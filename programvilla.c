@@ -1,5 +1,6 @@
 //TugasBesarPemrograman
 //Nana dan Gek ar
+//nanababi
 #include <stdio.h> //header standar input output dalam bahasa C
 #include <time.h>
 #include <stdlib.h>
