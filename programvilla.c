@@ -1,56 +1,14 @@
-//TugasBesarPemrograman
-//Nana dan Gek ar
-//nanababi
 #include <stdio.h> //header standar input output dalam bahasa C
 #include <time.h>
 #include <stdlib.h>
 #include <string.h>
 
-
-// Note : Pada beberapa compiler kode system ("clear") dapat dituliskan system ("cls");
 // Dekalarasi variable global yang di gunakan pada program pemesanan villa ini :
 int kategori ;
 int pilihanmenu ;
 time_t waktuserver; 
+int villa ;
 
-typedef struct
-{
-	char nama [50];
-	int villa ;
-	int jumvilla ;
-	int orang ;
-	int harga ;
-	char noHP [15] ;
-	int ciHari ;
-	int coHari ;
-	int tgl ;
-	int bulan ;
-	int tahun ;
-	int t_tgl ;
-	int t_bulan ;
-	int t_tahun ;
-	struct pesanvilla *next ;
-} pesanvilla ;
-
-pesanvilla *head_villa, *baru, *temp1, *tempp1 ;
-int villa [2] ;
-int jumvilla ;
-int orang ;
-int harga ;
-int ciHari ;
-int coHari ;
-int tgl ;
-int bulan ;
-int tahun ;
-int t_tgl ;
-int t_bulan ;
-int t_tahun ;
-int count1=0 ;
-int i ;
-int hari1 ;
-int hari2 ;
-char nama [50];
-char noHP [15];
 
 // Struct User untuk menyimpan member nama, username, password
 typedef struct {
@@ -78,8 +36,6 @@ void record(User u1, char file[]);
 void error_alert ();
 void daftar ();
 void listVilla ();
-void detStrukPemesanan ();
-
 
 // assign namaFile (nF) agar menyimpan string "logRecord.txt"
 char namaFile[] = "logRecord.txt";
@@ -373,6 +329,7 @@ void listVilla (){
 	printf ("\t\t\t|=========================================================================================================================================|\n");
 }
 void pesan_villa (){
+	int salahpilih ;
 	listVilla ();
 	printf  ("\t\t\t|Silahkan ketik ID VILLA yang ingin dipesan : ");
 	scanf ("%d", &villa);
@@ -381,20 +338,42 @@ void pesan_villa (){
 	switch (villa)
 	{
 		case 1 :
-
+		break ;
+		
 		case 2 :
+		break ;
+		
 		case 3 :
+		break ;
+		
 		case 4 :
+		break ;
+		
 		case 5 :
+		break ;
+		
 		case 6 :
+		break ;
+		
 		case 7 :
+		break ;
+		
 		case 8 :
+		break ;
+		
 		case 9 :
+		break ;
+		
 		case 10 :
+		break ;
+		
 		case 11 :
+		break ;
+		
 		case 12 :
+		break ;
+		
 	default :
-		int salahpilih ;
 		error_alert();
 		printf ("\t\t\t | Jika ingin keluar tekan 1, jika lanjut tekan 2 : \n ");
 		scanf ("%d", &salahpilih);
@@ -406,26 +385,7 @@ void pesan_villa (){
 	
 }
 
-void menentukanTagihanVilla (hargaVilla, DP, char namaVilla[])
-{
-	
-}
 
-void detStrukPemesanan (){
-	printf ("\t\t\t\t\t======================================================================\n");
-	printf ("\t\t\t\t\t|                           DETAIL PEMESANAN                         |\n");
-	printf ("\t\t\t\t\t======================================================================\n");
-	printf ("\t\t\t\t\t| Nama Pemesan     : %s", nama);
-	printf ("\t\t\t\t\t| NO HP            : %s", noHP);
-	printf ("\t\t\t\t\t| Check In         : %d/%d/%d", );
-	printf ("\t\t\t\t\t| Check Out        : ") ;
-	printf ("\t\t\t\t\t| Jumlah Orang     : %d orang", jumlah);
-	printf ("\t\t\t\t\t| Harga Villa      : Rp.%.2f", hargaVilla);
-	printf ("\t\t\t\t\t| DP               : Rp.%.2f", hargaDP);
-	printf ("\t\t\t\t\t| Deposit          : Rp.%.2f", deposit);
-	printf ("\t\t\t\t\t| Total Harga      : Rp.%.2f", totalHarga);
-	printf ("\t\t\t\t\t======================================================================\n");
-}
 void riwayat_pemesanan (){
 
 }
