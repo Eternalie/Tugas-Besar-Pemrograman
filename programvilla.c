@@ -1,7 +1,11 @@
 #include <stdio.h> //header standar input output dalam bahasa C
 #include <time.h>
 #include <stdlib.h>
+<<<<<<< HEAD
 #include <string.h> //hai gek
+=======
+#include <string.h> //header
+>>>>>>> 0fd4d2b8eae04da15515ac78789c4e44528973fe
 
 // Dekalarasi variable global yang di gunakan pada program pemesanan villa ini :
 int kategori ;
