@@ -1,17 +1,74 @@
 #include <stdio.h> //header standar input output dalam bahasa C
 #include <time.h>
 #include <stdlib.h>
-<<<<<<< HEAD
-#include <string.h> //hai gek
-=======
-#include <string.h> //header
->>>>>>> 0fd4d2b8eae04da15515ac78789c4e44528973fe
+#include <string.h>
 
+// Note : Pada beberapa compiler kode system ("clear") dapat dituliskan system ("cls");
 // Dekalarasi variable global yang di gunakan pada program pemesanan villa ini :
-int kategori ;
 int pilihanmenu ;
-time_t waktuserver; 
-int villa ;
+time_t waktuserver;
+int jumlah ;
+int count ;
+int temp ;
+int cek ;
+int hapus ;
+char tempp ;
+float biaya_ADM = 2000 ;
+float deposit = 500000 ;
+float hargaVilla ;
+
+
+//tarif harga villa
+const float hargavilla1 = 1800000 ;
+const float hargavilla2 = 1650000 ;
+const float hargavilla3 = 1750000 ;
+const float hargavilla4 = 3800000 ;
+const float hargavilla5 = 7750000 ;
+const float hargavilla6 = 5800000 ;
+const float hargavilla7 = 4800000 ;
+const float hargavilla8 = 4300000 ;
+const float hargavilla9 = 5960000 ;
+const float hargavilla10 = 2750000 ;
+const float hargavilla11 = 4120000 ;
+const float hargavilla12 = 4800000 ;
+
+
+typedef struct
+{
+	char nama_pemesan [50];
+	char villa  ;
+	int orang ;
+	float totalPembayaranVilla ;
+	char noHP [30] ;
+	int ciHari ;
+	int coHari ;
+	int tgl ;
+	int bln ;
+	int thn ;
+	int t_tgl ;
+	int t_bln ;
+	int t_thn ;
+	struct pesanvilla*next ;
+} pesanvilla ;
+
+pesanvilla *head_villa, *baru, *temp1, *tempp1 ;
+char villa ;
+int orang ;
+float totalPembayaranVilla;
+char noHP [30] ;
+int ciHari ;
+int coHari ;
+int tgl ;
+int bln ;
+int thn ;
+int t_tgl ;
+int t_bln ;
+int t_thn ;
+int count1=0 ;
+char nama_pemesan [50];
+int i ;
+int hari1, hari2 = 2 ;
+
 
 
 // Struct User untuk menyimpan member nama, username, password
@@ -31,7 +88,8 @@ void deskripsi_villa ();
 void lokasi_villa ();
 void list_villa ();
 void pesan_villa ();
-void riwayat_pemesanan ();
+void data_pesanan ();
+void hapus_pesanan ();
 void menu_program ();
 void waktu ();
 void menu_masuk ();
@@ -40,6 +98,16 @@ void record(User u1, char file[]);
 void error_alert ();
 void daftar ();
 void listVilla ();
+void detStrukPemesanan ();
+void restoredata_villa ();
+void pemesanan_villa ();
+void menentukanTotalBayar ();
+void penghitungHargaVilla (float hargaVillaAnyelir);
+void kalenderuntukCO ();
+void simpandata_villa ();
+void hapus_datavilla ();
+void hari ();
+
 
 // assign namaFile (nF) agar menyimpan string "logRecord.txt"
 char namaFile[] = "logRecord.txt";
@@ -53,6 +121,9 @@ int main (){
   system ("cls");
   menu_masuk();
   menu_program();
+
+  head_villa=NULL ; temp1=NULL ; tempp1=NULL;
+  restoredata_villa();
 }
 
 
@@ -81,6 +152,8 @@ void header (){
 }
 
 void menu (){
+	int kategori ;
+
 	system ("cls");
     ktgri:
     printf ("\t\t\t\t\t|=========================================================|\n");
@@ -91,8 +164,9 @@ void menu (){
     printf ("\t\t\t\t\t|   1   |    Lihat Lokasi Villa                           |\n");
     printf ("\t\t\t\t\t|   2   |    Lihat List Villa                             |\n");
     printf ("\t\t\t\t\t|   3   |    Pesan Villa                                  |\n");
-    printf ("\t\t\t\t\t|   4   |    Riwayat Pemesanan Villa                      |\n");
-    printf ("\t\t\t\t\t|   5   |    Exit                                         |\n");
+    printf ("\t\t\t\t\t|   4   |    Lihat Data Pesanan                           |\n");
+    printf ("\t\t\t\t\t|   5   |    Hapus Pesanan (Khusus Untuk Pegawai)         |\n"); 
+    printf ("\t\t\t\t\t|   6   |    Exit                                         |\n");
     printf ("\t\t\t\t\t|=========================================================|\n");
 
     printf ("\n\t\t\t\t\t||Masukkan No Pilihan Anda :");
@@ -115,14 +189,17 @@ void menu (){
                 goto ktgri;
                 break;
             case 4:
-                riwayat_pemesanan ();
+                data_pesanan ();
                 goto ktgri;
                 break;
             case 5:
-                exit (0);
+                hapus_datavilla ();
                 break;
+            case 6 :
+            	exit (0);
+            	break ;
             default:
-                printf ("Silahkan ketik ulang pilihan anda");
+                printf ("\t\t\t\t\t| Silahkan ketik ulang pilihan anda\n");
                 goto ktgri;
                 break;
         }
@@ -332,68 +409,419 @@ void listVilla (){
     printf ("\t\t\t|           |                 |Ruang Mandi Air Hangat       |                 |              |           |           |           |        |\n");
 	printf ("\t\t\t|=========================================================================================================================================|\n");
 }
+
 void pesan_villa (){
-	int salahpilih ;
 	listVilla ();
-	printf  ("\t\t\t|Silahkan ketik ID VILLA yang ingin dipesan : ");
-	scanf ("%d", &villa);
-	printf ("\t\t\t|=========================================================================================================================================|\n");
-	system ("cls");
-	switch (villa)
-	{
+
+    	count=0 ;
+		temp1=head_villa ;
+		while (temp1!=NULL)
+		{
+			count++ ;
+			temp1=temp1->next;
+		 }
+		 if (count==3){
+		 	printf ("\t\t\t [VILLA FULL]\n");
+		 }
+		 
+		 else {
+		 	pemesanan_villa (); 
+		 }
+}
+  
+void pemesanan_villa (){
+	
+	char ulangiProgram ;
+	int id_villa ;
+	printf ("\t\t\t\t\t======================================================================\n");
+	printf ("\t\t\t\t\t|               HARAP LIHAT DATA VILLA TERLEBIH DAHULU                |\n");
+	printf ("\t\t\t\t\t|                 UNTUK MENGHINDARI DOUBLE PEMESANAN                  |\n");
+	printf ("\t\t\t\t\t======================================================================\n");
+	printf ("\n\n");
+	printf ("\t\t\t\t\t======================================================================\n");
+	printf ("\t\t\t\t\t|                      INPUT DATA PEMESANAN VILLA                     |\n");
+	printf ("\t\t\t\t\t======================================================================\n");
+	printf ("\t\t\t\t\t| Nama Pemesan           : "); fflush (stdin); gets (nama_pemesan);
+	printf ("\t\t\t\t\t| NO HP                  : ");
+	scanf  ("%s", &noHP);
+	printf ("\t\t\t\t\t| Jumlah orang menginap  : ");
+	scanf  ("%d", &orang);
+	printf ("\t\t\t\t\t| Check In [HARI][ANGKA] : ");
+	scanf  ("%d", &hari1);
+	printf ("\t\t\t\t\t| Check In [DD/MM/YYYY]  : ");
+	scanf  ("%d/%d/%d", &tgl, &bln, &thn);
+	ciHari=hari1 ;
+	printf ("\t\t\t\t\t| Harap masukan id villa yang ingin dipesan : ");
+	scanf ("%d", &id_villa);
+	switch (id_villa){
 		case 1 :
+			villa = '1';
+			penghitungHargaVilla (hargavilla1);
+			menentukanTotalBayar ();
+			printf ("\t\t\t\t\t======================================================================\n");
+	printf ("\t\t\t\t\t|                           DETAIL PEMESANAN                         |\n");
+	printf ("\t\t\t\t\t======================================================================\n");
+	printf ("\t\t\t\t\t| Nama Pemesan     : %s\n", nama_pemesan);
+	printf ("\t\t\t\t\t| NO HP            : %s\n", noHP);
+	printf ("\t\t\t\t\t| Check In         : ");
+	hari ();
+	printf (" %d/%d/%d\n", tgl, bln, thn);
+	kalenderuntukCO ();
+	hari1=hari1+(hari2%7);
+	while (hari1>7)
+	       hari1=hari1%7;
+	coHari=hari1;
+	printf ("\t\t\t\t\t| Check Out        : ");
+	hari ();
+	printf (" %d/%d/%d\n", t_tgl,t_bln, t_thn) ;
+	printf ("\t\t\t\t\t| Jumlah Orang     : %d orang\n", jumlah);
+	printf ("\t\t\t\t\t| Harga Villa      : Rp.%.2f\n", hargaVilla);
+	printf ("\t\t\t\t\t| Deposit          : Rp.%.2f\n", deposit);
+	printf ("\t\t\t\t\t| Biaya Admin      : Rp.%.2f\n", biaya_ADM);
+	printf ("\t\t\t\t\t| Total Harga      : Rp.%.2f\n", totalPembayaranVilla);
+	printf ("\t\t\t\t\t======================================================================\n");	
+			simpandata_villa ();
+			restoredata_villa ();
 		break ;
 		
 		case 2 :
+			penghitungHargaVilla (hargavilla2);
+			menentukanTotalBayar ();
+			detStrukPemesanan ();	
+			simpandata_villa ();
+			restoredata_villa ();
 		break ;
 		
 		case 3 :
+			penghitungHargaVilla (hargavilla3);
+			menentukanTotalBayar ();
+			detStrukPemesanan ();
+			simpandata_villa ();
+			restoredata_villa ();
 		break ;
 		
 		case 4 :
+			penghitungHargaVilla (hargavilla4);
+			menentukanTotalBayar ();
+			detStrukPemesanan ();
+			simpandata_villa ();
+			restoredata_villa ();
 		break ;
-		
+			
 		case 5 :
+			penghitungHargaVilla (hargavilla5);
+			menentukanTotalBayar ();
+			detStrukPemesanan ();	
+			simpandata_villa ();
+			restoredata_villa ();
 		break ;
 		
 		case 6 :
+			penghitungHargaVilla (hargavilla6);
+			menentukanTotalBayar ();
+			detStrukPemesanan ();
+			simpandata_villa ();
+			restoredata_villa ();
 		break ;
 		
 		case 7 :
+			penghitungHargaVilla (hargavilla7);
+			menentukanTotalBayar ();
+			detStrukPemesanan ();	
+			simpandata_villa ();
+			restoredata_villa ();
 		break ;
 		
 		case 8 :
+			penghitungHargaVilla (hargavilla8);
+			menentukanTotalBayar ();
+			detStrukPemesanan ();
+			simpandata_villa ();
+			restoredata_villa ();
 		break ;
 		
 		case 9 :
+			penghitungHargaVilla (hargavilla9);
+			menentukanTotalBayar ();
+			detStrukPemesanan ();	
+			simpandata_villa ();
+			restoredata_villa ();
 		break ;
 		
 		case 10 :
+			penghitungHargaVilla (hargavilla10);
+			menentukanTotalBayar ();
+			detStrukPemesanan ();
+			simpandata_villa ();
+			restoredata_villa ();
 		break ;
 		
 		case 11 :
+			penghitungHargaVilla (hargavilla11);
+			menentukanTotalBayar ();
+			detStrukPemesanan ();	
+			simpandata_villa ();
+			restoredata_villa ();			
 		break ;
 		
 		case 12 :
+			penghitungHargaVilla (hargavilla12);
+			menentukanTotalBayar ();
+			detStrukPemesanan ();
+			simpandata_villa ();
+			restoredata_villa ();
 		break ;
 		
-	default :
-		error_alert();
-		printf ("\t\t\t | Jika ingin keluar tekan 1, jika lanjut tekan 2 : \n ");
-		scanf ("%d", &salahpilih);
-		if (salahpilih==1)
-			menu ();
-		else 
-			pesan_villa ();
+		default :
+			printf("\t\t\t\t\t| Anda Salah Memasukan Golongan\n");
+		break ;
 	}
+	printf ("\t\t\t\t\t======================================================================\n");
+	printf("\t\t\t\t\t|                TERIMAKASIH TELAH MEMESAN VILLA ANYELIR               \n");
+	printf ("\t\t\t\t\t======================================================================\n");
+	printf("\t\t\t\t\t| Ulangi Program Lagi (Y/T)");
+	scanf("\n%c",&ulangiProgram);
+	if(ulangiProgram == 'y'||ulangiProgram =='Y'){
+		menu ();
+	}
+
+
+}
+
+
+void penghitungHargaVilla (float hargaVillaAnyelir){
+	hargaVilla = hargaVillaAnyelir ;
+}
+
+void menentukanTotalBayar (){
+	totalPembayaranVilla = hargaVilla + deposit + biaya_ADM ;
+}
+
+
+void detStrukPemesanan (){
+	printf ("\t\t\t\t\t======================================================================\n");
+	printf ("\t\t\t\t\t|                           DETAIL PEMESANAN                         |\n");
+	printf ("\t\t\t\t\t======================================================================\n");
+	printf ("\t\t\t\t\t| Nama Pemesan     : %s\n", nama_pemesan);
+	printf ("\t\t\t\t\t| NO HP            : %s\n", noHP);
+	printf ("\t\t\t\t\t| Check In         : ");
+	hari ();
+	printf (" %d/%d/%d\n", tgl, bln, thn);
+	kalenderuntukCO ();
+	hari1=hari1+(hari2%7);
+	while (hari1>7)
+	       hari1=hari1%7;
+	coHari=hari1;
+	printf ("\t\t\t\t\t| Check Out        : ");
+	hari ();
+	printf (" %d/%d/%d\n", t_tgl,t_bln, t_thn) ;
+	printf ("\t\t\t\t\t| Jumlah Orang     : %d orang\n", jumlah);
+	printf ("\t\t\t\t\t| Harga Villa      : Rp.%.2f\n", hargaVilla);
+	printf ("\t\t\t\t\t| Deposit          : Rp.%.2f\n", deposit);
+	printf ("\t\t\t\t\t| Biaya Admin      : Rp.%.2f\n", biaya_ADM);
+	printf ("\t\t\t\t\t| Total Harga      : Rp.%.2f\n", totalPembayaranVilla);
+	printf ("\t\t\t\t\t======================================================================\n");
+}
+
+
+void data_pesanan (){
+	printf ("\t\t\t\t\t| Villa yang isi : ");
+	temp1=head_villa ;
+	while (temp1!=NULL){
+		printf ("%d ", temp1->villa);
+		temp1=temp1->next ;
+	}
+	printf ("\n\n");
+	printf ("\t\t\t\t\t | Id Villa yang akan check out : ");
+	scanf ("%d", &hapus);
+	if (head_villa->villa==hapus)
+	{
+		head_villa=head_villa->next ;
+		printf ("\t\t\t\t\t Data Berhasil Dihapus \n");
+	}
+	else
+	{
+		temp1=head_villa ;
+		tempp1=temp1->next ;
+		for (i=1;i<count1;i++)
+		{
+			if (tempp1->villa!=hapus)
+			{
+				temp1=temp1->next ;
+				tempp1=tempp1->next ;
+			}
+			else
+			{
+				temp1->next=tempp1->next;
+				printf ("\t\t\t\t\t Data Berhasil Dihapus \n");
+				break ;
+			}
+		}
+	}
+	//masukkan data ulang
+	hapus_datavilla ();
+	restoredata_villa ();
+}
+
+void hapus_datavilla (){
+	FILE *fp=fopen ("dataVilla.txt", "w");
+	if (head_villa!=NULL){
 	
+	fprintf (fp, "NO VILLA      : %d\n", head_villa->villa);
+	fprintf (fp, "NAMA PEMESAN  : %s\n", head_villa->nama_pemesan);
+	fprintf (fp, "NO HP PEMESAN : %s\n", head_villa->noHP);
+	fprintf (fp, "JUMLAH ORANG  : %d\n", head_villa->orang);
+	fprintf (fp, "CHECK IN      : %d/%d/%d\n", head_villa->tgl, head_villa->bln, head_villa->thn);
+	fprintf (fp, "CHECK OUT     : %d/%d/%d\n", head_villa->t_tgl, head_villa->t_bln, head_villa->t_thn);
+	fprintf (fp, "TOTAL HARGA   : Rp.%.2f\n", head_villa->totalPembayaranVilla);
+	
+	temp1=head_villa->next ;
+	while (temp1!=NULL){
+		fp=fopen ("dataVilla.txt", "a");
+		fprintf (fp, "NO VILLA      : %d\n", head_villa->villa);
+		fprintf (fp, "NAMA PEMESAN  : %s\n", head_villa->nama_pemesan);
+		fprintf (fp, "NO HP PEMESAN : %s\n", head_villa->noHP);
+		fprintf (fp, "JUMLAH ORANG  : %d\n", head_villa->orang);
+		fprintf (fp, "CHECK IN      : %d/%d/%d\n", head_villa->tgl, head_villa-> bln, head_villa-> thn);
+		fprintf (fp, "CHECK OUT     : %d/%d/%d\n", head_villa->t_tgl, head_villa-> t_bln, head_villa-> t_thn);
+		fprintf (fp, "TOTAL HARGA   : Rp.%.2f\n", head_villa->totalPembayaranVilla);
+		fclose (fp);
+		temp1=temp1->next ; 
+	 }
+	}
+	fclose (fp);
 }
 
+void kalenderuntukCO (){
+	t_tgl = 0 ;
+	t_bln = 0 ;
+	t_thn = 0 ;
+	do {
+		if (hari2 <= 31)
+		{
+			if (bln == 2)
+				t_tgl = Februari (thn);
+			else
+				t_tgl = BknFeb (thn,bln);
+			if (tgl + hari2 > t_tgl)
+			{
+				t_bln = bln + 1 ;
+				if (t_bln>12){
+					t_thn=thn+1;
+					t_bln=1;
+				}
+				else
+				t_thn = thn ;
+				t_tgl = tgl + hari2 - t_tgl ;
 
-void riwayat_pemesanan (){
-
+			}
+		
+		}
+		else 
+		{
+			if (bln == 2)
+				t_tgl = Februari (thn);
+			else 
+				t_tgl = BknFeb (thn,bln);
+				hari2 = hari2 - t_tgl ;
+			if (bln == 12)
+			{
+				bln = 1 ;
+				thn = thn + 1 ;
+			}
+			else
+				bln = bln + 1 ;
+		}
+	}
+	while (t_thn == 0);
 }
 
+int Februari (int thn){
+	if (((thn % 100 )!= 0) && ((thn % 4 )== 0)||((thn % 400 )== 0)){
+		return 29 ;
+	}
+	else {
+		return 30 ;
+	}		
+}
+
+int BknFeb (int thn, int bln){
+	if ((bln==1) || (bln==3) || (bln==5) || (bln==7) || (bln==8) || (bln==10) || (bln==12)){
+		return 31 ;
+	}
+	else {
+		return 30 ;
+	}
+}
+
+void hari (){
+	switch (hari1){
+		case 1 : printf ("SENIN"); break ;
+		case 2 : printf ("SELASA"); break ;
+		case 3 : printf ("RABU"); break ;
+		case 4 : printf ("KAMIS"); break ;
+		case 5 : printf ("JUMAT"); break ;
+		case 6 : printf ("SABTU"); break ;
+		case 7 : printf ("MINGGU"); break ;
+	}
+} 
+
+void simpandata_villa (int noVilla){
+	//simpan data ke linked list
+	baru=NULL ;
+	baru=(pesanvilla*)malloc(sizeof(pesanvilla));;
+	strcpy (baru->nama_pemesan,nama_pemesan);
+	strcpy (baru->noHP,noHP);
+	baru->villa=noVilla ;
+	baru->orang=orang ;
+	baru->ciHari=ciHari ; baru->tgl=tgl; baru->bln=bln; baru->thn=thn;
+	baru->coHari=coHari ; baru->t_tgl=t_tgl; baru->t_bln=t_bln; baru->t_thn=t_thn;
+	baru->totalPembayaranVilla=totalPembayaranVilla ;
+	
+	//linked
+	baru->next=head_villa ;
+	head_villa=baru ;
+	
+	//oprasi file
+	FILE*fp=fopen ("dataVilla.txt", "a");
+	fprintf (fp, "NO VILLA      : %d\n", head_villa->villa);
+	fprintf (fp, "NAMA PEMESAN  : %s\n", head_villa->nama_pemesan);
+	fprintf (fp, "NO HP PEMESAN : %s\n", head_villa->noHP);
+	fprintf (fp, "JUMLAH ORANG  : %d\n", head_villa->orang);
+	fprintf (fp, "CHECK IN      : %d/%d/%d\n", head_villa->tgl, head_villa->bln, head_villa->thn);
+	fprintf (fp, "CHECK OUT     : %d/%d/%d\n", head_villa->t_tgl, head_villa->t_bln, head_villa->t_thn);
+	fprintf (fp, "TOTAL HARGA   : Rp.%.2f\n", head_villa->totalPembayaranVilla);
+	fclose (fp);
+}
+
+void restoredata_villa (){
+	char temp [100];
+	FILE *fp ;
+	head_villa=NULL ;
+	count1=0 ;
+	fp=fopen("dataVilla.txt", "r");
+	if (fp!=NULL)
+		while (!feof (fp)){
+			baru=NULL ;
+			baru=(pesanvilla*)malloc(sizeof (pesanvilla));;
+			
+			fscanf (fp, "%[^:]: %d\n", &temp,&baru->villa); fflush (stdin);
+			fscanf (fp, "%[^:]: %[^\n]\n", &temp,&baru->nama_pemesan); fflush (stdin);
+			fscanf (fp, "%[^:]: %[^\n]\n", &temp,&baru->noHP); fflush (stdin);
+			fscanf (fp, "%[^:]: %d\n", &temp,&baru->orang); fflush (stdin);
+			fscanf (fp, "%[^:]: %d/%d/%d\n",&temp,&baru->tgl,&baru->bln,&baru->thn); fflush (stdin);
+			fscanf (fp, "%[^:]: %d/%d/%d\n",&temp,&baru->t_tgl,&baru->t_bln,&baru->t_thn); fflush (stdin);
+			fscanf (fp, "%[^:]: Rp.%.2f\n", &temp,&baru->totalPembayaranVilla); fflush (stdin);
+			fscanf (fp, "\n"); fflush (stdin);
+			if (baru->villa!=NULL)
+			{
+				baru->next=head_villa;
+				head_villa=baru ;
+				count1++ ;
+			}
+		}
+	fclose (fp);
+}
 
 void menu_program(){
 	system ("cls");
