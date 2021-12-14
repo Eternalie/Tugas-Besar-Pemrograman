@@ -5,7 +5,11 @@
 #define JUM_BLOK 1		/* sebuah record */
 
 time_t waktuserver; 
+
+//deklarasi variabel pada program :
+
 //deklarasi variabel :
+
 int passwordbenar;
 char passP[20], passwordP[20];
 float deposito = 500000 ;
@@ -23,7 +27,11 @@ typedef struct {
 User u; 
 
 
+
+// Struct Pemesanan Villa
+
 // Struct Pesan
+
 typedef struct {
 	int nomor_villa;
 	char nama_pemesan[50];
@@ -102,7 +110,8 @@ void menu_masuk (){
     int pilihan;
 
     // Instruksi yang diberikan kepada pengguna
-    
+
+    instruksi:
     printf ("\t\t\t\t\t|================================================|\n");
     printf ("\t\t\t\t\t|                PILIHAN MENU MASUK              |\n");
     printf ("\t\t\t\t\t|                  VILLA ANYELIR                 |\n");
