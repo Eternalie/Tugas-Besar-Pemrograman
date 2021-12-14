@@ -23,7 +23,7 @@ typedef struct {
 User u; 
 
 
-// Struct Pesan
+// Struct Pemesanan Villa
 typedef struct {
 	int nomor_villa;
 	char nama_pemesan[50];
