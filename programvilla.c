@@ -1,14 +1,16 @@
 #include <stdio.h> //header standar input output dalam bahasa C
-#include <time.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
+#define JUM_BLOK 1		/* sebuah record */
 
-// Dekalarasi variable global yang di gunakan pada program pemesanan villa ini :
-int kategori ;
-int pilihanmenu ;
 time_t waktuserver; 
-int villa ;
-
+//deklarasi variabel :
+int passwordbenar;
+char passP[20], passwordP[20];
+float deposito = 500000 ;
+float biaya_ADM = 2000 ;
+char jawab ;
 
 // Struct User untuk menyimpan member nama, username, password
 typedef struct {
@@ -20,37 +22,55 @@ typedef struct {
 
 User u; 
 
+
+// Struct Pesan
+typedef struct {
+	int nomor_villa;
+	char nama_pemesan[50];
+	char noHP [15];
+	char email [50];
+	int orang ;
+	int tglCI ;
+	int blnCI ;
+	int thnCI ;
+	int tglCO ;
+	int blnCO ;
+	int thnCO ;
+	float totalPembayaran ;
+	float DPpemesan ;
+	float sisaPembayaran ;	
+}pesan_villa;
+pesan_villa pesanvl;
+
 //Deklarasi fungsi-fungsi yang digunkan pada program pemesanan villa
 void header ();
-void menu ();
-void deskripsi_villa ();
-void lokasi_villa ();
+void menu_masuk();
+void masuk_admin();
+void daftar();
+void error_alert();
+void masuk_pengunjung ();
+void ambil_password();
+void selesai();
+void menuadm();
+void record(User u, char file[]);
+void waktu();
+void menu_pengunjung();
 void list_villa ();
-void pesan_villa ();
-void riwayat_pemesanan ();
-void menu_program ();
-void waktu ();
-void menu_masuk ();
-void masuk ();
-void record(User u1, char file[]);
-void error_alert ();
-void daftar ();
-void listVilla ();
+void lokasi_villa ();
+void list_villa_pengunjung ();
+void pesan_villa_anyelir ();
+void lihat_data_pesanan ();
+void hapus_pesanan ();
+void pemesanan_villa();
 
 // assign namaFile (nF) agar menyimpan string "logRecord.txt"
 char namaFile[] = "logRecord.txt";
 
-// fungsi main () adalah kepala dari program ini, dimana program akan di eksekusi oleh fungsi main ini.
 int main (){
-  system ("color F5");
-  header ();
-  system ("cls");
-  deskripsi_villa ();
-  system ("cls");
-  menu_masuk();
-  menu_program();
+   system ("color F5");
+   header ();
+   menu_masuk ();
 }
-
 
 void header (){
   system ("cls");
@@ -76,57 +96,426 @@ void header (){
   system ("cls");
 }
 
-void menu (){
+void menu_masuk (){
 	system ("cls");
-    ktgri:
-    printf ("\t\t\t\t\t|=========================================================|\n");
-    printf ("\t\t\t\t\t|                 KATEGORI MENU VILLA ANYELIR             |\n");
+	// Variabel pilihan yang digunakan untuk menyimpan pilihan pengguna antara Masuk dengan Registrasi
+    int pilihan;
+
+    // Instruksi yang diberikan kepada pengguna
+    instruksi:
+    printf ("\t\t\t\t\t|================================================|\n");
+    printf ("\t\t\t\t\t|                PILIHAN MENU MASUK              |\n");
+    printf ("\t\t\t\t\t|                  VILLA ANYELIR                 |\n");
+    printf ("\t\t\t\t\t|================================================|\n");
+    printf ("\t\t\t\t\t|   No  |    Menu Masuk                          |\n");
+    printf ("\t\t\t\t\t|-------|----------------------------------------|\n");
+    printf ("\t\t\t\t\t|   1   |    Masuk Sebagai Admin                 |\n");
+    printf ("\t\t\t\t\t|   2   |    Masuk Sebagai Pengunjung            |\n");
+    printf ("\t\t\t\t\t|   3   |    Registrasi Pengunjung               |\n");
+    printf ("\t\t\t\t\t|   4   |    Exit                                |\n");
+    printf ("\t\t\t\t\t|================================================|\n");
+    printf ("\t\t\t\t\t|================================================|\n");
+    printf ("\t\t\t\t\t|| Masukkan pilihan Anda => ");
+    scanf  ("%d", &pilihan);
+    printf ("\t\t\t\t\t|================================================|\n");
+    system ("cls");
+    switch (pilihan){
+    case 1:
+        // Jika pengguna menginput angka 1 maka dipanggil fungsi masuk
+        masuk_admin();
+        break;
+    case 2 :
+    	masuk_pengunjung ();
+    break ;
+    case 3:
+        // Jika pengguna menginput angka 2 maka dipanggil fungsi registrasi
+        daftar();
+        break;
+    case 4:
+        exit(1);
+        break;
+    default:
+        error_alert();
+        // Kembali ke label instruksi jika terjadi kesalahan dalam menginput pilihan
+        goto instruksi;
+        break;
+    }
+}
+
+void masuk_admin (){
+	system("cls");
+	ambil_password ();
+	printf ("\t\t\t\t\t|================================================|\n");
+    printf ("\t\t\t\t\t|                   MENU MASUK                   |\n");
+    printf ("\t\t\t\t\t|                 PEGAWAI ANYELIR                |\n");
+    printf ("\t\t\t\t\t|================================================|\n");
+    printf ("\t\t\t\t\t| Masukkan password : ");
+	scanf("%s", &passP);
+	passwordbenar=strcmp(passP,passwordP);
+	if(passwordbenar !=0){
+		printf("\t\t\t\t\t Password yang anda masukan salah!");
+		printf("\t\t\t\t\t Kembali ke menu utama\n");
+		getch();
+		system("cls");
+		main();
+	}
+	else{
+		selesai(); //void selesai dapat kalian ubah ke void menu
+	}
+    
+}
+
+void ambil_password(){
+	FILE *file;
+	file=fopen("passwordAdmin.txt", "r");
+	fscanf(file, "%s", passwordP);
+	fclose(file);
+}
+
+void selesai(){
+	printf("\t\t\t\t\t\t\tLOGIN SUKSES!\n");
+	getch(); fflush(stdin);
+	menuadm();
+}
+
+
+void masuk_pengunjung (){
+	/*  Variabel username[12] digunakan untuk menyimpan input username
+        yang dilakukan oleh pengguna. Inputan tersebut akan divalidasi
+        dengan username yang sudah terdaftar pada file logRecord.txt   */
+    char username[12];
+
+    /*  Variabel password[10] digunakan untuk menyimpan input password
+        yang dilakukan oleh pengguna. Inputan tersebut akan divalidasi
+        dengan password yang sudah terdaftar pada file logRecord.txt   */
+    char password[10];
+
+    // Variabel pilihan untuk pilihan user apakah ingin mendaftar atau keluar
+    int pilihan;
+
+    // Membuat pointer record untuk menunjuk pada file "logRecord.txt"
+    FILE *record;
+    // Membuka file dengan mode "r"
+    record = fopen (namaFile, "r");
+    if (record == NULL){
+        fputs ("Error, Tidak terdapat File untuk penyimpanan akun\n", stderr);
+        daftar();
+    }
+
+    // Memperlihatkan tanggal login
+    waktu();
+    // Instruksi untuk LOGIN
+    printf ("\t\t\t\t\t||================================================||\n");
+    printf ("\t\t\t\t\t||                       LOGIN                    ||\n");
+    printf ("\t\t\t\t\t||                 PENGUNJUNG ANYELIR             ||\n");
+    printf ("\t\t\t\t\t||================================================||\n");
+    printf ("\t\t\t\t\t|| Username: ");
+    scanf  ("%s", username);
+    printf ("\t\t\t\t\t|| Password: ");
+    scanf  ("%s", password);
+    printf ("\t\t\t\t\t||================================================||\n");
+    system ("cls");
+    // Membeaca file "logRecord.txt"
+    while(fread(&u,sizeof(u),1,record)){
+        /*  Mengkomparasi username serta password yang diinput pengguna kedalam fungsi
+            masuk() dengan username serta password yang sudah terdaftar */
+        if(strcmp(username, u.username)==0 && strcmp(password, u.password)==0){
+            menu_pengunjung();
+        }
+        //  Jika akun tidak terdaftar maka akan diberikan pilihan untuk mendaftar atau keluar dari program
+        else {
+            printf ("\t\t\t\t\t||===============================================||\n");
+            printf ("\t\t\t\t\t||            Akun tidak terdaftar!              ||\n");
+            printf ("\t\t\t\t\t||===============================================||\n");
+
+            instruksi:
+            printf ("\t\t\t\t\t||===============================================||\n");
+            printf ("\t\t\t\t\t||Ketik 1 untuk daftar");
+            printf ("\n\t\t\t\t\t||Ketik 2 untuk masuk ulang");
+            printf ("\n\t\t\t\t\t||Ketik 3 untuk EXIT\n");
+            printf ("\t\t\t\t\t||===============================================||\n");
+            printf ("\n\t\t\t\t\t||Pilihan: ");
+            scanf ("%d", &pilihan);
+            system ("cls");
+            // Jika pengguna mengetik nomor 1 maka akan dialihkan kepada fungsi daftar
+            if (pilihan == 1){
+                daftar();
+            /* Menggunakan fungsi recursive kepada fungsi masuk agar pengguna
+               dapat melakukan percobaan masuk kembali jika terjadi kesalahan penulisan */
+            } else if (pilihan==2) {
+                masuk_pengunjung();
+            } else if (pilihan ==3){
+                exit(1);
+            } else {
+                printf ("\t\t\t\t\t HARAP MASUKKAN PILIHAN YANG SESUAI [1-3]\n");
+                goto instruksi;
+            }
+        }
+    }
+    fclose(record);
+    return;
+}
+
+   
+void daftar (){
+	// Membuat pointer regis untuk file "logRecord.txt"
+    FILE *regis;
+
+    // Membuka file "logRecord.txt" dengan mode "w"
+    regis = fopen(namaFile,"w");
+
+    // Melakukan Pengecekan apakah pointer regis menunjuk kepada file yang dituju ("logRecord.txt")
+    if (regis == NULL)
+    {
+        fputs("ERROR, Tidak ada File!", stderr);
+        exit(1);
+    }
+
+    // Instruksi untuk menginput nama
+    printf("\n\t\t\t\t\t Silahkan registrasi akun anda!\n\n");
+    getchar();
+    printf("\t\t\t\t\t Nama Lengkap: ");
+    gets(u.nama);
+    printf("\t\t\t\t\t Email anda: ");
+    scanf ("%s", u.email);
+    printf("\n\t\t\t\t\t Hallo %s!\n", u.nama);
+    printf ("\t\t\t\t\t Silahkan membuat username (max 12 karakter) serta membuat password (max 10 karakter)\n");
+
+    // Instruksi untuk menginput username serta password
+    printf("\n\t\t\t\t\t Enter Username:");
+    scanf ("%s", u.username);
+    printf("\n\t\t\t\t\t Enter Password:");
+    scanf ("%s", u.password);
+
+    // Menuliskan nama yang diinput oleh pengguna kedalam file "logRecord.txt"
+    fwrite(&u,sizeof(u),1,regis);
+    fclose(regis);
+    printf("\n\t\t\t\t\t Registrasi Selesai!");
+    printf ("\n\t\t\t\t\t Akun anda terdaftar, silahkan mencoba !");
+    getchar();
+
+    // Membersikan layar terminal
+    system ("cls");
+    // Memanggil fungsi masuk()
+    menu_pengunjung();
+}
+
+void record(User u, char file[] ){
+    time( & waktuserver);
+    struct tm * waktu = localtime( & waktuserver);
+    //Mendeklarasikan tipe data file dengan pointer *rc yang bertujuan untuk pointer pada file "logRecord.txt"
+    FILE *rc;
+    //Assign rc untuk membuka file binary Record.dat dan menggunakan mode "r" untuk membaca textfile
+    rc = fopen(file, "r");
+    //Menggunakan fungsi fread untuk membaca isi dari file "logRecord.txt"
+    fread (&u, sizeof(u), 1, rc);
+    //Menggunakan fungsi fclose untuk menutup file "logRecord.txt" agar tidak diproses lagi
+    fclose (rc);
+
+    //Menampilkan hasil dari Record nama user dan nomor telepon yang diinput oleh user
+    //Menampilkan hasil dari Record nama user dan nomor telepon yang diinput oleh user
+    printf("\t\t\t\t\t|=========================================|\n");
+    printf("\t\t\t\t\t||Nama        Username       Tanggal      \n");
+    printf("\t\t\t\t\t||%s\t%s\t\t%i-%i-%i\n",u.nama, u.username, waktu -> tm_mday, waktu -> tm_mon + 1, waktu -> tm_year + 1900);
+    printf("\t\t\t\t\t|=========================================|\n");
+
+}
+
+void waktu(){
+    time( & waktuserver);
+    struct tm * waktu = localtime( & waktuserver);
+    printf("\n\t\t\t\t\t||================Tanggal: %i/%i/%i==============||\n\n", waktu -> tm_mday, waktu -> tm_mon + 1, waktu -> tm_year + 1900);
+}
+
+void error_alert (){
+	printf   ("\t\t\t\t\t===============================================  \n");
+    printf   ("\t\t\t\t\t||     Pilihan yang Anda masukan Salah!!!     || \n");
+    printf   ("\t\t\t\t\t||   Silahkan Memilih Pilihan yang Sudah ada  || \n");
+    printf   ("\t\t\t\t\t===============================================  \n");
+}
+
+void menuadm (){
+	char a ;
+	int kategori ;
+	system ("cls");
+	ulangi :
+	printf ("\n\n");
+	printf ("\t\t\t\t\t|=========================================================|\n");
+    printf ("\t\t\t\t\t|                        KATEGORI MENU                    |\n");
+    printf ("\t\t\t\t\t|                    PEGAWAI VILLA ANYELIR                |\n");
     printf ("\t\t\t\t\t|=========================================================|\n");
     printf ("\t\t\t\t\t|   No  |    Pilihan Kategori                             |\n");
     printf ("\t\t\t\t\t|-------|-------------------------------------------------|\n");
-    printf ("\t\t\t\t\t|   1   |    Lihat Lokasi Villa                           |\n");
-    printf ("\t\t\t\t\t|   2   |    Lihat List Villa                             |\n");
-    printf ("\t\t\t\t\t|   3   |    Pesan Villa                                  |\n");
-    printf ("\t\t\t\t\t|   4   |    Riwayat Pemesanan Villa                      |\n");
+    printf ("\t\t\t\t\t|   1   |    Lihat List Villa                             |\n");
+    printf ("\t\t\t\t\t|   2   |    Pesan Villa                                  |\n");
+    printf ("\t\t\t\t\t|   3   |    Lihat Data Pesanan                           |\n");
+    printf ("\t\t\t\t\t|   4   |    Hapus Pesanan                                |\n"); 
     printf ("\t\t\t\t\t|   5   |    Exit                                         |\n");
     printf ("\t\t\t\t\t|=========================================================|\n");
-
-    printf ("\n\t\t\t\t\t||Masukkan No Pilihan Anda :");
-        scanf  ("%d",&kategori);
-        system ("cls");
-        //pada menu switch case bagian ini , merupakan lanjutan proses dari pilihan user yang di inputkan sebelumnya pada pilihan pada MENU program.
-        switch (kategori)
-        {
-
-            case 1:
-                lokasi_villa();
-                goto ktgri;
-                break;
-            case 2:
-                list_villa();
-                goto ktgri;
-                break;
-            case 3:
-                pesan_villa();
-                goto ktgri;
-                break;
-            case 4:
-                riwayat_pemesanan ();
-                goto ktgri;
-                break;
-            case 5:
-                exit (0);
-                break;
-            default:
-                printf ("Silahkan ketik ulang pilihan anda");
-                goto ktgri;
-                break;
-        }
-    }
-
-
-void deskripsi_villa (){
+    printf ("\t\t\t\t\t| Masukkan No Pilihan Anda : ");
+	scanf  ("%d",&kategori);
     system ("cls");
+    switch (kategori){
+    	case 1 :
+    		list_villa ();
+    		printf ("\t\t\t|                                                     Proses Pemesanan [Y/T]? : ");
+    		scanf  ("%s", &a);
+    		if (a=='Y'|| a=='y')
+    			pesan_villa_anyelir();
+    		else
+    			menuadm ();
+    	break ;
+    	
+    	case 2 :
+    		pesan_villa_anyelir ();
+    	break ;
+    	
+    	case 3 :
+    		lihat_data_pesanan ();
+    	break ;
+    
+    	case 4 :
+    		hapus_pesanan ();
+    	break ;
+    	
+    	case 5 :
+    		menu_masuk ();
+    	break ;
+    	
+    	default :
+    		error_alert ();
+    		goto ulangi ;
+    	break ;
+	}
+}
+
+void pesan_villa_anyelir (){
+	system ("cls");
+	printf ("\n\n");
+	printf ("\t\t\t\t\t|=========================================================|\n");
+    printf ("\t\t\t\t\t|                   PESAN VILLA ANYELIR                   |\n");
+    printf ("\t\t\t\t\t|=========================================================|\n");
+    FILE*dtpesan ;
+    dtpesan = fopen ("datapesan.txt", "ab");
+    if (dtpesan== NULL ){
+		printf("\t\t\t\t\t|File tidak dapat dibuat!\r\n");
+		menuadm();
+	}
+	do {
+		printf ("\t\t\t\t\t| Masukkan Id Villa     : ");
+		scanf  ("%d", &pesanvl.nomor_villa);
+		if (pesanvl.nomor_villa >=1 && pesanvl.nomor_villa <=12){
+			pemesanan_villa ();
+				printf ("\t\t\t\t\t| Nama Pemesan          : "); fflush(stdin); gets (pesanvl.nama_pemesan);
+				printf ("\t\t\t\t\t| No HP Pemesan         : "); fflush(stdin); scanf ("%s", &pesanvl.noHP);
+				printf ("\t\t\t\t\t| Email Pemesan         : "); fflush(stdin); scanf ("%s", &pesanvl.email);
+				printf ("\t\t\t\t\t| Jumlah Orang          : "); fflush(stdin); scanf ("%d", &pesanvl.orang);
+				printf ("\t\t\t\t\t| Check In [DD/MM/YYYY] : "); fflush(stdin); scanf ("%d/%d/%d", &pesanvl.tglCI, &pesanvl.blnCI, &pesanvl.thnCI);
+				printf ("\t\t\t\t\t| Deposito              : Rp.%.2f\n", deposito);
+				printf ("\t\t\t\t\t| Biaya Admin           : Rp.%.2f\n", biaya_ADM);
+				printf ("\t\t\t\t\t| Total Pembayaran      : Rp.%.2f\n", pesanvl.totalPembayaran);
+				printf ("\t\t\t\t\t| DP Pemesan            : "); fflush(stdin); scanf ("%f", &pesanvl.DPpemesan);
+				pesanvl.sisaPembayaran = pesanvl.totalPembayaran - pesanvl.DPpemesan ;
+				printf ("\t\t\t\t\t| Sisa Pembayaran       : Rp.%.2f\n", pesanvl.sisaPembayaran);
+		    	fwrite(&pesanvl, sizeof(pesanvl), 1, dtpesan);
+		}
+		else {
+			fflush(stdin);
+			printf ("\t\t\t\t\t| HARAP MASUKKAN ID VILLA DENGAN BENAR \n");
+			getch();
+			pesan_villa_anyelir();
+				
+		}
+		printf ("\t\t\t\t\t Data pemesanan tersimpan. \n");
+		printf("\t\t\t\t\t  Pesan villa lagi? (Y/T) : "); fflush(stdin);
+	    scanf("%s", &jawab)	;
+	}
+	while (jawab == 'Y'||jawab=='y');
+	fclose(dtpesan);		
+	menuadm();
+}
+
+
+void pemesanan_villa (){
+	if (pesanvl.nomor_villa==1){
+		pesanvl.totalPembayaran = 1800000 + biaya_ADM + deposito ;	
+	}
+	else if(pesanvl.nomor_villa==2){
+		pesanvl.totalPembayaran = 1650000 + biaya_ADM + deposito ;	
+	}
+	else if (pesanvl.nomor_villa==3){
+		pesanvl.totalPembayaran = 1750000 + biaya_ADM + deposito ;
+	}
+	else if (pesanvl.nomor_villa==4){
+		pesanvl.totalPembayaran = 3800000 + biaya_ADM + deposito ;
+	}
+	else if (pesanvl.nomor_villa==5){
+		pesanvl.totalPembayaran = 7750000 + biaya_ADM + deposito ;
+	}
+	else if (pesanvl.nomor_villa==6){
+		pesanvl.totalPembayaran = 5800000 + biaya_ADM + deposito ;
+	}
+	else if (pesanvl.nomor_villa==7){
+		pesanvl.totalPembayaran = 4800000 + biaya_ADM + deposito ;
+	}
+	else if (pesanvl.nomor_villa==8){
+		pesanvl.totalPembayaran = 4300000 + biaya_ADM + deposito ;
+	}
+	else if (pesanvl.nomor_villa==9){
+		pesanvl.totalPembayaran = 5960000 + biaya_ADM + deposito ;
+	}
+	else if (pesanvl.nomor_villa==10){
+		pesanvl.totalPembayaran = 2750000 + biaya_ADM + deposito ;
+	}
+	else if (pesanvl.nomor_villa==11){
+		pesanvl.totalPembayaran = 4120000 + biaya_ADM + deposito ;
+	}
+	else if (pesanvl.nomor_villa==12){
+		pesanvl.totalPembayaran = 4800000 + biaya_ADM + deposito ;
+	}
+}
+
+
+void lihat_data_pesanan (){
+	char opsi_kembali;
+	system ("cls");
+	printf ("\t\t\t|===================================================================================================================|\n");
+	printf ("\t\t\t|                                              DATA PEMESAN VILLA ANYELIR                                           |\n");
+	printf ("\t\t\t|===================================================================================================================|\n");
+	printf ("\t\t\t| Kode Villa |     Nama Pemesan      |        NO HP      |     Check In     |  Total Pembayaran | Sisa Pembayaran   |\n");
+	printf ("\t\t\t|------------|-----------------------|-------------------|------------------|-------------------|-------------------|\n");                                                                                          
+	FILE*dtpesan ;
+    dtpesan = fopen ("datapesan.txt", "rt");
+    if (dtpesan== NULL ){
+		printf("\t\t\t| FILE TIDAK DAPAT DIBUKA!\r\n");
+		menuadm();
+	}
+		/* Ambil isi file ngenggunakan fungsi fread(), lalu tampilkan ke layar */
+	while ((fread(&pesanvl, sizeof(pesanvl), JUM_BLOK, dtpesan)) == JUM_BLOK )
+	printf ("\t\t\t|     %d              %s            %s           %d/%d/%d        Rp.%.2f      Rp.%.2f\n", pesanvl.nomor_villa, pesanvl.nama_pemesan, pesanvl.noHP, pesanvl.tglCI, pesanvl.blnCI, pesanvl.thnCI, pesanvl.totalPembayaran, pesanvl.sisaPembayaran);
+	fclose(dtpesan);
+	printf("\t\t\t|===================================================================================================================|\n");
+	opsi :
+	printf("\t\t\t| Kembali ke menu ketik Y : ");
+	scanf ("%s", &opsi_kembali);
+	if (opsi_kembali=='Y'||opsi_kembali=='y')
+	    menuadm();
+	else 
+	    goto opsi ;
+}
+
+void hapus_pesanan (){
+	system ("cls");
+	lihat_data_pesanan ();
+	printf ("\n\n");
+	printf ("\t\t\t\t\t|=========================================================|\n");
+    printf ("\t\t\t\t\t|                       HAPUS PESANAN                     |\n");
+    printf ("\t\t\t\t\t|=========================================================|\n");
+}
+
+void menu_pengunjung (){
+    system ("cls");
+    int pilihan_deskripsi ;
 	printf ("\t\t\t\t\t|=========================================================|\n");
     printf ("\t\t\t\t\t|    *      *     *   *      *  *****   *      ***   ***  |\n");
     printf ("\t\t\t\t\t|   * *     * *   *     *   *   *       *       *    *  * |\n");
@@ -146,17 +535,34 @@ void deskripsi_villa (){
     printf ("\t\t\t\t\t|Villa Anyelir memadukan arsitektur Bali dan modern yang  |\n");
     printf ("\t\t\t\t\t|membuat pengunjung senantiasa nyaman sehingga ingin lagi |\n");
     printf ("\t\t\t\t\t|menyewa villa ini. Jika ingin melakukan pemesanan segera |\n");
-    printf ("\t\t\t\t\t|hubungi kontak di bawah ini.                             |\n");
-    printf ("\t\t\t\t\t|                        0361000000                       |\n");
+    printf ("\t\t\t\t\t|hubungi admin.                                           |\n");
     printf ("\t\t\t\t\t|=========================================================|\n");
-    printf ("\t\t\t\t\t|           Tekan enter untuk menuju menu....             |\n");
+    printf ("\t\t\t\t\t|          Tekan 1 untuk melihat lokasi vila              |\n");
+	printf ("\t\t\t\t\t|          Tekan 2 untuk melihat list vila                |\n");
+	printf ("\t\t\t\t\t|          Tekan 3 untuk kembali ke menu                  |\n");          
     printf ("\t\t\t\t\t|=========================================================|\n");
-    getchar ();
-  system ("cls");
+    tekan_benar :
+    printf ("\t\t\t\t\t|                      Tekan : ");
+    scanf  ("%d", &pilihan_deskripsi);
+    if (pilihan_deskripsi==1){
+    	lokasi_villa ();
+	}
+	else if (pilihan_deskripsi==2){
+		list_villa_pengunjung ();
+	}
+	else if (pilihan_deskripsi==3){
+		menu_masuk ();
+		
+	}
+	else {
+		error_alert ();
+		goto tekan_benar ;
+	}
 }
 
-void lokasi_villa(){
+void lokasi_villa (){
 	int pilih1 ;
+	system ("cls");
     printf ("\n");
     printf ("\t\t\t\t\t|============================================================|\n");
     printf ("\t\t\t\t\t|                          LOKASI VILLA                      |\n");
@@ -188,34 +594,20 @@ void lokasi_villa(){
     printf ("\t\t\t\t\t|            |Jalan Nelayan No.81, Canggu, Bali              |\n");
     printf ("\t\t\t\t\t|------------------------------------------------------------|\n");
     printf ("\t\t\t\t\t|============================================================|\n");
-    printf ("\t\t\t\t\t|               Tekan 1  untuk kembali ke menu....           |\n");
+    printf ("\t\t\t\t\t|         Tekan  1 untuk kembali ke menu pengunjung          |\n");
     printf ("\t\t\t\t\t|============================================================|\n");
     tekan1 :
-    printf ("\t\t\t\t\t|Tekan 1 : ") ;
+    printf ("\t\t\t\t\t| Tekan      : ") ;
 	scanf  ("%d", &pilih1);
 	if (pilih1== 1)
-		menu ();
+		menu_pengunjung ();
 	else 
 		printf ("\t\t\t\t\t| Silahkan ketik ulang 1 \n");
 		goto tekan1 ;
-	 
-}
-void list_villa(){
-	char menuList;
-	system ("cls");
-    listVilla ();
-	printf ("\t\t\t|Pesan Villa [Y/T] : ") ;
-	scanf  ("%s", &menuList);
-	system ("cls");
-	if (menuList== 'Y'|| menuList == 'y')
-		pesan_villa ();
-	else 
-		menu ();
-	 
+   
 }
 
-void listVilla (){
-	
+void list_villa (){
 	system ("cls");
 	printf ("\t\t\t|=========================================================================================================================================|\n");
     printf ("\t\t\t|                                                       LIST VILLA ANYELIR                                                                |\n");
@@ -328,307 +720,23 @@ void listVilla (){
     printf ("\t\t\t|           |                 |Ruang Mandi Air Hangat       |                 |              |           |           |           |        |\n");
 	printf ("\t\t\t|=========================================================================================================================================|\n");
 }
-void pesan_villa (){
-	int salahpilih ;
-	listVilla ();
-	printf  ("\t\t\t|Silahkan ketik ID VILLA yang ingin dipesan : ");
-	scanf ("%d", &villa);
-	printf ("\t\t\t|=========================================================================================================================================|\n");
-	system ("cls");
-	switch (villa)
-	{
-		case 1 :
-		break ;
-		
-		case 2 :
-		break ;
-		
-		case 3 :
-		break ;
-		
-		case 4 :
-		break ;
-		
-		case 5 :
-		break ;
-		
-		case 6 :
-		break ;
-		
-		case 7 :
-		break ;
-		
-		case 8 :
-		break ;
-		
-		case 9 :
-		break ;
-		
-		case 10 :
-		break ;
-		
-		case 11 :
-		break ;
-		
-		case 12 :
-		break ;
-		
-	default :
-		error_alert();
-		printf ("\t\t\t | Jika ingin keluar tekan 1, jika lanjut tekan 2 : \n ");
-		scanf ("%d", &salahpilih);
-		if (salahpilih==1)
-			menu ();
-		else 
-			pesan_villa ();
-	}
+
+void list_villa_pengunjung (){
+	int pilih ;
+	list_villa ();
+    printf ("\t\t\t|                                                PROSES PEMESANAN HARAP PANGGIL ADMIN                                                     |\n");
+    printf ("\t\t\t|=========================================================================================================================================|\n");
+    masukkan1 :
+    printf ("\t\t\t| Tekan 1 untuk kembali ke menu pengunjung      : ") ;
+	scanf  ("%d", &pilih);
+	if (pilih== 1){
 	
+		menu_pengunjung ();
+	}
+	else {
+		printf ("\t\t\t| Silahkan ketik ulang 1 \n");
+		goto masukkan1 ;
+	}
 }
 
 
-void riwayat_pemesanan (){
-
-}
-
-
-void menu_program(){
-	system ("cls");
-    pilih:
-
-    printf ("\n");
-    printf ("\t\t\t\t\t|================================================|\n");
-    printf ("\t\t\t\t\t|                   MENU PROGRAM                 |\n");
-    printf ("\t\t\t\t\t|================================================|\n");
-    printf ("\t\t\t\t\t|   No  |    Pilihan Menu Program                |\n");
-    printf ("\t\t\t\t\t|-------|----------------------------------------|\n");
-    printf ("\t\t\t\t\t|   1   |    MENU                                |\n");
-    printf ("\t\t\t\t\t|   2   |    EXIT                                |\n");
-    printf ("\t\t\t\t\t|================================================|\n"); 
-    printf ("\t\t\t\t\t|================================================|\n");
-    printf ("\n\t\t\t\t\t Masukan Pilihan Anda => ");
-    scanf  ("%d",&pilihanmenu);
-    printf ("\t\t\t\t\t|================================================|\n");
-    system ("cls");
-
-    // pada switch case bagian ini , disini akan memproses dari inputan yang sudah dimasukkan oleh user pada proses pemiihan pemilihan menu sebelumnya dan mengantarkan program pada fungsi yang merupakan panggilan dari pilihan yang di inputkan oleh user.
-    switch (pilihanmenu)
-    {
-        //pada case 1 ini, program akan memanggil fungsi yang sudah dibuat yaitu fungsi yang bernama void menu();
-        case 1:
-            menu ();
-            break;
-        case 2:
-            system (EXIT_SUCCESS);
-            break;
-        //Jika user menginput pilihan yang salah, atau menginput nilai yang tidak ada pada tampilan menu maka program akan mengesekusi pada bagian default seperti di bawah ini:
-        default:
-            error_alert();
-            //goto pilih; dimana syntax ini akan membawa user kembali ke menu pemilihan program untuk menginputkan pilihan yang benar, ini akan terus berulang hingga user menginputkan pilihan yang benar sesaui apa yang sudah ditampilkan pada menu pilihan.
-            goto pilih;
-            break;
-    }
-}
-
-
-void menu_masuk(){
-    // Variabel pilihan yang digunakan untuk menyimpan pilihan pengguna antara Masuk dengan Registrasi
-    int pilihan;
-
-    // Instruksi yang diberikan kepada pengguna
-    instruksi:
-    printf ("\t\t\t\t\t|================================================|\n");
-    printf ("\t\t\t\t\t|                PILIHAN MENU MASUK              |\n");
-    printf ("\t\t\t\t\t|================================================|\n");
-    printf ("\t\t\t\t\t|   No  |    Menu Masuk                          |\n");
-    printf ("\t\t\t\t\t|-------|----------------------------------------|\n");
-    printf ("\t\t\t\t\t|   1   |    Masuk                               |\n");
-    printf ("\t\t\t\t\t|   2   |    Registrasi                          |\n");
-    printf ("\t\t\t\t\t|   3   |    Exit                                |\n");
-    printf ("\t\t\t\t\t|================================================|\n");
-    printf ("\t\t\t\t\t|================================================|\n");
-    printf ("\t\t\t\t\t|| Masukkan pilihan Anda => ");
-    scanf  ("%d", &pilihan);
-    printf ("\t\t\t\t\t|================================================|\n");
-    // Membersihkan Layar terminal 
-    system ("cls");
-
-    /* Percabangan Switch dengan kondisi nilai yang disimpan pada variabel
-       pilihan jika pengguna menuliskan 1 maka akan dipanggil fungsi masuk()
-       jika pengguna menuliskna 2 maka akan dipanggil fungsi registrasi()    */
-    switch (pilihan){
-    case 1:
-        // Jika pengguna menginput angka 1 maka dipanggil fungsi masuk
-        masuk();
-        break;
-    case 2:
-        // Jika pengguna menginput angka 2 maka dipanggil fungsi registrasi
-        daftar();
-        break;
-    case 3:
-        exit(1);
-        break;
-    default:
-        error_alert();
-        // Kembali ke label instruksi jika terjadi kesalahan dalam menginput pilihan
-        goto instruksi;
-        break;
-    }
-}
-
-void masuk(){
-    /*  Variabel username[12] digunakan untuk menyimpan input username
-        yang dilakukan oleh pengguna. Inputan tersebut akan divalidasi
-        dengan username yang sudah terdaftar pada file logRecord.txt   */
-    char username[12];
-
-    /*  Variabel password[10] digunakan untuk menyimpan input password
-        yang dilakukan oleh pengguna. Inputan tersebut akan divalidasi
-        dengan password yang sudah terdaftar pada file logRecord.txt   */
-    char password[10];
-
-    // Variabel pilihan untuk pilihan user apakah ingin mendaftar atau keluar
-    int pilihan;
-
-    // Membuat pointer record untuk menunjuk pada file "logRecord.txt"
-    FILE *record;
-    // Membuka file dengan mode "r"
-    record = fopen (namaFile, "r");
-    if (record == NULL){
-        fputs ("Error, Tidak terdapat File untuk penyimpanan akun\n", stderr);
-        daftar();
-    }
-
-    // Memperlihatkan tanggal login
-    waktu();
-    // Instruksi untuk LOGIN
-    printf ("\t\t\t\t\t||================================================||\n");
-    printf ("\t\t\t\t\t|| LOGIN\n");
-    printf ("\t\t\t\t\t||================================================||\n");
-    printf ("\t\t\t\t\t|| Username: ");
-    scanf  ("%s", username);
-    printf ("\t\t\t\t\t||================================================||\n");
-    printf ("\t\t\t\t\t|| Password: ");
-    scanf  ("%s", password);
-    printf ("\t\t\t\t\t||================================================||\n");
-    system ("cls");
-    // Membeaca file "logRecord.txt"
-    while(fread(&u,sizeof(u),1,record)){
-        /*  Mengkomparasi username serta password yang diinput pengguna kedalam fungsi
-            masuk() dengan username serta password yang sudah terdaftar */
-        if(strcmp(username, u.username)==0 && strcmp(password, u.password)==0){
-            printf ("\t\t\t\t\t||===============================================||\n");
-            printf ("\t\t\t\t\t||                Login Berhasil!                ||\n");
-            printf ("\t\t\t\t\t||===============================================||\n");
-
-        }
-        //  Jika akun tidak terdaftar maka akan diberikan pilihan untuk mendaftar atau keluar dari program
-        else {
-            printf ("\t\t\t\t\t||===============================================||\n");
-            printf ("\t\t\t\t\t||            Akun tidak terdaftar!              ||\n");
-            printf ("\t\t\t\t\t||===============================================||\n");
-
-            instruksi:
-            printf ("\t\t\t\t\t||===============================================||\n");
-            printf ("\t\t\t\t\t||Ketik 1 untuk daftar");
-            printf ("\n\t\t\t\t\t||Ketik 2 untuk masuk ulang");
-            printf ("\n\t\t\t\t\t||Ketik 3 untuk EXIT\n");
-            printf ("\t\t\t\t\t||===============================================||\n");
-            printf ("\n\t\t\t\t\t||Pilihan: ");
-            scanf ("%d", &pilihan);
-            system ("cls");
-            // Jika pengguna mengetik nomor 1 maka akan dialihkan kepada fungsi daftar
-            if (pilihan == 1){
-                daftar();
-            /* Menggunakan fungsi recursive kepada fungsi masuk agar pengguna
-               dapat melakukan percobaan masuk kembali jika terjadi kesalahan penulisan */
-            } else if (pilihan==2) {
-                masuk();
-            } else if (pilihan ==3){
-                exit(1);
-            } else {
-                printf ("\t\t\t\t\t ERROR");
-                goto instruksi;
-            }
-        }
-    }
-    fclose(record);
-    return;
-}
-
-void daftar(){
-    // Membuat pointer regis untuk file "logRecord.txt"
-    FILE *regis;
-
-    // Membuka file "logRecord.txt" dengan mode "w"
-    regis = fopen(namaFile,"w");
-
-    // Melakukan Pengecekan apakah pointer regis menunjuk kepada file yang dituju ("logRecord.txt")
-    if (regis == NULL)
-    {
-        fputs("ERROR, Tidak ada File!", stderr);
-        exit(1);
-    }
-
-    // Instruksi untuk menginput nama
-    printf("\n\t\t\t\t\t Silahkan registrasi akun anda!\n\n");
-    getchar();
-    printf("\t\t\t\t\t Nama Lengkap: ");
-    gets(u.nama);
-    printf("\t\t\t\t\t Email anda: ");
-    scanf ("%s", u.email);
-    printf("\n\t\t\t\t\t Hallo %s!\n", u.nama);
-    printf ("\t\t\t\t\t Silahkan membuat username (max 12 karakter) serta membuat password (max 10 karakter)\n");
-
-    // Instruksi untuk menginput username serta password
-    printf("\n\t\t\t\t\t Enter Username:");
-    scanf ("%s", u.username);
-    printf("\n\t\t\t\t\t Enter Password:");
-    scanf ("%s", u.password);
-
-    // Menuliskan nama yang diinput oleh pengguna kedalam file "logRecord.txt"
-    fwrite(&u,sizeof(u),1,regis);
-    fclose(regis);
-    printf("\n\t\t\t\t\t Registrasi Selesai!");
-    printf ("\n\t\t\t\t\t Akun anda terdaftar, silahkan mencoba !");
-    getchar();
-
-    // Membersikan layar terminal
-    system ("cls");
-    // Memanggil fungsi masuk()
-    masuk();
-}
-
-
-void record(User u, char file[] ){
-    time( & waktuserver);
-    struct tm * waktu = localtime( & waktuserver);
-    //Mendeklarasikan tipe data file dengan pointer *rc yang bertujuan untuk pointer pada file "logRecord.txt"
-    FILE *rc;
-    //Assign rc untuk membuka file binary Record.dat dan menggunakan mode "r" untuk membaca textfile
-    rc = fopen(file, "r");
-    //Menggunakan fungsi fread untuk membaca isi dari file "logRecord.txt"
-    fread (&u, sizeof(u), 1, rc);
-    //Menggunakan fungsi fclose untuk menutup file "logRecord.txt" agar tidak diproses lagi
-    fclose (rc);
-
-    //Menampilkan hasil dari Record nama user dan nomor telepon yang diinput oleh user
-    //Menampilkan hasil dari Record nama user dan nomor telepon yang diinput oleh user
-    printf("\t\t\t\t\t|=========================================|\n");
-    printf("\t\t\t\t\t||Nama        Username       Tanggal      \n");
-    printf("\t\t\t\t\t||%s\t%s\t\t%i-%i-%i\n",u.nama, u.username, waktu -> tm_mday, waktu -> tm_mon + 1, waktu -> tm_year + 1900);
-    printf("\t\t\t\t\t|=========================================|\n");
-
-}
-
-void waktu(){
-    time( & waktuserver);
-    struct tm * waktu = localtime( & waktuserver);
-    printf("\n\t\t\t\t\t||================Tanggal: %i/%i/%i==============||\n\n", waktu -> tm_mday, waktu -> tm_mon + 1, waktu -> tm_year + 1900);
-}
-
-void error_alert(){
-    printf   ("\t\t\t\t\t===============================================  \n");
-    printf   ("\t\t\t\t\t||     Pilihan yang Anda masukan Salah!!!     || \n");
-    printf   ("\t\t\t\t\t||   Silahkan Memilih Pilihan yang Sudah ada  || \n");
-    printf   ("\t\t\t\t\t===============================================  \n");
-}
