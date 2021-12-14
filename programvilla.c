@@ -5,7 +5,7 @@
 #define JUM_BLOK 1		/* sebuah record */
 
 time_t waktuserver; 
-//deklarasi variabel :
+//deklarasi variabel pada program :
 int passwordbenar;
 char passP[20], passwordP[20];
 float deposito = 500000 ;
