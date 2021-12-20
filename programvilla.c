@@ -1,52 +1,53 @@
 #include <stdio.h> //header standar input output dalam bahasa C
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
-#define JUM_BLOK 1		/* sebuah record */
+#include <stdlib.h> //header standar input output dalam bahasa C
+#include <string.h> //header yang berisi fungsi-fungsi yang digunakan untuk pengoprasian string dan array
+#include <time.h> //header yang digunakan untuk menampilkan format tanggal dan waktu
+#define JUM_BLOK 1	/* sebuah record */
 
-time_t waktuserver; 
+// Note : Pada beberapa compiler kode system ("clear") dapat dituliskan system ("cls");
 
-//deklarasi variabel :
-int passwordbenar;
-char passP[20], passwordP[20];
-float deposito = 500000 ;
-float biaya_ADM = 2000 ;
-char jawab ;
-int hari1 ;
-int hari2=2;
+// Dekalarasi variable global yang digunakan pada program pemesanan villa ini:
+int passwordbenar;        //variabel passwordbenar => berfungsi untuk menyimpan password yang benar sesuai dengan input user ke dalam bentuk data integer
+char passP[20];           //variabel passP         => berfungsi untuk menyimpan password pegawai sesuai dengan input user ke dalam bentuk data char dengan jumlah maksimal 20 karakter
+char passwordP[20];       //variabel passwordP     => berfungsi untuk menyimpan password pegawai yang diubah dari passP menjadi passwordP dengan strcpy ke dalam bentuk data char dengan jumlah maksimal 20 karakter
+float deposito = 500000 ; //variabel deposito      => berfungsi untuk menyimpan deposito ke dalam variabel bertipe data float dengan nilai deposito tetap Rp. 500.000,-
+float biaya_ADM = 2000 ;  //variabel biaya_ADM     => berfungsi untuk menyimpan biaya_ADM ke dalam variabel bertipe data float dengan nilai biaya_ADM tetap Rp. 2.000,-
+char jawab ;              //variabel jawab         => berfungsi untuk menyimpan jawab sesuai dengan input user ke dalam variabel bertipe char 
+int hari1 ;               //variabel hari1         => berfungsi untuk menyimpan hari1 yaitu hari check in ke dalam variabel bertipe integer
+int hari2 = 1;            //variabel hari1         => berfungsi untuk menyimpan hari2 yaitu hari check out ke dalam variabel bertipe integer, dimana hari checkout ditentukkan berdasarkan hari checkin + 1 hari
+time_t waktuserver;       //variabel waktuserver   => berfungsi untuk mengambil waktu dari sistem.
 
 // Struct User untuk menyimpan member nama, username, password, email
 typedef struct {
-    char nama[50];
-    char username[12];
-    char password[10];
-    char email[50];
+    char nama[50]; //untuk menyimpan nama dengan maksimal 50 karakter pada saat registrasi pengguna
+    char username[12]; //untuk menyimpan username dengan maksimal 12 karakter pada saat registrasi serta login pengguna
+    char password[10]; //untuk menyimpan password dengan maksimal 10 karakter pada saat registrasi serta login pengguna
+    char email[50]; //untuk menyimpan email dengan maksimal 50 karakter pada saat registrasi pengguna
 }User;
+User u; //Mendeklarasikan variabel u pada struct User
 
-User u; 
 
-
-// Struct Pesan
+// Struct untuk menyimpan Pesanan Villa
 typedef struct {
-	int nomor_villa;
-	char nama_pemesan[50];
-	char noHP [15];
-	char email [50];
-	int orang ;
-	int tglCI ;
-	int blnCI ;
-	int thnCI ;
-	int tglCO ;
-	int blnCO ;
-	int thnCO ;
-	float totalPembayaran ;
-	float DPpemesan ;
-	float sisaPembayaran ;
-	int id_pesan ;	
+	int nomor_villa;        //untuk menyimpan nomor_villa yang dipesan ke dalam variabel integer saat input pemesanan villa
+	char nama_pemesan[50];  //untuk menyimpan nama_pemesan ke dalam variabel char dengan maksimal 50 karakter saat input pemesanan villa
+	char noHP [15];         //untuk menyimpan noHP pemesan ke dalam variabel char dengan maksimal 15 karakter saat input pemesanan villa
+	char email [50];        //untuk menyimpan email pemesan ke dalam variabel char dengan maksimal 50 karakter saat input pemesanan villa
+	int orang ;             //untuk menyimpan banyaknya orang yang ada didalam suatu villa, disimpan ke variabel bertipe integer, input saat pemesanan villa
+	int tglCI ;             //berfungsi untuk menyimpan tanggal check in saat input pemesanan villa ke dalam variabel bertipe integer
+	int blnCI ;             //berfungsi untuk menyimpan bulan check in saat input pemesanan villa ke dalam variabel bertipe integer
+	int thnCI ;             //berfungsi untuk menyimpan tahun check in saat input pemesanan villa ke dalam variabel bertipe integer
+	int tglCO ;             //berfungsi untuk menyimpan tanggal check out saat input pemesanan villa ke dalam variabel bertipe integer
+	int blnCO ;             //berfungsi untuk menyimpan bulan check out saat input pemesanan villa ke dalam variabel bertipe integer
+	int thnCO ;             //berfungsi untuk menyimpan tahun check out saat input pemesanan villa ke dalam variabel bertipe integer
+	float totalPembayaran ; //berfungsi untuk menyimpan total pembayaran villa ke dalam variabel bertipe float
+	float DPpemesan ;       //berfungsi untuk menyimpan total DP Pemesan ke dalam variabel bertipe float
+	float sisaPembayaran ;  //berfungsi untuk menyimpan sisa pembayaran villa ke dalam variabel bertipe float
+	int id_pesan ;	        //berfungsi untuk menyimpan id_villa yang diinput user ke dalam variabel bertipe integer
 }pesan_villa;
-pesan_villa pesanvl;
+pesan_villa pesanvl; //Mendeklarasikan variabel pesanvl pada struct pesan_villa
 
-//Deklarasi fungsi-fungsi yang digunkan pada program pemesanan villa
+//Deklarasi fungsi-fungsi yang digunakan pada program pemesanan villa :
 void header ();
 void menu_masuk();
 void masuk_admin();
@@ -77,10 +78,11 @@ void tampilan_pemesanan ();
 // assign namaFile (nF) agar menyimpan string "logRecord.txt"
 char namaFile[] = "logRecord.txt";
 
+// fungsi main () adalah kepala dari program ini, dimana program akan di eksekusi oleh fungsi main ini.
 int main (){
    system ("color F5");
-   header ();
-   menu_masuk ();
+   header (); //pemanggilan fungsi header
+   menu_masuk (); //pemanggilan fungsi menu masuk
 }
 
 void header (){
@@ -189,7 +191,20 @@ void selesai(){
 	menuadm();
 }
 
-
+//=======================================================================//
+//*****                 Fungsi Untuk Login Pengunjung              ******//
+//=======================================================================//
+// Nama Fungsi    : masuk_pengunjung                                     //
+// Input Argumen  : char username[12], char password[10], dan int pilihan//
+// Output Argumen : -                                                    //
+// Deskripsi      : Menginput username dan passowrd saat masuk pengunjung//
+//                  yang sesuai dengan rekaman pada logrecord.txt        //
+//                  akan berlanjut pada menu pengunjung                  //
+// Versi : 1.0                                      Rev. 0               //
+// Tgl   : 13-12-2021                               Tgl: -               //
+// Gusti Ayu Wahyu Whurapsari - 2105551042                               //
+// Kelas B                                                               //
+//=======================================================================//
 void masuk_pengunjung (){
 	/*  Variabel username[12] digunakan untuk menyimpan input username
         yang dilakukan oleh pengguna. Inputan tersebut akan divalidasi
@@ -220,9 +235,9 @@ void masuk_pengunjung (){
     printf ("\t\t\t\t\t|                          LOGIN                          |\n");
     printf ("\t\t\t\t\t|                    PENGUNJUNG ANYELIR                   |\n");
     printf ("\t\t\t\t\t|=========================================================|\n");
-    printf ("\t\t\t\t\t| Username: ");
+    printf ("\t\t\t\t\t| Username: "); //input username
     scanf  ("%s", username);
-    printf ("\t\t\t\t\t| Password: ");
+    printf ("\t\t\t\t\t| Password: "); //input password
     scanf  ("%s", password);
     printf ("\t\t\t\t\t|=========================================================|\n");
     system ("cls");
@@ -251,12 +266,13 @@ void masuk_pengunjung (){
             // Jika pengguna mengetik nomor 1 maka akan dialihkan kepada fungsi daftar
             if (pilihan == 1){
                 daftar();
-            /* Menggunakan fungsi recursive kepada fungsi masuk agar pengguna
-               dapat melakukan percobaan masuk kembali jika terjadi kesalahan penulisan */
+            // Jika pengguna mengetik nomor 2 maka akan dialihkan kepada fungsi masuk_pengunjung
             } else if (pilihan==2) {
                 masuk_pengunjung();
+        	// Jika pengguna mengetik nomor 3, karena exit maka akan dialihkan kepada menu_masuk
             } else if (pilihan ==3){
-                exit(1);
+                menu_masuk ();
+            // Jika pengguna salah menginput nomor yang tidak sesuai dengan pilihan yang ada maka pengguna akan dialihkan kembali untuk memasukkan pilihan yang sesuai
             } else {
                 printf ("\t\t\t\t\t HARAP MASUKKAN PILIHAN YANG SESUAI [1-3]\n");
                 goto instruksi;
