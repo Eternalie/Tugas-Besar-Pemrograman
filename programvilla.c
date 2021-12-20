@@ -1,7 +1,7 @@
 #include <stdio.h> //header standar input output dalam bahasa C
-#include <stdlib.h>
+#include <stdlib.h> 
 #include <string.h>
-#include <time.h>
+#include <time.h> //header untuk waktu server saat ini
 #define JUM_BLOK 1		/* sebuah record */
 
 time_t waktuserver; 
