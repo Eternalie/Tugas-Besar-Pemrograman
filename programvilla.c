@@ -128,7 +128,7 @@ void menu_masuk (){
     printf ("\t\t\t\t\t|   4   |    Exit                                |\n");
     printf ("\t\t\t\t\t|================================================|\n");
     printf ("\t\t\t\t\t|================================================|\n");
-    printf ("\t\t\t\t\t|| Masukkan pilihan Anda => ");
+    printf ("\t\t\t\t\t| Masukkan pilihan Anda => ");
     scanf  ("%d", &pilihan);
     printf ("\t\t\t\t\t|================================================|\n");
     system ("cls");
@@ -178,11 +178,24 @@ void masuk_admin (){
     
 }
 
+//=======================================================================//
+//*****           Fungsi Untuk Mengambil Password Pegawai           *****//
+//=======================================================================//
+// Nama Fungsi    : ambil_password                                       //
+// Input Argumen  : -                                                    //
+// Output Argumen : -                                                    //
+// Deskripsi      : Fungsi untuk mengambil password pegawai dari database//
+//                  passwordAdmin.txt                                    //
+// Versi : 1.0                                      Rev. 0               //
+// Tgl   : 13-12-2021                               Tgl: -               //
+// Gusti Ayu Wahyu Whurapsari - 2105551042                               //
+// Kelas B                                                               //
+//=======================================================================//
 void ambil_password(){
-	FILE *file;
-	file=fopen("passwordAdmin.txt", "r");
+	FILE *file; // Membuat pointer file untuk menunjuk pada file "passwordAdmin.txt"
+	file=fopen("passwordAdmin.txt", "r"); // Membuka file dengan mode "r"
 	fscanf(file, "%s", passwordP);
-	fclose(file);
+	fclose(file); //menutup file "passwordAdmin"
 }
 
 void selesai(){
@@ -241,7 +254,7 @@ void masuk_pengunjung (){
     scanf  ("%s", password);
     printf ("\t\t\t\t\t|=========================================================|\n");
     system ("cls");
-    // Membeaca file "logRecord.txt"
+    // Membaca file "logRecord.txt"
     while(fread(&u,sizeof(u),1,record)){
         /*  Mengkomparasi username serta password yang diinput pengguna kedalam fungsi
             masuk() dengan username serta password yang sudah terdaftar */
@@ -279,7 +292,7 @@ void masuk_pengunjung (){
             }
         }
     }
-    fclose(record);
+    fclose(record); //menutup file "logRecord.txt"
     return;
 }
 
@@ -327,6 +340,20 @@ void daftar (){
     menu_pengunjung();
 }
 
+//=======================================================================//
+//**************  Fungsi Untuk Menampilkan Record User   ****************//
+//=======================================================================//
+// Nama Fungsi    : record                                               //
+// Passing Argumen: struct User u, char file[]                           //
+// Output Argumen : u.nama                                               //
+// Deskripsi      : Fungsi ini ditujukan untuk menampilkan data yang     //
+//                  dimasukan oleh user yaitu berupa nama yang ada pada  //
+//                  logRecord.txt                                        //
+// Versi : 1.0                                      Rev. 0               //
+// Tgl: 14-12-2021                                  Tgl: -               //
+// Gusti Ayu Wahyu Whurapsari - 2105551042                               //
+// Kelas B                                                               //
+//=======================================================================//
 void record(User u, char file[] ){
     time( & waktuserver);
     struct tm * waktu = localtime( & waktuserver);
@@ -348,11 +375,24 @@ void record(User u, char file[] ){
 
 }
 
+//=======================================================================//
+//***********     Fungsi Untuk Menampilkan Waktu Sistem     *************//
+//=======================================================================//
+// Nama Fungsi    : waktu                                                //
+// Input Argumen  : -                                                    //
+// Output Argumen : -                                                    //
+// Deskripsi      : Fungsi ini digunakan untuk mengambil dan menampilkan //
+//                 Waktu sistem pada saat user mengakses program.        //
+//                                                                       //
+// Versi : 1.0                                      Rev. 0               //
+// Tgl   : 14-12-2020                               Tgl: -               //
+// Gusti Ayu Wahyu Whurapsari - 2105551042                               //
+// Kelas B                                                               //
+//=======================================================================//
 void waktu(){
     time( & waktuserver);
     struct tm * waktu = localtime( & waktuserver);
-    printf ("\t\t\t\t\t|=====================Tanggal: %i/%i/%i=================|\n", waktu -> tm_mday, waktu -> tm_mon + 1, waktu -> tm_year + 1900);
-                           
+    printf ("\t\t\t\t\t|=====================Tanggal: %i/%i/%i=================|\n", waktu -> tm_mday, waktu -> tm_mon + 1, waktu -> tm_year + 1900);                      
 }
 
 void error_alert (){
@@ -739,6 +779,23 @@ void hapusdtpesan (pesan_villa pesanvl, int r){
 		}
 }
 
+//=======================================================================//
+//***********   Fungsi Untuk Menampilkan Menu Pengunjung    *************//
+//=======================================================================//
+// Nama Fungsi    : menu_pengunjung                                      //
+// Input Argumen  : int pilihan_deskripsi                                //
+// Output Argumen : -                                                    //
+// Deskripsi      : Fungsi ini digunakan untuk menampilkan menu          //
+//                  pengunjung yang berisi deskripsi villa dan pilihan   //
+//                  menu apabila tekan 1 akan mengarah pada fungsi lokasi//
+//                  villa, tekan 2 mengarah pada fungsi list villa pengun//
+//                  jung, tekan 3 mengarah pada fungsi tampilan pesanan  //
+//                  serta 4 exit yaitu kembali ke menu masuk             //
+// Versi : 1.0                                      Rev. 0               //
+// Tgl   : 10-12-2020                               Tgl: -               //
+// Gusti Ayu Wahyu Whurapsari - 2105551042                               //
+// Kelas B                                                               //
+//=======================================================================//
 void menu_pengunjung (){
     system ("cls");
     int pilihan_deskripsi ;
@@ -868,6 +925,18 @@ void lokasi_villa (){
    
 }
 
+//=======================================================================//
+//***********     Fungsi Untuk Menampilkan List Villa       *************//
+//=======================================================================//
+// Nama Fungsi    : list_villa                                           //
+// Input Argumen  : -                                                    //
+// Output Argumen : -                                                    //
+// Deskripsi      : Fungsi ini digunakan untuk menampilkan list villa    //
+// Versi : 1.0                                      Rev. 0               //
+// Tgl   : 10-12-2020                               Tgl: -               //
+// Gusti Ayu Wahyu Whurapsari - 2105551042                               //
+// Kelas B                                                               //
+//=======================================================================//
 void list_villa (){
 	system ("cls");
 	printf ("\t\t\t|=========================================================================================================================================|\n");
