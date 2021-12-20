@@ -1,22 +1,21 @@
 #include <stdio.h> //header standar input output dalam bahasa C
-#include <stdlib.h> 
+#include <stdlib.h>
 #include <string.h>
-#include <time.h> //header untuk waktu server saat ini
+#include <time.h>
 #define JUM_BLOK 1		/* sebuah record */
 
 time_t waktuserver; 
 
-//deklarasi variabel pada program :
-
 //deklarasi variabel :
-
 int passwordbenar;
 char passP[20], passwordP[20];
 float deposito = 500000 ;
 float biaya_ADM = 2000 ;
 char jawab ;
+int hari1 ;
+int hari2=2;
 
-// Struct User untuk menyimpan member nama, username, password
+// Struct User untuk menyimpan member nama, username, password, email
 typedef struct {
     char nama[50];
     char username[12];
@@ -27,11 +26,7 @@ typedef struct {
 User u; 
 
 
-
-// Struct Pemesanan Villa
-
 // Struct Pesan
-
 typedef struct {
 	int nomor_villa;
 	char nama_pemesan[50];
@@ -46,7 +41,8 @@ typedef struct {
 	int thnCO ;
 	float totalPembayaran ;
 	float DPpemesan ;
-	float sisaPembayaran ;	
+	float sisaPembayaran ;
+	int id_pesan ;	
 }pesan_villa;
 pesan_villa pesanvl;
 
@@ -70,6 +66,13 @@ void pesan_villa_anyelir ();
 void lihat_data_pesanan ();
 void hapus_pesanan ();
 void pemesanan_villa();
+void hapus ();
+void hapusdtpesan (pesan_villa pesanvl, int r);
+void list_data_pemesan ();
+void detPemesanan ();
+void kalenderuntukCO ();
+void hari ();
+void tampilan_pemesanan ();
 
 // assign namaFile (nF) agar menyimpan string "logRecord.txt"
 char namaFile[] = "logRecord.txt";
@@ -98,7 +101,7 @@ void header (){
 	printf  ("\t\t\t\t\t||                 Universitas Udayana                 ||\n");
 	printf  ("\t\t\t\t\t||                       2021                          ||\n");
 	printf  ("\t\t\t\t\t=========================================================\n");
-	printf  ("\t\t\t\t\t         Tekan ENTER  untuk melanjutkan....\n");
+	printf  ("\t\t\t\t\t              Tekan ENTER  untuk melanjutkan....\n");
     printf  ("\t\t\t\t\t=========================================================\n");
 	getchar ();
   system ("cls");
@@ -110,7 +113,6 @@ void menu_masuk (){
     int pilihan;
 
     // Instruksi yang diberikan kepada pengguna
-
     instruksi:
     printf ("\t\t\t\t\t|================================================|\n");
     printf ("\t\t\t\t\t|                PILIHAN MENU MASUK              |\n");
@@ -124,7 +126,6 @@ void menu_masuk (){
     printf ("\t\t\t\t\t|   4   |    Exit                                |\n");
     printf ("\t\t\t\t\t|================================================|\n");
     printf ("\t\t\t\t\t|================================================|\n");
-    instruksi:
     printf ("\t\t\t\t\t|| Masukkan pilihan Anda => ");
     scanf  ("%d", &pilihan);
     printf ("\t\t\t\t\t|================================================|\n");
@@ -215,15 +216,15 @@ void masuk_pengunjung (){
     // Memperlihatkan tanggal login
     waktu();
     // Instruksi untuk LOGIN
-    printf ("\t\t\t\t\t||================================================||\n");
-    printf ("\t\t\t\t\t||                       LOGIN                    ||\n");
-    printf ("\t\t\t\t\t||                 PENGUNJUNG ANYELIR             ||\n");
-    printf ("\t\t\t\t\t||================================================||\n");
-    printf ("\t\t\t\t\t|| Username: ");
+    printf ("\t\t\t\t\t|=========================================================|\n");
+    printf ("\t\t\t\t\t|                          LOGIN                          |\n");
+    printf ("\t\t\t\t\t|                    PENGUNJUNG ANYELIR                   |\n");
+    printf ("\t\t\t\t\t|=========================================================|\n");
+    printf ("\t\t\t\t\t| Username: ");
     scanf  ("%s", username);
-    printf ("\t\t\t\t\t|| Password: ");
+    printf ("\t\t\t\t\t| Password: ");
     scanf  ("%s", password);
-    printf ("\t\t\t\t\t||================================================||\n");
+    printf ("\t\t\t\t\t|=========================================================|\n");
     system ("cls");
     // Membeaca file "logRecord.txt"
     while(fread(&u,sizeof(u),1,record)){
@@ -234,17 +235,17 @@ void masuk_pengunjung (){
         }
         //  Jika akun tidak terdaftar maka akan diberikan pilihan untuk mendaftar atau keluar dari program
         else {
-            printf ("\t\t\t\t\t||===============================================||\n");
-            printf ("\t\t\t\t\t||            Akun tidak terdaftar!              ||\n");
-            printf ("\t\t\t\t\t||===============================================||\n");
+            printf ("\t\t\t\t\t|=========================================================|\n");
+            printf ("\t\t\t\t\t|                   Akun tidak terdaftar!                 |\n");
+            printf ("\t\t\t\t\t|=========================================================|\n");
 
             instruksi:
-            printf ("\t\t\t\t\t||===============================================||\n");
-            printf ("\t\t\t\t\t||Ketik 1 untuk daftar");
-            printf ("\n\t\t\t\t\t||Ketik 2 untuk masuk ulang");
-            printf ("\n\t\t\t\t\t||Ketik 3 untuk EXIT\n");
-            printf ("\t\t\t\t\t||===============================================||\n");
-            printf ("\n\t\t\t\t\t||Pilihan: ");
+            printf ("\t\t\t\t\t|=========================================================|\n");
+            printf ("\t\t\t\t\t| Ketik 1 untuk daftar");
+            printf ("\n\t\t\t\t\t| Ketik 2 untuk masuk ulang");
+            printf ("\n\t\t\t\t\t| Ketik 3 untuk EXIT\n");
+            printf ("\t\t\t\t\t|=========================================================|\n");
+            printf ("\n\t\t\t\t\t| Pilihan: ");
             scanf ("%d", &pilihan);
             system ("cls");
             // Jika pengguna mengetik nomor 1 maka akan dialihkan kepada fungsi daftar
@@ -324,24 +325,25 @@ void record(User u, char file[] ){
 
     //Menampilkan hasil dari Record nama user dan nomor telepon yang diinput oleh user
     //Menampilkan hasil dari Record nama user dan nomor telepon yang diinput oleh user
-    printf("\t\t\t\t\t|=========================================|\n");
-    printf("\t\t\t\t\t||Nama        Username       Tanggal      \n");
-    printf("\t\t\t\t\t||%s\t%s\t\t%i-%i-%i\n",u.nama, u.username, waktu -> tm_mday, waktu -> tm_mon + 1, waktu -> tm_year + 1900);
-    printf("\t\t\t\t\t|=========================================|\n");
+    printf("\t\t\t\t\t|=========================================================|\n");
+    printf("\t\t\t\t\t|    Nama        Username       Tanggal      \n");
+    printf("\t\t\t\t\t| %s\t%s\t\t%i-%i-%i\n",u.nama, u.username, waktu -> tm_mday, waktu -> tm_mon + 1, waktu -> tm_year + 1900);
+    printf("\t\t\t\t\t|=========================================================|\n");
 
 }
 
 void waktu(){
     time( & waktuserver);
     struct tm * waktu = localtime( & waktuserver);
-    printf("\n\t\t\t\t\t||================Tanggal: %i/%i/%i==============||\n\n", waktu -> tm_mday, waktu -> tm_mon + 1, waktu -> tm_year + 1900);
+    printf ("\t\t\t\t\t|=====================Tanggal: %i/%i/%i=================|\n", waktu -> tm_mday, waktu -> tm_mon + 1, waktu -> tm_year + 1900);
+                           
 }
 
 void error_alert (){
-	printf   ("\t\t\t\t\t===============================================  \n");
-    printf   ("\t\t\t\t\t||     Pilihan yang Anda masukan Salah!!!     || \n");
-    printf   ("\t\t\t\t\t||   Silahkan Memilih Pilihan yang Sudah ada  || \n");
-    printf   ("\t\t\t\t\t===============================================  \n");
+	printf   ("\t\t\t\t\t=========================================================  \n");
+    printf   ("\t\t\t\t\t||         Pilihan yang Anda masukan Salah!!!          || \n");
+    printf   ("\t\t\t\t\t||      Silahkan Memilih Pilihan yang Sudah ada        || \n");
+    printf   ("\t\t\t\t\t=========================================================  \n");
 }
 
 void menuadm (){
@@ -401,6 +403,7 @@ void menuadm (){
 
 void pesan_villa_anyelir (){
 	system ("cls");
+	list_villa ();
 	printf ("\n\n");
 	printf ("\t\t\t\t\t|=========================================================|\n");
     printf ("\t\t\t\t\t|                   PESAN VILLA ANYELIR                   |\n");
@@ -416,10 +419,13 @@ void pesan_villa_anyelir (){
 		scanf  ("%d", &pesanvl.nomor_villa);
 		if (pesanvl.nomor_villa >=1 && pesanvl.nomor_villa <=12){
 			pemesanan_villa ();
+				printf ("\t\t\t\t\t| Id Pemesanan          : "); fflush(stdin); scanf ("%d", &pesanvl.id_pesan);
 				printf ("\t\t\t\t\t| Nama Pemesan          : "); fflush(stdin); gets (pesanvl.nama_pemesan);
 				printf ("\t\t\t\t\t| No HP Pemesan         : "); fflush(stdin); scanf ("%s", &pesanvl.noHP);
 				printf ("\t\t\t\t\t| Email Pemesan         : "); fflush(stdin); scanf ("%s", &pesanvl.email);
 				printf ("\t\t\t\t\t| Jumlah Orang          : "); fflush(stdin); scanf ("%d", &pesanvl.orang);
+				printf ("\t\t\t\t\t| Check In HARI [ANGKA] : ");
+				scanf ("%d", &hari1);
 				printf ("\t\t\t\t\t| Check In [DD/MM/YYYY] : "); fflush(stdin); scanf ("%d/%d/%d", &pesanvl.tglCI, &pesanvl.blnCI, &pesanvl.thnCI);
 				printf ("\t\t\t\t\t| Deposito              : Rp.%.2f\n", deposito);
 				printf ("\t\t\t\t\t| Biaya Admin           : Rp.%.2f\n", biaya_ADM);
@@ -436,6 +442,7 @@ void pesan_villa_anyelir (){
 			pesan_villa_anyelir();
 				
 		}
+		detPemesanan ();
 		printf ("\t\t\t\t\t Data pemesanan tersimpan. \n");
 		printf("\t\t\t\t\t  Pesan villa lagi? (Y/T) : "); fflush(stdin);
 	    scanf("%s", &jawab)	;
@@ -485,15 +492,139 @@ void pemesanan_villa (){
 	}
 }
 
+void detPemesanan (){
+	printf ("\n\n");
+	printf ("\t\t\t\t\t|=========================================================|\n");
+    printf ("\t\t\t\t\t|                  DETAIL PEMESANAN VILLA                 |\n");
+    printf ("\t\t\t\t\t|=========================================================|\n");
+	waktu ();
+	printf ("\t\t\t\t\t| Id Villa              : %d\n", pesanvl.nomor_villa);
+	printf ("\t\t\t\t\t| Id Pemesanan          : %d\n", pesanvl.id_pesan);
+	printf ("\t\t\t\t\t| Nama Pemesan          : %s\n", pesanvl.nama_pemesan);
+	printf ("\t\t\t\t\t| No HP Pemesan         : %s\n", pesanvl.noHP);
+	printf ("\t\t\t\t\t| Email Pemesan         : %s\n", pesanvl.email);
+	printf ("\t\t\t\t\t| Jumlah Orang          : %d\n", pesanvl.orang);
+	printf ("\t\t\t\t\t| Check In              : ");
+	hari ();
+	printf (" %d/%d/%d\n", pesanvl.tglCI, pesanvl.blnCI, pesanvl.thnCI);
+	kalenderuntukCO ();
+	hari1=hari1+(hari2%7);
+	while (hari1>7)
+		hari1=hari1%7;
+	printf ("\t\t\t\t\t| Check Out             : ");
+	hari ();
+	printf (" %d/%d/%d\n", pesanvl.tglCO,pesanvl.blnCO, pesanvl.thnCO) ;
+	printf ("\t\t\t\t\t| Deposito              : Rp.%.2f\n", deposito);
+	printf ("\t\t\t\t\t| Biaya Admin           : Rp.%.2f\n", biaya_ADM);
+	printf ("\t\t\t\t\t| Total Pembayaran      : Rp.%.2f\n", pesanvl.totalPembayaran);
+	printf ("\t\t\t\t\t| DP Pemesan            : Rp.%.2f\n", pesanvl.DPpemesan);
+	printf ("\t\t\t\t\t| Sisa Pembayaran       : Rp.%.2f\n", pesanvl.sisaPembayaran);
+	printf ("\t\t\t\t\t|=========================================================|\n");
+}
+
+void kalenderuntukCO (){
+	pesanvl.tglCO = 0 ;
+	pesanvl.blnCO = 0 ;
+	pesanvl.thnCO = 0 ;
+	do {
+		if (hari2 <= 31)
+		{
+			if (pesanvl.blnCI == 2)
+				pesanvl.tglCO = Februari (pesanvl.thnCI);
+			else
+				pesanvl.tglCO = BknFeb (pesanvl.thnCI,pesanvl.blnCI);
+			if (pesanvl.tglCI + hari2 > pesanvl.tglCO)
+			{
+				pesanvl.blnCO = pesanvl.blnCI + 1 ;
+				if (pesanvl.blnCO>12){
+					pesanvl.thnCO=pesanvl.thnCI+1;
+					pesanvl.blnCO=1;
+				}
+				else
+				pesanvl.thnCO = pesanvl.thnCI ;
+				pesanvl.tglCO = pesanvl.tglCI + hari2 - pesanvl.tglCO ;
+
+			}
+			else
+			{
+				pesanvl.tglCO= pesanvl.tglCI+hari2;
+				pesanvl.blnCO=pesanvl.blnCI;
+				pesanvl.thnCO=pesanvl.thnCI;
+			}
+		
+		}
+		else 
+		{
+			if (pesanvl.blnCI == 2)
+				pesanvl.tglCO = Februari (pesanvl.blnCI);
+			else 
+				pesanvl.tglCO = BknFeb (pesanvl.thnCI,pesanvl.blnCI);
+				hari2 = hari2 - pesanvl.tglCO;
+			if (pesanvl.blnCI == 12)
+			{
+				pesanvl.blnCI = 1 ;
+				pesanvl.thnCI = pesanvl.thnCI + 1 ;
+			}
+			else
+				pesanvl.blnCI = pesanvl.blnCI + 1 ;
+		}
+	}
+	while (pesanvl.thnCO== 0);
+}
+
+int Februari (int thn){
+	thn = pesanvl.thnCI;
+	if ((pesanvl.thnCI % 100 != 0) && (pesanvl.thnCI % 4 == 0)||(pesanvl.thnCI % 400 == 0)){
+		return 29 ;
+	}
+	else {
+		return 28 ;
+	}		
+}
+
+int BknFeb (int thn, int bln){
+	thn = pesanvl.thnCI;
+	bln = pesanvl.blnCI;
+	if ((pesanvl.blnCI==1) || (pesanvl.blnCI==3) || (pesanvl.blnCI==5) || (pesanvl.blnCI==7) || (pesanvl.blnCI==8) || (pesanvl.blnCI==10) || (pesanvl.blnCI==12)){
+		return 31 ;
+	}
+	else {
+		return 30 ;
+	}
+}
+
+void hari (){
+	switch (hari1){
+		case 1 : printf ("SENIN"); break ;
+		case 2 : printf ("SELASA"); break ;
+		case 3 : printf ("RABU"); break ;
+		case 4 : printf ("KAMIS"); break ;
+		case 5 : printf ("JUMAT"); break ;
+		case 6 : printf ("SABTU"); break ;
+		case 7 : printf ("MINGGU"); break ;
+	}
+} 
 
 void lihat_data_pesanan (){
 	char opsi_kembali;
 	system ("cls");
-	printf ("\t\t\t|===================================================================================================================|\n");
-	printf ("\t\t\t|                                              DATA PEMESAN VILLA ANYELIR                                           |\n");
-	printf ("\t\t\t|===================================================================================================================|\n");
-	printf ("\t\t\t| Kode Villa |     Nama Pemesan      |        NO HP      |     Check In     |  Total Pembayaran | Sisa Pembayaran   |\n");
-	printf ("\t\t\t|------------|-----------------------|-------------------|------------------|-------------------|-------------------|\n");                                                                                          
+	list_data_pemesan ();
+	opsi :
+	printf("\t\t| Kembali ke menu ketik Y : ");
+	scanf ("%s", &opsi_kembali);
+	if (opsi_kembali=='Y'||opsi_kembali=='y')
+	    menuadm();
+	else 
+	    goto opsi ;
+}
+
+void list_data_pemesan (){
+	system ("cls");
+	printf ("\t\t|======================================================================================================================================================|\n");
+	printf ("\t\t|                                                             DATA PEMESAN VILLA ANYELIR                                                               |\n");
+	printf ("\t\t|======================================================================================================================================================|\n");
+	printf ("\t\t| Id Pemesanan | Kode Villa |     Nama Pemesan      |        NO HP      |     Check In     |     Check Out     | Total Pembayaran  | Sisa Pembayaran   |\n");
+	printf ("\t\t|--------------|------------|-----------------------|-------------------|------------------|-------------------|-------------------|-------------------|\n");                                                                                          
 	FILE*dtpesan ;
     dtpesan = fopen ("datapesan.txt", "rt");
     if (dtpesan== NULL ){
@@ -502,25 +633,94 @@ void lihat_data_pesanan (){
 	}
 		/* Ambil isi file ngenggunakan fungsi fread(), lalu tampilkan ke layar */
 	while ((fread(&pesanvl, sizeof(pesanvl), JUM_BLOK, dtpesan)) == JUM_BLOK )
-	printf ("\t\t\t|     %d              %s            %s           %d/%d/%d        Rp.%.2f      Rp.%.2f\n", pesanvl.nomor_villa, pesanvl.nama_pemesan, pesanvl.noHP, pesanvl.tglCI, pesanvl.blnCI, pesanvl.thnCI, pesanvl.totalPembayaran, pesanvl.sisaPembayaran);
+	printf ("\t\t|     %d          %d           %s               %s           %d/%d/%d        %d/%d/%d        Rp.%.2f      Rp.%.2f\n", pesanvl.id_pesan, pesanvl.nomor_villa, pesanvl.nama_pemesan, pesanvl.noHP, pesanvl.tglCI, pesanvl.blnCI, pesanvl.thnCI, pesanvl.tglCO,pesanvl.blnCO,pesanvl.thnCO,pesanvl.totalPembayaran, pesanvl.sisaPembayaran);
 	fclose(dtpesan);
-	printf("\t\t\t|===================================================================================================================|\n");
-	opsi :
-	printf("\t\t\t| Kembali ke menu ketik Y : ");
-	scanf ("%s", &opsi_kembali);
-	if (opsi_kembali=='Y'||opsi_kembali=='y')
-	    menuadm();
-	else 
-	    goto opsi ;
+	printf ("\t\t|=====================================================================================================================================================|\n");
+}
+
+int checkNomor(pesan_villa pesanvl,int id){
+	FILE *dtpesan;
+	int c = 1;
+	if(c==1){
+		dtpesan = fopen("datapesan.txt","rb");
+		while(fread(&pesanvl, sizeof(pesanvl),1,dtpesan)){
+			if( id == pesanvl.id_pesan){
+				fclose(dtpesan);
+				return 1;
+			}
+		}
+	}else{
+		c = 0;
+		fclose(dtpesan);
+		return 0;
+	}
 }
 
 void hapus_pesanan (){
 	system ("cls");
-	lihat_data_pesanan ();
+	int pil_hapus ;
+	list_data_pemesan ();
 	printf ("\n\n");
 	printf ("\t\t\t\t\t|=========================================================|\n");
     printf ("\t\t\t\t\t|                       HAPUS PESANAN                     |\n");
     printf ("\t\t\t\t\t|=========================================================|\n");
+    printf ("\t\t\t\t\t| Ketik 1 untuk hapus pesanan di atas                     |\n");
+    printf ("\t\t\t\t\t| Ketik 2 untuk keluar                                    |\n");
+    kembali_memilih :
+    printf ("\t\t\t\t\t| Pilihan : ");
+    scanf  ("%d", &pil_hapus);
+    if (pil_hapus==1){
+    	hapus ();
+	}
+	else if (pil_hapus==2){
+		menuadm ();
+	}
+	else
+		error_alert ();
+		goto kembali_memilih ;
+}
+
+void hapus (){
+	int pil_hapus ;
+	printf ("\t\t\t\t\t| Pilih ID pemesanan yang akan dihapus : ");
+	scanf  ("%d",&pil_hapus); fflush(stdin);
+	printf ("\t\t\t\t\t| Apakah anda yakin? (Y/T) : ");
+	jawab = toupper(getche());			/* Baca jawaban dari keyboard */
+	if (jawab == 'Y')
+	{	hapusdtpesan(pesanvl, pil_hapus);
+		hapus_pesanan();
+	}hapus_pesanan();
+}
+
+
+void hapusdtpesan (pesan_villa pesanvl, int r){
+	FILE *tmp;
+	int s;
+	
+		if (checkNomor(pesanvl, r) == 0){
+			printf("\t\t\t\t\t Data pemesanan %d tidak ditemukan\n",r);
+		}
+		else{
+			FILE*dtpesan ;
+			dtpesan = fopen("datapesan.txt","rb");
+			tmp = fopen("Temp_Data.txt","wb");
+			while (fread(&pesanvl, sizeof(pesanvl), 1, dtpesan)){
+				s = pesanvl.id_pesan;
+				if ( s != r){
+					//Menyalin data file yang tidak ingin dihapus
+					fwrite(&pesanvl, sizeof(pesanvl), 1, tmp);
+				}
+			}
+			fclose(dtpesan);
+			fclose(tmp);
+			dtpesan = fopen("datapesan.txt","wb");
+			tmp = fopen("Temp_Data.txt","rb");
+			while(fread(&pesanvl,sizeof(pesanvl),1,tmp)){
+				fwrite(&pesanvl,sizeof(pesanvl),1,dtpesan);
+			}
+			fclose(dtpesan);
+			fclose(tmp);
+		}
 }
 
 void menu_pengunjung (){
@@ -549,7 +749,8 @@ void menu_pengunjung (){
     printf ("\t\t\t\t\t|=========================================================|\n");
     printf ("\t\t\t\t\t|          Tekan 1 untuk melihat lokasi vila              |\n");
 	printf ("\t\t\t\t\t|          Tekan 2 untuk melihat list vila                |\n");
-	printf ("\t\t\t\t\t|          Tekan 3 untuk kembali ke menu                  |\n");          
+	printf ("\t\t\t\t\t|          Tekan 3 untuk melihat riwayat pesan villa      |\n");
+	printf ("\t\t\t\t\t|          Tekan 4 untuk kembali ke menu                  |\n");          
     printf ("\t\t\t\t\t|=========================================================|\n");
     tekan_benar :
     printf ("\t\t\t\t\t|                      Tekan : ");
@@ -561,13 +762,47 @@ void menu_pengunjung (){
 		list_villa_pengunjung ();
 	}
 	else if (pilihan_deskripsi==3){
-		menu_masuk ();
+		tampilan_pemesanan ();
 		
+	}
+	else if (pilihan_deskripsi==4){
+		menu_masuk ();
 	}
 	else {
 		error_alert ();
 		goto tekan_benar ;
 	}
+}
+
+void tampilan_pemesanan (){
+	int pilih1 ;
+	system ("cls");
+	printf ("\t\t\t\t\t|=============================================|\n");
+	printf ("\t\t\t\t\t|          DATA PEMESAN VILLA ANYELIR         |\n");
+	printf ("\t\t\t\t\t|=============================================|\n");
+	printf ("\t\t\t\t\t| Id Pemesanan | Kode Villa |     Check In    |\n");
+	printf ("\t\t\t\t\t|--------------|------------|-----------------|\n");                                                                                          
+	FILE*dtpesan ;
+    dtpesan = fopen ("datapesan.txt", "rt");
+    if (dtpesan== NULL ){
+		printf("\t\t\t| FILE TIDAK DAPAT DIBUKA!\r\n");
+		menuadm();
+	}
+		/* Ambil isi file ngenggunakan fungsi fread(), lalu tampilkan ke layar */
+	while ((fread(&pesanvl, sizeof(pesanvl), JUM_BLOK, dtpesan)) == JUM_BLOK )
+	printf ("\t\t\t\t\t|     %d          %d           %d/%d/%d        \n", pesanvl.id_pesan, pesanvl.nomor_villa,pesanvl.tglCI, pesanvl.blnCI, pesanvl.thnCI);
+	fclose(dtpesan);
+	printf ("\t\t\t\t\t|=============================================|\n");
+	printf ("\t\t\t\t\t|   Tekan  1 untuk kembali ke menu pengunjung |\n");
+    printf ("\t\t\t\t\t|=============================================|\n");
+    tekan1 :
+    printf ("\t\t\t\t\t| Tekan      : ") ;
+	scanf  ("%d", &pilih1);
+	if (pilih1== 1)
+		menu_pengunjung ();
+	else 
+		printf ("\t\t\t\t\t| Silahkan ketik ulang 1 \n");
+		goto tekan1 ;
 }
 
 void lokasi_villa (){
@@ -624,19 +859,19 @@ void list_villa (){
     printf ("\t\t\t|-----------------------------------------------------------------------------------------------------------------------------------------|\n");
     printf ("\t\t\t|ID VILLA   |    NAMA VILLA   |         FASILITAS           |    HARGA LUNAS  |      DP      | KAPASITAS | CHECK IN  | CHECK OUT |  KET   |\n");
     printf ("\t\t\t|-----------|-----------------|-----------------------------|-----------------|--------------|-----------|---------- |-----------|--------|\n");
-    printf ("\t\t\t|    1      |   Anyelir 1     |Dua Lantai, Kolam Renang     | Rp. 1.800.000   | Rp.900.000   | 6 orang   |12.00 WITA |14.00 WITA |2 hari  |\n");
+    printf ("\t\t\t|    1      |   Anyelir 1     |Dua Lantai, Kolam Renang     | Rp. 1.800.000   | Rp.900.000   | 6 orang   |14.00 WITA |14.00 WITA |2 hari  |\n");
     printf ("\t\t\t|           |(Jl. Anyelir No  |Dua Kamar Tidur, Dua Kasur   |                 |              |           |           |           |1 malam |\n");
     printf ("\t\t\t|           |  61, Denpasar   |Dua Kamar Mandi dengan Bathup|                 |              |           |           |           |        |\n");
     printf ("\t\t\t|           | Timur, Bali )   |Satu Ruang Makan, Satu Dapur |                 |              |           |           |           |        |\n");
     printf ("\t\t\t|           |                 |Dua Balkon, TV, Towel, AC    |                 |              |           |           |           |        |\n");
     printf ("\t\t\t|-----------|-----------------|-----------------------------|-----------------|--------------|-----------|-----------|-----------|--------|\n");
-    printf ("\t\t\t|    2      |   Anyelir 2     |Tiga Lantai, Kolam Renang    | Rp. 1.650.000   | Rp.750.000   | 4 orang   |11.00 WITA |14.00 WITA |2 hari  |\n");
+    printf ("\t\t\t|    2      |   Anyelir 2     |Tiga Lantai, Kolam Renang    | Rp. 1.650.000   | Rp.750.000   | 4 orang   |14.00 WITA |14.00 WITA |2 hari  |\n");
     printf ("\t\t\t|           |(Jl. Hayam Wuruk |Empat Kamar Tidur,Empat Kasur|                 |              |           |           |           |1 malam |\n");
     printf ("\t\t\t|           | No.05, Denpasar |Satu Kamar Mandi dgn Bathup  |                 |              |           |           |           |        |\n");
     printf ("\t\t\t|           | Timur, Bali )   |Satu Ruang Makan, Satu Dapur |                 |              |           |           |           |        |\n");
     printf ("\t\t\t|           |                 |Tiga Balkon, TV, Towel, AC   |                 |              |           |           |           |        |\n");
     printf ("\t\t\t|-----------|-----------------|-----------------------------|-----------------|--------------|-----------|-----------|-----------|--------|\n");
-    printf ("\t\t\t|    3      |   Anyelir 3     |Dua Lantai,Kolam Renang Lt.2 | Rp. 1.750.000   | Rp.800.000   | 2 orang   |12.00 WITA |13.30 WITA |2 hari  |\n");
+    printf ("\t\t\t|    3      |   Anyelir 3     |Dua Lantai,Kolam Renang Lt.2 | Rp. 1.750.000   | Rp.800.000   | 2 orang   |14.00 WITA |13.30 WITA |2 hari  |\n");
     printf ("\t\t\t|           |(Jl. Raya Kesambi|Dua Kamar Tidur, Dua Kasur   |                 |              |           |           |           |1 malam |\n");
     printf ("\t\t\t|           |   No.42, Kuta   |Satu Kamar Mandi dgn Bathup  |                 |              |           |           |           |        |\n");
     printf ("\t\t\t|           |     Bali )      |Satu Ruang Makan, Satu Dapur |                 |              |           |           |           |        |\n");
@@ -650,7 +885,7 @@ void list_villa (){
     printf ("\t\t\t|           |                 |besar, Satu Balkon, TV, AC,  |                 |              |           |           |           |        |\n");
     printf ("\t\t\t|           |                 |Tiga Towel, Satu Ruang Tamu  |                 |              |           |           |           |        |\n");
     printf ("\t\t\t|-----------|-----------------|-----------------------------|-----------------|--------------|-----------|-----------|-----------|--------|\n");
-    printf ("\t\t\t|    5      |   Anyelir 5     |Tiga Lantai, AC, Shower,     | Rp. 7.750.000   | Rp.3.800.000 | 42 orang  |12.00 WITA |18.00 WITA |3 hari  |\n");
+    printf ("\t\t\t|    5      |   Anyelir 5     |Tiga Lantai, AC, Shower,     | Rp. 7.750.000   | Rp.3.800.000 | 42 orang  |14.00 WITA |18.00 WITA |3 hari  |\n");
     printf ("\t\t\t|           |(Jl. Raya Pengo- |7 Kamar Tidur, 14 Kasur Besar|                 |              |           |           |           |2 malam |\n");
     printf ("\t\t\t|           |  sekan No.76    |Lima Kamar Mandi dgn Bathup  |                 |              |           |           |           |        |\n");
     printf ("\t\t\t|           |  Ubud, Bali )   |Satu Ruang Makan, Satu Dapur |                 |              |           |           |           |        |\n");
@@ -662,7 +897,7 @@ void list_villa (){
     printf ("\t\t\t|           |                 |Party Villa, Ruang Mandi Air |                 |              |           |           |           |        |\n"); 
     printf ("\t\t\t|           |                 |Hangat                       |                 |              |           |           |           |        |\n");
     printf ("\t\t\t|-----------|-----------------|-----------------------------|-----------------|--------------|-----------|-----------|-----------|--------|\n");
-    printf ("\t\t\t|    6      |   Anyelir 6     |Tiga Lantai, AC,             | Rp. 5.800.000   | Rp.1.500.000 | 30 orang  |12.00 WITA |14.30 WITA |2 hari  |\n");
+    printf ("\t\t\t|    6      |   Anyelir 6     |Tiga Lantai, AC,             | Rp. 5.800.000   | Rp.1.500.000 | 30 orang  |14.00 WITA |14.30 WITA |2 hari  |\n");
     printf ("\t\t\t|           |(Jl. Raya Pengo- |5 Kamar Tidur, 5 Kasur Besar |                 |              |           |           |           |1 malam |\n");
     printf ("\t\t\t|           |  sekan No.102   |Lima Kamar Mandi dgn Shower  |                 |              |           |           |           |        |\n");
     printf ("\t\t\t|           |  Ubud, Bali )   |Satu Ruang Makan, Satu Dapur |                 |              |           |           |           |        |\n");
@@ -679,7 +914,7 @@ void list_villa (){
     printf ("\t\t\t|           |                 |4 Towel, 1 Ruang Tamu        |                 |              |           |           |           |        |\n");
     printf ("\t\t\t|           |                 |Kolam Renang Lt.2            |                 |              |           |           |           |        |\n"); 
     printf ("\t\t\t|-----------|-----------------|-----------------------------|-----------------|--------------|-----------|-----------|-----------|--------|\n");
-    printf ("\t\t\t|    8      |   Anyelir 8     |Dua Lantai, AC,              | Rp. 4.300.000   | Rp.2.000.000 | 6 orang   |12.00 WITA |14.00 WITA |2 hari  |\n");
+    printf ("\t\t\t|    8      |   Anyelir 8     |Dua Lantai, AC,              | Rp. 4.300.000   | Rp.2.000.000 | 6 orang   |14.00 WITA |14.00 WITA |2 hari  |\n");
     printf ("\t\t\t|           |(Jl. Bukit Permai|2 Kamar Tidur, 2 Kasur Besar |                 |              |           |           |           |1 malam |\n");
     printf ("\t\t\t|           |      No.66      |2 Kamar Mandi dgn Bathup     |                 |              |           |           |           |        |\n");
     printf ("\t\t\t|           | Jimbaran, Bali )|Satu Ruang Makan, Satu Dapur |                 |              |           |           |           |        |\n");
@@ -688,7 +923,7 @@ void list_villa (){
     printf ("\t\t\t|           |                 |Kolam Renang Lt.2, Satu      |                 |              |           |           |           |        |\n"); 
     printf ("\t\t\t|           |                 |Kamar Utama dengan 2 Kasur   |                 |              |           |           |           |        |\n"); 
     printf ("\t\t\t|-----------|-----------------|-----------------------------|-----------------|--------------|-----------|-----------|-----------|--------|\n");
-    printf ("\t\t\t|    9      |   Anyelir 9     |Tiga Lantai, AC, Shower      | Rp. 5.960.000   | Rp.3.000.000 | 40 orang  |12.00 WITA |15.00 WITA |2 hari  |\n");
+    printf ("\t\t\t|    9      |   Anyelir 9     |Tiga Lantai, AC, Shower      | Rp. 5.960.000   | Rp.3.000.000 | 40 orang  |14.00 WITA |15.00 WITA |2 hari  |\n");
     printf ("\t\t\t|           |(Jl. Raya Uluwatu|4 Kamar Tidur, 4 Kasur Besar |                 |              |           |           |           |1 malam |\n");
     printf ("\t\t\t|           |      No.46      |4 Kamar Mandi dgn Bathup     |                 |              |           |           |           |        |\n");
     printf ("\t\t\t|           | Jimbaran, Bali )|Satu Ruang Makan, Satu Dapur |                 |              |           |           |           |        |\n");
@@ -699,7 +934,7 @@ void list_villa (){
 	printf ("\t\t\t|           |                 |Ruang Tamu Biasa, Karaoke,   |                 |              |           |           |           |        |\n"); 
     printf ("\t\t\t|           |                 |Ruang Party                  |                 |              |           |           |           |        |\n"); 
     printf ("\t\t\t|-----------|-----------------|-----------------------------|-----------------|--------------|-----------|-----------|-----------|--------|\n");
-    printf ("\t\t\t|    10     |   Anyelir 10    |Dua Lantai, Ruang Dinner     | Rp. 2.750.000   | Rp.1.000.000 | 6 orang   |12.00 WITA |14.00 WITA |2 hari  |\n");
+    printf ("\t\t\t|    10     |   Anyelir 10    |Dua Lantai, Ruang Dinner     | Rp. 2.750.000   | Rp.1.000.000 | 6 orang   |14.00 WITA |14.00 WITA |2 hari  |\n");
     printf ("\t\t\t|           |(Jl. Sahadewi    |3 Kamar Tidur, 3 Kasur       |                 |              |           |           |           |1 malam |\n");
     printf ("\t\t\t|           |      No.21      |1 Kamar Mandi dgn Bathup     |                 |              |           |           |           |        |\n");
     printf ("\t\t\t|           | Br. Umacandi, Ds|Satu Ruang Makan, Satu Dapur,|                 |              |           |           |           |        |\n");
@@ -748,5 +983,3 @@ void list_villa_pengunjung (){
 		goto masukkan1 ;
 	}
 }
-
-
