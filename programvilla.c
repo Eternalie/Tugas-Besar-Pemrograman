@@ -347,7 +347,21 @@ void masuk_pengunjung (){
     return;
 }
 
-   
+//=======================================================================//
+//*****                    Fungsi Untuk Daftar Akun                 *****//
+//=======================================================================//
+// Nama Fungsi    : daftar                                               //
+// Input Argumen  : struct User u                                        //
+// Output Argumen : u.nama                                               //
+// Deskripsi      : Fungsi ini berfungsi untuk menampilkan program daftar//
+//                  atau registrasi akun, disetai dengan menginputkan    //
+//                  username dan password, yang nantinya akan tersimpan  //
+//                  pada file "logRecord.txt"                            //
+// Versi : 1.0                                      Rev. 0               //
+// Tgl   : 13-12-2021                               Tgl: -               //
+// Putu Eternalie Prajnani Welaga - 2105551046                           //
+// Kelas B                                                               //
+//=======================================================================//      
 void daftar (){
 	// Membuat pointer regis untuk file "logRecord.txt"
     FILE *regis;
