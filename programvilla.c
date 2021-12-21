@@ -80,7 +80,7 @@ char namaFile[] = "logRecord.txt";
 
 // fungsi main () adalah kepala dari program ini, dimana program akan di eksekusi oleh fungsi main ini.
 int main (){
-   system ("color F5");
+   system ("color F5"); //pewarnaan latar program saat dijalankan F = Light White , 5 = Purple 
    header (); //pemanggilan fungsi header
    menu_masuk (); //pemanggilan fungsi menu masuk
 }
@@ -425,7 +425,7 @@ void menuadm (){
     system ("cls");
     switch (kategori){
     	case 1 :
-    		list_villa ();
+    	list_villa ();
     		printf ("\t\t\t|                                                     Proses Pemesanan [Y/T]? : ");
     		scanf  ("%s", &a);
     		if (a=='Y'|| a=='y')
@@ -508,7 +508,18 @@ void pesan_villa_anyelir (){
 	menuadm();
 }
 
-
+//=======================================================================//
+//*****                   Fungsi Untuk Pemesanan Villa              *****//
+//=======================================================================//
+// Nama Fungsi    : pemesanan_villa                                      //
+// Input Argumen  : -                                                    //
+// Output Argumen : -                                                    //
+// Deskripsi      : Menampilkan sistem harga total pembayaran Villa      //
+// Versi : 1.0                                      Rev. 0               //
+// Tgl   : 13-12-2021                               Tgl: -               //
+// Gusti Ayu Wahyu Whurapsari - 2105551042                               //
+// Kelas B                                                               //
+//=======================================================================//
 void pemesanan_villa (){
 	if (pesanvl.nomor_villa==1){
 		pesanvl.totalPembayaran = 1800000 + biaya_ADM + deposito ;	
@@ -578,6 +589,19 @@ void detPemesanan (){
 	printf ("\t\t\t\t\t|=========================================================|\n");
 }
 
+//=======================================================================//
+//*****          Fungsi Untuk Menampilkan Tanggal Check Out         *****//
+//=======================================================================//
+// Nama Fungsi    : kalenderuntukCO                                      //
+// Input Argumen  : -                                                    //
+// Output Argumen : -                                                    //
+// Deskripsi      : Fungsi ini berfungsi untuk menampilkan tanggal check //
+//                  out Villa                                            //
+// Versi : 1.0                                      Rev. 0               //
+// Tgl   : 13-12-2021                               Tgl: -               //
+// Gusti Ayu Wahyu Whurapsari - 2105551042                               //
+// Kelas B                                                               //
+//=======================================================================//
 void kalenderuntukCO (){
 	pesanvl.tglCO = 0 ;
 	pesanvl.blnCO = 0 ;
@@ -661,16 +685,30 @@ void hari (){
 	}
 } 
 
+//=======================================================================//
+//***********   Fungsi Untuk Menampilkan Data Pesananan     *************//
+//=======================================================================//
+// Nama Fungsi    : lihat_data_pesanan                                   //
+// Input Argumen  : char opsi_kembali                                    //
+// Output Argumen : -                                                    //
+// Deskripsi      : Fungsi ini digunakan untuk menampilkan data pesanan  //
+//                  villa anyelir dengan memanggil fungsi                //
+//                  list_data_pemesan                                    //
+// Versi : 1.0                                      Rev. 0               //
+// Tgl   : 10-12-2020                               Tgl: -               //
+// Gusti Ayu Wahyu Whurapsari - 2105551042                               //
+// Kelas B                                                               //
+//=======================================================================//
 void lihat_data_pesanan (){
-	char opsi_kembali;
+	char opsi_kembali; //deklarasi opsi_kembali ke dalam variabel bertipe data char
 	system ("cls");
-	list_data_pemesan ();
+	list_data_pemesan (); //memanggil fungsi list_data_pemesan
 	opsi :
 	printf("\t\t| Kembali ke menu ketik Y : ");
 	scanf ("%s", &opsi_kembali);
-	if (opsi_kembali=='Y'||opsi_kembali=='y')
+	if (opsi_kembali=='Y'||opsi_kembali=='y') //jika mengetik Y atau y maka akan mengarah pada fungsi menuadm
 	    menuadm();
-	else 
+	else //jika selain Y atau y maka akan balik pada opsi
 	    goto opsi ;
 }
 
@@ -712,11 +750,25 @@ int checkNomor(pesan_villa pesanvl,int id){
 	}
 }
 
+//=======================================================================//
+//***********      Fungsi Untuk Menghapus Pesanan Villa     *************//
+//=======================================================================//
+// Nama Fungsi    : lihat_data_pesanan                                   //
+// Input Argumen  : int pil_hapus                                        //
+// Output Argumen : -                                                    //
+// Deskripsi      : Fungsi ini digunakan untuk menghapus pesanan dengan  //
+//                  memanggil fungsi hapus jika memilih 1 dan memanggil  //
+//                  fungsi menuadm jika memilih 2                        //
+// Versi : 1.0                                      Rev. 0               //
+// Tgl   : 10-12-2020                               Tgl: -               //
+// Gusti Ayu Wahyu Whurapsari - 2105551042                               //
+// Kelas B                                                               //
+//=======================================================================//
 void hapus_pesanan (){
 	system ("cls");
-	int pil_hapus ;
-	list_data_pemesan ();
-	printf ("\n\n");
+	int pil_hapus ; //deklarasi variabel pil_hapus bertipe data integer
+	list_data_pemesan (); //memanggil fungsi list_data_pemesan
+	printf ("\n\n"); //untuk enter jarak
 	printf ("\t\t\t\t\t|=========================================================|\n");
     printf ("\t\t\t\t\t|                       HAPUS PESANAN                     |\n");
     printf ("\t\t\t\t\t|=========================================================|\n");
@@ -725,41 +777,70 @@ void hapus_pesanan (){
     kembali_memilih :
     printf ("\t\t\t\t\t| Pilihan : ");
     scanf  ("%d", &pil_hapus);
-    if (pil_hapus==1){
+    if (pil_hapus==1){ //jika memilih 1 akan mengarah pada fungsi hapus
     	hapus ();
 	}
-	else if (pil_hapus==2){
+	else if (pil_hapus==2){ //jika memilih 2 akan mengarah pada fungsi menuadm
 		menuadm ();
 	}
-	else
+	else //jika salah memilih maka akan tampil error dengan memanggil fungsi error_alert dan kembali untuk memilih pilihan yang sesuai
 		error_alert ();
 		goto kembali_memilih ;
 }
 
+//=======================================================================//
+//*******         Fungsi Untuk Menghapus Data Pemesanan           *******//
+//=======================================================================//
+// Nama Fungsi    : hapus                                                //
+// Input Argumen  : int pil_hapus                                        //
+// Output Argumen : -                                                    //
+// Deskripsi      : Fungsi ini digunakan untuk menghapus pesanan dengan  //
+//                  memilih id pemesanan yang akan dihapus serta         //
+//                  meyakinkan user apakah yakin akan menghapus data     //
+//                  tersebut.                                            //
+// Versi : 1.0                                      Rev. 0               //
+// Tgl   : 10-12-2020                               Tgl: -               //
+// Gusti Ayu Wahyu Whurapsari - 2105551042                               //
+// Kelas B                                                               //
+//=======================================================================//
 void hapus (){
-	int pil_hapus ;
+	int pil_hapus ; //deklarasi pil_hapus pada fungsi hapus ke dalam variabel bertipe data int
 	printf ("\t\t\t\t\t| Pilih ID pemesanan yang akan dihapus : ");
 	scanf  ("%d",&pil_hapus); fflush(stdin);
 	printf ("\t\t\t\t\t| Apakah anda yakin? (Y/T) : ");
 	jawab = toupper(getche());			/* Baca jawaban dari keyboard */
-	if (jawab == 'Y')
-	{	hapusdtpesan(pesanvl, pil_hapus);
+	if (jawab == 'Y'|| jawab == 'y') 
+	{	hapusdtpesan(pesanvl, pil_hapus); //memanggil fungsi hapusdtpesan
 		hapus_pesanan();
-	}hapus_pesanan();
+	}hapus_pesanan(); //kembali pada fungsi hapus_pesanan jika tidak memilih Y atau y
 }
 
-
+//=======================================================================//
+//*******       Fungsi Untuk Menghapus Database Pemesanan         *******//
+//=======================================================================//
+// Nama Fungsi    : hapusdtpesan                                         //
+// Input Argumen  : int r, int s                                         //
+// Output Argumen : -                                                    //
+// Deskripsi      : Fungsi ini digunakan untuk menghapus pesanan dengan  //
+//                  memilih id pemesanan yang akan dihapus serta         //
+//                  meyakinkan user apakah yakin akan menghapus data     //
+//                  tersebut.                                            //
+// Versi : 1.0                                      Rev. 0               //
+// Tgl   : 10-12-2020                               Tgl: -               //
+// Gusti Ayu Wahyu Whurapsari - 2105551042                               //
+// Kelas B                                                               //
+//=======================================================================//
 void hapusdtpesan (pesan_villa pesanvl, int r){
-	FILE *tmp;
+	FILE *tmp; // Membuat pointer tmp untuk menunjuk pada file "Temp_Data.txt"
 	int s;
 	
-		if (checkNomor(pesanvl, r) == 0){
+		if (checkNomor(pesanvl, r) == 0){ //memanggil fungsi checkNomor jika 0 maka akan menampilkan data pemesanan tidak ditemukan
 			printf("\t\t\t\t\t Data pemesanan %d tidak ditemukan\n",r);
 		}
 		else{
-			FILE*dtpesan ;
-			dtpesan = fopen("datapesan.txt","rb");
-			tmp = fopen("Temp_Data.txt","wb");
+			FILE*dtpesan ; // Membuat pointer dtpesan untuk menunjuk pada file "datapesan.txt"
+			dtpesan = fopen("datapesan.txt","rb"); //membuka file "datapesan.txt" dengan rb
+			tmp = fopen("Temp_Data.txt","wb");  //membuka file "Temp_Data.txt"
 			while (fread(&pesanvl, sizeof(pesanvl), 1, dtpesan)){
 				s = pesanvl.id_pesan;
 				if ( s != r){
@@ -774,8 +855,8 @@ void hapusdtpesan (pesan_villa pesanvl, int r){
 			while(fread(&pesanvl,sizeof(pesanvl),1,tmp)){
 				fwrite(&pesanvl,sizeof(pesanvl),1,dtpesan);
 			}
-			fclose(dtpesan);
-			fclose(tmp);
+			fclose(dtpesan);  //Menggunakan fungsi fclose untuk menutup file "datapesan.txt" agar tidak diproses lagi
+			fclose(tmp);      //Menggunakan fungsi fclose untuk menutup file "tmp" agar tidak diproses lagi
 		}
 }
 
@@ -798,7 +879,7 @@ void hapusdtpesan (pesan_villa pesanvl, int r){
 //=======================================================================//
 void menu_pengunjung (){
     system ("cls");
-    int pilihan_deskripsi ;
+    int pilihan_deskripsi ; //deklarasi variabel bernama pilihan_deskripsi bertipe integer yang digunakan dalam fungsi menu_pengunjung
 	printf ("\t\t\t\t\t|=========================================================|\n");
     printf ("\t\t\t\t\t|    *      *     *   *      *  *****   *      ***   ***  |\n");
     printf ("\t\t\t\t\t|   * *     * *   *     *   *   *       *       *    *  * |\n");
@@ -828,20 +909,20 @@ void menu_pengunjung (){
     tekan_benar :
     printf ("\t\t\t\t\t|                      Tekan : ");
     scanf  ("%d", &pilihan_deskripsi);
-    if (pilihan_deskripsi==1){
+    if (pilihan_deskripsi==1){ //jika menekan 1 maka akan mengarah pada fungsi lokasi_villa
     	lokasi_villa ();
 	}
-	else if (pilihan_deskripsi==2){
+	else if (pilihan_deskripsi==2){ //jika menekan 2 maka akan mengarah pada fungsi list_villa_pengunjung
 		list_villa_pengunjung ();
 	}
-	else if (pilihan_deskripsi==3){
+	else if (pilihan_deskripsi==3){ //jika menekan 3 maka akan mengarah pada fungsi tampilan_pemesanan
 		tampilan_pemesanan ();
 		
 	}
-	else if (pilihan_deskripsi==4){
+	else if (pilihan_deskripsi==4){ //jika menekan 4 maka akan kembali pada fungsi menu_masuk
 		menu_masuk ();
 	}
-	else {
+	else { //jika user salah menekan (tidak ada dipilihan) maka akan terpanggil fungsi error_alert dan akan kembali diminta memilih sesuai dengan opsi yang ada
 		error_alert ();
 		goto tekan_benar ;
 	}
@@ -1051,19 +1132,32 @@ void list_villa (){
 	printf ("\t\t\t|=========================================================================================================================================|\n");
 }
 
+//=======================================================================//
+//****      Fungsi Untuk Menampilkan List Villa Untuk Pengunjung     ****//
+//=======================================================================//
+// Nama Fungsi    : list_villa_pengunjung                                //
+// Input Argumen  : int pilih                                            //
+// Output Argumen : -                                                    //
+// Deskripsi      : Fungsi ini digunakan untuk menampilkan list villa    //
+//                  pada pengunjung                                      //
+// Versi : 1.0                                      Rev. 0               //
+// Tgl   : 10-12-2020                               Tgl: -               //
+// Gusti Ayu Wahyu Whurapsari - 2105551042                               //
+// Kelas B                                                               //
+//=======================================================================//
 void list_villa_pengunjung (){
-	int pilih ;
-	list_villa ();
+	int pilih ; //deklarasi variabel pilih pada fungsi list_villa_pengunjung bertipe data integer
+	list_villa (); //memanggil fungsi list_villa
     printf ("\t\t\t|                                                PROSES PEMESANAN HARAP PANGGIL ADMIN                                                     |\n");
     printf ("\t\t\t|=========================================================================================================================================|\n");
     masukkan1 :
-    printf ("\t\t\t| Tekan 1 untuk kembali ke menu pengunjung      : ") ;
+    printf ("\t\t\t| Tekan 1 untuk kembali ke menu pengunjung      : ") ; //input memasukkan atau tekan 1
 	scanf  ("%d", &pilih);
-	if (pilih== 1){
+	if (pilih== 1){ //jika tekan 1 maka akan mengarah pada fungsi menu_pengunjung
 	
 		menu_pengunjung ();
 	}
-	else {
+	else { //jika user salah memilih maka akan kembali pada masukkan 1
 		printf ("\t\t\t| Silahkan ketik ulang 1 \n");
 		goto masukkan1 ;
 	}
