@@ -84,7 +84,18 @@ int main (){
    header (); //pemanggilan fungsi header
    menu_masuk (); //pemanggilan fungsi menu masuk
 }
-
+//=======================================================================//
+//*****           Fungsi Untuk Menampilkan Header Program           *****//
+//=======================================================================//
+// Nama Fungsi    : header                                               //
+// Input Argumen  : -                                                    //
+// Output Argumen : -                                                    //
+// Deskripsi      : Menampilkan nama dari penyusun program               //
+// Versi : 1.0                                      Rev. 0               //
+// Tgl   : 13-12-2021                               Tgl: -               //
+// Putu Eternalie Prajnani Welaga - 2105551046                           //
+// Kelas B                                                               //
+//=======================================================================//
 void header (){
   system ("cls");
 	printf  ("\t\t\t\t\t=========================================================\n");
