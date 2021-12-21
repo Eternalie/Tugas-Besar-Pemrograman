@@ -178,7 +178,21 @@ void menu_masuk (){
         break;
     }
 }
-
+//=======================================================================//
+//*****                  Fungsi Untuk Masuk Pegawai                 *****//
+//=======================================================================//
+// Nama Fungsi    : masuk_admin                                          //
+// Input Argumen  : -                                                    //
+// Output Argumen : -                                                    //
+// Deskripsi      : Fungsi ini berfungsi khusus bagi pegawai atau admin  //
+//                  untuk masuk ke dalam program, dengan menginputkan    //
+//                  password yang sudah terdapat pada file databases     //
+//                  'passwordAdmin.txt'                                  //
+// Versi : 1.0                                      Rev. 0               //
+// Tgl   : 13-12-2021                               Tgl: -               //
+// Putu Eternalie Prajnani Welaga - 2105551046                           //
+// Kelas B                                                               //
+//=======================================================================//
 void masuk_admin (){
 	system("cls");
 	ambil_password ();
