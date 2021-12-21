@@ -665,7 +665,20 @@ void pemesanan_villa (){
 		pesanvl.totalPembayaran = 4800000 + biaya_ADM + deposito ;
 	}
 }
-
+//=======================================================================//
+//*****           Fungsi Untuk Menampilkan Harga Pemesanan          *****//
+//=======================================================================//
+// Nama Fungsi    : pemesanan_villa                                      //
+// Input Argumen  : -                                                    //
+// Output Argumen : -                                                    //
+// Deskripsi      : Fungsi ini berfungsi untuk menampilkan sistem harga  //
+//                  total pembayaran Villa yang akan ditampilkan untuk   //
+//                  pengguna yang sudah memesan villa                    //
+// Versi : 1.0                                      Rev. 0               //
+// Tgl   : 13-12-2021                               Tgl: -               //
+// Putu Eternalie Prajnani Welaga - 2105551046                           //
+// Kelas B                                                               //
+//=======================================================================//
 void detPemesanan (){
 	printf ("\n\n");
 	printf ("\t\t\t\t\t|=========================================================|\n");
