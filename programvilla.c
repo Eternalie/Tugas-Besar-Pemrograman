@@ -459,7 +459,20 @@ void waktu(){
     struct tm * waktu = localtime( & waktuserver);
     printf ("\t\t\t\t\t|=====================Tanggal: %i/%i/%i=================|\n", waktu -> tm_mday, waktu -> tm_mon + 1, waktu -> tm_year + 1900);                      
 }
-
+//=======================================================================//
+//*****                      Fungsi Error Program                   *****//
+//=======================================================================//
+// Nama Fungsi    : error                                                //
+// Input Argumen  : -                                                    //
+// Output Argumen : -                                                    //
+// Deskripsi      : Fungsi ini berfungsi untuk menampilkan program error // 
+//                  atau pilihan yang diinput baik oleh pegawai atau     //
+//                  pengguna tidak terdapat pada pilihan                 //
+// Versi : 1.0                                      Rev. 0               //
+// Tgl   : 13-12-2021                               Tgl: -               //
+// Putu Eternalie Prajnani Welaga - 2105551046                           //
+// Kelas B                                                               //
+//=======================================================================//
 void error_alert (){
 	printf   ("\t\t\t\t\t=========================================================  \n");
     printf   ("\t\t\t\t\t||         Pilihan yang Anda masukan Salah!!!          || \n");
