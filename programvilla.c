@@ -84,18 +84,7 @@ int main (){
    header (); //pemanggilan fungsi header
    menu_masuk (); //pemanggilan fungsi menu masuk
 }
-//=======================================================================//
-//*****           Fungsi Untuk Menampilkan Header Program           *****//
-//=======================================================================//
-// Nama Fungsi    : header                                               //
-// Input Argumen  : -                                                    //
-// Output Argumen : -                                                    //
-// Deskripsi      : Menampilkan nama dari penyusun program               //
-// Versi : 1.0                                      Rev. 0               //
-// Tgl   : 13-12-2021                               Tgl: -               //
-// Putu Eternalie Prajnani Welaga - 2105551046                           //
-// Kelas B                                                               //
-//=======================================================================//
+
 void header (){
   system ("cls");
 	printf  ("\t\t\t\t\t=========================================================\n");
@@ -119,20 +108,7 @@ void header (){
 	getchar ();
   system ("cls");
 }
-//=======================================================================//
-//*****         Fungsi Untuk Menampilkan Menu Masuk Program         *****//
-//=======================================================================//
-// Nama Fungsi    : menu_masuk                                           //
-// Input Argumen  : int pilihan                                          //
-// Output Argumen : -                                                    //
-// Deskripsi      : Fungsi ini berfungsi untuk menampilkan menu masuk    //
-//                  ke program dengan menginputkan angka sesuai dengan   //
-//                  pilihan dari pengguna program                        //
-// Versi : 1.0                                      Rev. 0               //
-// Tgl   : 13-12-2021                               Tgl: -               //
-// Putu Eternalie Prajnani Welaga - 2105551046                           //
-// Kelas B                                                               //
-//=======================================================================//
+
 void menu_masuk (){
 	system ("cls");
 	// Variabel pilihan yang digunakan untuk menyimpan pilihan pengguna antara Masuk dengan Registrasi
@@ -178,21 +154,7 @@ void menu_masuk (){
         break;
     }
 }
-//=======================================================================//
-//*****                  Fungsi Untuk Masuk Pegawai                 *****//
-//=======================================================================//
-// Nama Fungsi    : masuk_admin                                          //
-// Input Argumen  : -                                                    //
-// Output Argumen : -                                                    //
-// Deskripsi      : Fungsi ini berfungsi khusus bagi pegawai atau admin  //
-//                  untuk masuk ke dalam program, dengan menginputkan    //
-//                  password yang sudah terdapat pada file databases     //
-//                  'passwordAdmin.txt'                                  //
-// Versi : 1.0                                      Rev. 0               //
-// Tgl   : 13-12-2021                               Tgl: -               //
-// Putu Eternalie Prajnani Welaga - 2105551046                           //
-// Kelas B                                                               //
-//=======================================================================//
+
 void masuk_admin (){
 	system("cls");
 	ambil_password ();
@@ -235,20 +197,7 @@ void ambil_password(){
 	fscanf(file, "%s", passwordP);
 	fclose(file); //menutup file "passwordAdmin"
 }
-//=======================================================================//
-//*****                    Fungsi Untuk Daftar Akun                 *****//
-//=======================================================================//
-// Nama Fungsi    : daftar                                               //
-// Input Argumen  : -                                                    //
-// Output Argumen : -                                                    //
-// Deskripsi      : Fungsi ini berfungsi untuk menampilkan bahwa login   //
-//                  yang dilakukan oleh pegawai sudah berhasil atau      //
-//                  sukses                                               //
-// Versi : 1.0                                      Rev. 0               //
-// Tgl   : 13-12-2021                               Tgl: -               //
-// Putu Eternalie Prajnani Welaga - 2105551046                           //
-// Kelas B                                                               //
-//=======================================================================//   
+
 void selesai(){
 	printf("\t\t\t\t\t\t\tLOGIN SUKSES!\n");
 	getch(); fflush(stdin);
@@ -347,21 +296,7 @@ void masuk_pengunjung (){
     return;
 }
 
-//=======================================================================//
-//*****                    Fungsi Untuk Daftar Akun                 *****//
-//=======================================================================//
-// Nama Fungsi    : daftar                                               //
-// Input Argumen  : struct User u                                        //
-// Output Argumen : u.nama                                               //
-// Deskripsi      : Fungsi ini berfungsi untuk menampilkan program daftar//
-//                  atau registrasi akun, disetai dengan menginputkan    //
-//                  username dan password, yang nantinya akan tersimpan  //
-//                  pada file "logRecord.txt"                            //
-// Versi : 1.0                                      Rev. 0               //
-// Tgl   : 13-12-2021                               Tgl: -               //
-// Putu Eternalie Prajnani Welaga - 2105551046                           //
-// Kelas B                                                               //
-//=======================================================================//      
+   
 void daftar (){
 	// Membuat pointer regis untuk file "logRecord.txt"
     FILE *regis;
@@ -459,42 +394,14 @@ void waktu(){
     struct tm * waktu = localtime( & waktuserver);
     printf ("\t\t\t\t\t|=====================Tanggal: %i/%i/%i=================|\n", waktu -> tm_mday, waktu -> tm_mon + 1, waktu -> tm_year + 1900);                      
 }
-//=======================================================================//
-//*****                      Fungsi Error Program                   *****//
-//=======================================================================//
-// Nama Fungsi    : error                                                //
-// Input Argumen  : -                                                    //
-// Output Argumen : -                                                    //
-// Deskripsi      : Fungsi ini berfungsi untuk menampilkan program error // 
-//                  atau pilihan yang diinput baik oleh pegawai atau     //
-//                  pengguna tidak terdapat pada pilihan                 //
-// Versi : 1.0                                      Rev. 0               //
-// Tgl   : 13-12-2021                               Tgl: -               //
-// Putu Eternalie Prajnani Welaga - 2105551046                           //
-// Kelas B                                                               //
-//=======================================================================//
+
 void error_alert (){
 	printf   ("\t\t\t\t\t=========================================================  \n");
     printf   ("\t\t\t\t\t||         Pilihan yang Anda masukan Salah!!!          || \n");
     printf   ("\t\t\t\t\t||      Silahkan Memilih Pilihan yang Sudah ada        || \n");
     printf   ("\t\t\t\t\t=========================================================  \n");
 }
-//=======================================================================//
-//*****             Fungsi Untuk Menampilkan Menu Admin             *****//
-//=======================================================================//
-// Nama Fungsi    : menuadm                                              //
-// Input Argumen  : char a, int kategori                                 //
-// Output Argumen : -                                                    //
-// Deskripsi      : Fungsi ini berfungsi untuk menampilkan kategori menu //
-//                  khusus untuk pegawai atau admin, yaitu 1 untuk lihat //
-//                  list villa, 2 untuk pesan villa, 3 untuk lihat data  //
-//                  pesanan, 4 untuk hapus pesanan dan 5 untuk exit atau //
-//                  keluar                                               //
-// Versi : 1.0                                      Rev. 0               //
-// Tgl   : 13-12-2021                               Tgl: -               //
-// Putu Eternalie Prajnani Welaga - 2105551046                           //
-// Kelas B                                                               //
-//=======================================================================//
+
 void menuadm (){
 	char a ;
 	int kategori ;
@@ -549,21 +456,7 @@ void menuadm (){
     	break ;
 	}
 }
-//=======================================================================//
-//*****           Fungsi Untuk Menampilkan Pesanan Villa            *****//
-//=======================================================================//
-// Nama Fungsi    : pesan_villa_anyelir                                  //
-// Input Argumen  : -                                                    //
-// Output Argumen : -                                                    //
-// Deskripsi      : Menampilkan program pesan villa dengan menginputkan  //
-//                  data diri pengguna dan juga detail dari pesanan      //
-//                  seperti biaya dan juga tanggal check in yang nantinya//
-//                  akan tersimpan pada file databases "datapesan.txt"   //
-// Versi : 1.0                                      Rev. 0               //
-// Tgl   : 13-12-2021                               Tgl: -               //
-// Putu Eternalie Prajnani Welaga - 2105551046                           //
-// Kelas B                                                               //
-//=======================================================================//
+
 void pesan_villa_anyelir (){
 	system ("cls");
 	list_villa ();
@@ -665,20 +558,7 @@ void pemesanan_villa (){
 		pesanvl.totalPembayaran = 4800000 + biaya_ADM + deposito ;
 	}
 }
-//=======================================================================//
-//*****           Fungsi Untuk Menampilkan Harga Pemesanan          *****//
-//=======================================================================//
-// Nama Fungsi    : pemesanan_villa                                      //
-// Input Argumen  : -                                                    //
-// Output Argumen : -                                                    //
-// Deskripsi      : Fungsi ini berfungsi untuk menampilkan sistem harga  //
-//                  total pembayaran Villa yang akan ditampilkan untuk   //
-//                  pengguna yang sudah memesan villa                    //
-// Versi : 1.0                                      Rev. 0               //
-// Tgl   : 13-12-2021                               Tgl: -               //
-// Putu Eternalie Prajnani Welaga - 2105551046                           //
-// Kelas B                                                               //
-//=======================================================================//
+
 void detPemesanan (){
 	printf ("\n\n");
 	printf ("\t\t\t\t\t|=========================================================|\n");
@@ -792,19 +672,7 @@ int BknFeb (int thn, int bln){
 		return 30 ;
 	}
 }
-//=======================================================================//
-//*****                  Fungsi Untuk Menampilkan Hari              *****//
-//=======================================================================//
-// Nama Fungsi    : hari                                                 //
-// Input Argumen  : -                                                    //
-// Output Argumen : -                                                    //
-// Deskripsi      : Fungsi ini berfungsi untuk menampilkan hari pada     //
-//                  program yang akan ditampilkan pada detail pemesanan  //
-// Versi : 1.0                                      Rev. 0               //
-// Tgl   : 13-12-2021                               Tgl: -               //
-// Putu Eternalie Prajnani Welaga - 2105551046                           //
-// Kelas B                                                               //
-//=======================================================================//
+
 void hari (){
 	switch (hari1){
 		case 1 : printf ("SENIN"); break ;
@@ -843,19 +711,7 @@ void lihat_data_pesanan (){
 	else //jika selain Y atau y maka akan balik pada opsi
 	    goto opsi ;
 }
-//=======================================================================//
-//*****          Fungsi Untuk Menampilkan List Data Pemesan         *****//
-//=======================================================================//
-// Nama Fungsi    : list_data_pemesan                                    //
-// Input Argumen  : -                                                    //
-// Output Argumen : -                                                    //
-// Deskripsi      : Fungsi ini berfungsi untuk menampilkan list data     //
-//                  dari pemesan Villa dan khusus untuk pegawai          //
-// Versi : 1.0                                      Rev. 0               //
-// Tgl   : 13-12-2021                               Tgl: -               //
-// Putu Eternalie Prajnani Welaga - 2105551046                           //
-// Kelas B                                                               //
-//=======================================================================//
+
 void list_data_pemesan (){
 	system ("cls");
 	printf ("\t\t|======================================================================================================================================================|\n");
@@ -1071,20 +927,7 @@ void menu_pengunjung (){
 		goto tekan_benar ;
 	}
 }
-//=======================================================================//
-//*****            Fungsi Untuk Menampilkan Data Pemesan            *****//
-//=======================================================================//
-// Nama Fungsi    : tampilan_pemesan                                     //
-// Input Argumen  : int pilih1                                           //
-// Output Argumen : -                                                    //
-// Deskripsi      : Fungsi ini berfungsi untuk memperlihatkan data       //
-//                  para pemesan yang dikhususkan untuk pengguna agar    //
-//                  tidak terjadinya pembookingan yang sama              //
-// Versi : 1.0                                      Rev. 0               //
-// Tgl   : 13-12-2021                               Tgl: -               //
-// Putu Eternalie Prajnani Welaga - 2105551046                           //
-// Kelas B                                                               //
-//=======================================================================//
+
 void tampilan_pemesanan (){
 	int pilih1 ;
 	system ("cls");
@@ -1115,20 +958,7 @@ void tampilan_pemesanan (){
 		printf ("\t\t\t\t\t| Silahkan ketik ulang 1 \n");
 		goto tekan1 ;
 }
-//=======================================================================//
-//*****               Fungsi Untuk Mengecek Lokasi Villa            *****//
-//=======================================================================//
-// Nama Fungsi    : lokasi_villa                                         //
-// Input Argumen  : int pilih1                                           //
-// Output Argumen : -                                                    //
-// Deskripsi      : Fungsi ini berfungsi untuk mengecek lokasi villa yang//
-//                  ada dengan memperlihatkan daerah dan alamat villa    //
-//                  untuk memudahi pengguna dalam memilih villa          //
-// Versi : 1.0                                      Rev. 0               //
-// Tgl   : 13-12-2021                               Tgl: -               //
-// Putu Eternalie Prajnani Welaga - 2105551046                           //
-// Kelas B                                                               //
-//=======================================================================//
+
 void lokasi_villa (){
 	int pilih1 ;
 	system ("cls");
