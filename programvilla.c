@@ -1,8 +1,8 @@
-#include <stdio.h> //header standar input output dalam bahasa C
-#include <stdlib.h> //header standar input output dalam bahasa C
-#include <string.h> //header yang berisi fungsi-fungsi yang digunakan untuk pengoprasian string dan array
-#include <time.h> //header yang digunakan untuk menampilkan format tanggal dan waktu
-#define JUM_BLOK 1	/* sebuah record */
+#include <stdio.h>   //header standar input output dalam bahasa C
+#include <stdlib.h>  //header standar input output dalam bahasa C
+#include <string.h>  //header yang berisi fungsi-fungsi yang digunakan untuk pengoprasian string dan array
+#include <time.h>    //header yang digunakan untuk menampilkan format tanggal dan waktu
+#define JUM_BLOK 1	 //sebuah record 
 
 // Note : Pada beberapa compiler kode system ("clear") dapat dituliskan system ("cls");
 
@@ -19,10 +19,10 @@ time_t waktuserver;       //variabel waktuserver   => berfungsi untuk mengambil 
 
 // Struct User untuk menyimpan member nama, username, password, email
 typedef struct {
-    char nama[50]; //untuk menyimpan nama dengan maksimal 50 karakter pada saat registrasi pengguna
-    char username[12]; //untuk menyimpan username dengan maksimal 12 karakter pada saat registrasi serta login pengguna
-    char password[10]; //untuk menyimpan password dengan maksimal 10 karakter pada saat registrasi serta login pengguna
-    char email[50]; //untuk menyimpan email dengan maksimal 50 karakter pada saat registrasi pengguna
+    char nama[50];      //untuk menyimpan nama dengan maksimal 50 karakter pada saat registrasi pengguna
+    char username[12];  //untuk menyimpan username dengan maksimal 12 karakter pada saat registrasi serta login pengguna
+    char password[10];  //untuk menyimpan password dengan maksimal 10 karakter pada saat registrasi serta login pengguna
+    char email[50];     //untuk menyimpan email dengan maksimal 50 karakter pada saat registrasi pengguna
 }User;
 User u; //Mendeklarasikan variabel u pada struct User
 
@@ -48,32 +48,32 @@ typedef struct {
 pesan_villa pesanvl; //Mendeklarasikan variabel pesanvl pada struct pesan_villa
 
 //Deklarasi fungsi-fungsi yang digunakan pada program pemesanan villa :
-void header ();
-void menu_masuk();
-void masuk_admin();
-void daftar();
-void error_alert();
-void masuk_pengunjung ();
-void ambil_password();
-void selesai();
-void menuadm();
-void record(User u, char file[]);
-void waktu();
-void menu_pengunjung();
-void list_villa ();
-void lokasi_villa ();
-void list_villa_pengunjung ();
-void pesan_villa_anyelir ();
-void lihat_data_pesanan ();
-void hapus_pesanan ();
-void pemesanan_villa();
-void hapus ();
-void hapusdtpesan (pesan_villa pesanvl, int r);
-void list_data_pemesan ();
-void detPemesanan ();
-void kalenderuntukCO ();
-void hari ();
-void tampilan_pemesanan ();
+void header ();                                   /*Merupakan fungsi yang digunakan untuk menampilkan header program yang ditunjukkan pertama kali saat program dijalankan*/
+void menu_masuk();                                /*Merupakan fungsi menu masuk untuk user pegawai maupun user pengunjung yang berisi 4 opsi,Masuk Sebagai Admin,Masuk Sebagai Pengunjung,Registrasi Pengunjung, dan EXIT*/
+void masuk_admin();                               /*Merupakan fungsi untuk masuk admin (login admin) dengan memasukkan password admin atau pegawai villa anyelir*/
+void daftar();                                    /*Merupakan fungsi untuk daftar atau registrasi bagi pengunjung yang belum membuat akun*/
+void error_alert();                               /*Merupakan fungsi untuk pesan error*/
+void masuk_pengunjung ();                         /*Merupakan fungsi untuk masuk pengunjung (login) yang berisi input username dan password*/
+void ambil_password();                            /*Merupakan fungsi untuk mengambil password yang diinput dan dicek pada file passwordAdmin.txt*/
+void selesai();                                   /*Merupakan fungsi untuk menampilkan kata-kata selesai yang digunakan bila berhasil login*/
+void menuadm();                                   /*Merupakan fungsi untuk menu admin yang berisi 4 opsi yaitu Lihat List Villa, Pesan Villa, Lihat Data Pesanan, Hapus Pesanan, dan Exit*/
+void record(User u, char file[]);                 /*Merupakan fungsi yang digunakan untuk memperlihatkan track record dari file "Record.dat"*/
+void waktu();                                     /*Merupakan fungsi yang digunakan untuk menampilkan waktu pada sistem tempat user mengakses*/
+void menu_pengunjung();                           /*Merupakan fungsi untuk menu pengunjung ketika berhasil login atau masuk dengan menghadirkan 4 opsi yaitu untuk melihat lokasi villa, list villa, riwayat pesan villa, dan Exit*/
+void list_villa ();                               /*Merupakan fungsi untuk menampilkan list villa anyelir */
+void lokasi_villa ();                             /*Merupakan fungsi untuk menampilkan lokasi dari setiap villa anyelir*/
+void list_villa_pengunjung ();                    /*Merupakan fungsi untuk menampilkan list villa pengunjung dengan memanggil fungsi yang telah dibuat sebelumnya yaitu list_villa*/
+void pesan_villa_anyelir ();                      /*Merupakan fungsi yang digunakan untuk memesan villa anyelir (pemesanan dilakukan oleh admin atau pegawai anyelir)*/
+void lihat_data_pesanan ();                       /*Merupakan fungsi untuk melihat data pesanan villa anyelir jika telah memesan dengan admin atau pegawai*/
+void hapus_pesanan ();                            /*Merupakan fungsi bagian dari menu admin untuk menghapus data pesanan villa anyelir yang dilakukan oleh pegawai atau adminn*/
+void pemesanan_villa();                           /*Merupakan fungsi yang berhubungan dengan pemesanan villa yang memuat harga dari setiap villa anyelir*/
+void hapus ();                                    /*Merupakan fungsi yang digunakan untuk menghapus data pemesanan (lanjutan dari fungsi hapus_pesanan)*/
+void hapusdtpesan (pesan_villa pesanvl, int r);   /*Merupakan fungsi lanjutan dari hapus yang merujuk langsung pada database datapesan.txt sehingga apabila menghapus data maka data pada database juga ikut terhapus*/
+void list_data_pemesan ();                        /*Merupakan fungsi yang berisi list data pemesanan villa anyelir*/
+void detPemesanan ();                             /*Merupakan fungsi berupa output keseluruhan saat pemesanan villa anyelir */
+void kalenderuntukCO ();                          /*Merupakan fungsi yang digunakan untuk perhitungan kalender pada saat check out */
+void hari ();                                     /*Merupakan fungsi yang digunakan untuk menampilkan nama-nama hari*/
+void tampilan_pemesanan ();                       /*Merupakan fungsi yang digunakan untuk menampilkan pesanan namun secara singkat berisi id pemesan, id villa dan tanggal check in yang bisa dilihat oleh pengunjung villa*/
 
 // assign namaFile (nF) agar menyimpan string "logRecord.txt"
 char namaFile[] = "logRecord.txt";
@@ -944,34 +944,34 @@ void list_villa (){
     printf ("\t\t\t|-----------------------------------------------------------------------------------------------------------------------------------------|\n");
     printf ("\t\t\t|ID VILLA   |    NAMA VILLA   |         FASILITAS           |    HARGA LUNAS  |      DP      | KAPASITAS | CHECK IN  | CHECK OUT |  KET   |\n");
     printf ("\t\t\t|-----------|-----------------|-----------------------------|-----------------|--------------|-----------|---------- |-----------|--------|\n");
-    printf ("\t\t\t|    1      |   Anyelir 1     |Dua Lantai, Kolam Renang     | Rp. 1.800.000   | Rp.900.000   | 6 orang   |14.00 WITA |14.00 WITA |2 hari  |\n");
+    printf ("\t\t\t|    1      |   Anyelir 1     |Dua Lantai, Kolam Renang     | Rp. 1.800.000   | Rp.900.000   | 6 orang   |14.00 WITA |12.00 WITA |2 hari  |\n");
     printf ("\t\t\t|           |(Jl. Anyelir No  |Dua Kamar Tidur, Dua Kasur   |                 |              |           |           |           |1 malam |\n");
     printf ("\t\t\t|           |  61, Denpasar   |Dua Kamar Mandi dengan Bathup|                 |              |           |           |           |        |\n");
     printf ("\t\t\t|           | Timur, Bali )   |Satu Ruang Makan, Satu Dapur |                 |              |           |           |           |        |\n");
     printf ("\t\t\t|           |                 |Dua Balkon, TV, Towel, AC    |                 |              |           |           |           |        |\n");
     printf ("\t\t\t|-----------|-----------------|-----------------------------|-----------------|--------------|-----------|-----------|-----------|--------|\n");
-    printf ("\t\t\t|    2      |   Anyelir 2     |Tiga Lantai, Kolam Renang    | Rp. 1.650.000   | Rp.750.000   | 4 orang   |14.00 WITA |14.00 WITA |2 hari  |\n");
+    printf ("\t\t\t|    2      |   Anyelir 2     |Tiga Lantai, Kolam Renang    | Rp. 1.650.000   | Rp.750.000   | 4 orang   |14.00 WITA |12.00 WITA |2 hari  |\n");
     printf ("\t\t\t|           |(Jl. Hayam Wuruk |Empat Kamar Tidur,Empat Kasur|                 |              |           |           |           |1 malam |\n");
     printf ("\t\t\t|           | No.05, Denpasar |Satu Kamar Mandi dgn Bathup  |                 |              |           |           |           |        |\n");
     printf ("\t\t\t|           | Timur, Bali )   |Satu Ruang Makan, Satu Dapur |                 |              |           |           |           |        |\n");
     printf ("\t\t\t|           |                 |Tiga Balkon, TV, Towel, AC   |                 |              |           |           |           |        |\n");
     printf ("\t\t\t|-----------|-----------------|-----------------------------|-----------------|--------------|-----------|-----------|-----------|--------|\n");
-    printf ("\t\t\t|    3      |   Anyelir 3     |Dua Lantai,Kolam Renang Lt.2 | Rp. 1.750.000   | Rp.800.000   | 2 orang   |14.00 WITA |13.30 WITA |2 hari  |\n");
+    printf ("\t\t\t|    3      |   Anyelir 3     |Dua Lantai,Kolam Renang Lt.2 | Rp. 1.750.000   | Rp.800.000   | 2 orang   |14.00 WITA |12.00 WITA |2 hari  |\n");
     printf ("\t\t\t|           |(Jl. Raya Kesambi|Dua Kamar Tidur, Dua Kasur   |                 |              |           |           |           |1 malam |\n");
     printf ("\t\t\t|           |   No.42, Kuta   |Satu Kamar Mandi dgn Bathup  |                 |              |           |           |           |        |\n");
     printf ("\t\t\t|           |     Bali )      |Satu Ruang Makan, Satu Dapur |                 |              |           |           |           |        |\n");
     printf ("\t\t\t|           |                 |besar, Satu Balkon, TV, AC   |                 |              |           |           |           |        |\n");
     printf ("\t\t\t|           |                 |Tiga Towel, PRIVATE VILLA    |                 |              |           |           |           |        |\n");
     printf ("\t\t\t|-----------|-----------------|-----------------------------|-----------------|--------------|-----------|-----------|-----------|--------|\n");
-    printf ("\t\t\t|    4      |   Anyelir 4     |Tiga Lantai,Kolam Renang Lt.3| Rp. 3.800.000   | Rp.1.400.000 | 5 orang   |14.00 WITA |13.30 WITA |2 hari  |\n");
+    printf ("\t\t\t|    4      |   Anyelir 4     |Tiga Lantai,Kolam Renang Lt.3| Rp. 3.800.000   | Rp.1.400.000 | 5 orang   |14.00 WITA |12.00 WITA |2 hari  |\n");
     printf ("\t\t\t|           |(Jl. Dewi Sri    |Dua Kamar Tidur, Empat Kasur |                 |              |           |           |           |1 malam |\n");
     printf ("\t\t\t|           |   No.80 , Kuta  |Tiga Kamar Mandi dgn Bathup  |                 |              |           |           |           |        |\n");
     printf ("\t\t\t|           |     Bali )      |Satu Ruang Makan, Satu Dapur |                 |              |           |           |           |        |\n");
     printf ("\t\t\t|           |                 |besar, Satu Balkon, TV, AC,  |                 |              |           |           |           |        |\n");
     printf ("\t\t\t|           |                 |Tiga Towel, Satu Ruang Tamu  |                 |              |           |           |           |        |\n");
     printf ("\t\t\t|-----------|-----------------|-----------------------------|-----------------|--------------|-----------|-----------|-----------|--------|\n");
-    printf ("\t\t\t|    5      |   Anyelir 5     |Tiga Lantai, AC, Shower,     | Rp. 7.750.000   | Rp.3.800.000 | 42 orang  |14.00 WITA |18.00 WITA |3 hari  |\n");
-    printf ("\t\t\t|           |(Jl. Raya Pengo- |7 Kamar Tidur, 14 Kasur Besar|                 |              |           |           |           |2 malam |\n");
+    printf ("\t\t\t|    5      |   Anyelir 5     |Tiga Lantai, AC, Shower,     | Rp. 7.750.000   | Rp.3.800.000 | 42 orang  |14.00 WITA |12.00 WITA |2 hari  |\n");
+    printf ("\t\t\t|           |(Jl. Raya Pengo- |7 Kamar Tidur, 14 Kasur Besar|                 |              |           |           |           |1 malam |\n");
     printf ("\t\t\t|           |  sekan No.76    |Lima Kamar Mandi dgn Bathup  |                 |              |           |           |           |        |\n");
     printf ("\t\t\t|           |  Ubud, Bali )   |Satu Ruang Makan, Satu Dapur |                 |              |           |           |           |        |\n");
     printf ("\t\t\t|           |                 |besar, Empat Balkon, 8 TV,   |                 |              |           |           |           |        |\n");
@@ -982,7 +982,7 @@ void list_villa (){
     printf ("\t\t\t|           |                 |Party Villa, Ruang Mandi Air |                 |              |           |           |           |        |\n"); 
     printf ("\t\t\t|           |                 |Hangat                       |                 |              |           |           |           |        |\n");
     printf ("\t\t\t|-----------|-----------------|-----------------------------|-----------------|--------------|-----------|-----------|-----------|--------|\n");
-    printf ("\t\t\t|    6      |   Anyelir 6     |Tiga Lantai, AC,             | Rp. 5.800.000   | Rp.1.500.000 | 30 orang  |14.00 WITA |14.30 WITA |2 hari  |\n");
+    printf ("\t\t\t|    6      |   Anyelir 6     |Tiga Lantai, AC,             | Rp. 5.800.000   | Rp.1.500.000 | 30 orang  |14.00 WITA |12.00 WITA |2 hari  |\n");
     printf ("\t\t\t|           |(Jl. Raya Pengo- |5 Kamar Tidur, 5 Kasur Besar |                 |              |           |           |           |1 malam |\n");
     printf ("\t\t\t|           |  sekan No.102   |Lima Kamar Mandi dgn Shower  |                 |              |           |           |           |        |\n");
     printf ("\t\t\t|           |  Ubud, Bali )   |Satu Ruang Makan, Satu Dapur |                 |              |           |           |           |        |\n");
@@ -991,7 +991,7 @@ void list_villa (){
     printf ("\t\t\t|           |                 |Sound System, Biliyard       |                 |              |           |           |           |        |\n");
     printf ("\t\t\t|           |                 |Kolam Renang Lt.3            |                 |              |           |           |           |        |\n"); 
     printf ("\t\t\t|-----------|-----------------|-----------------------------|-----------------|--------------|-----------|-----------|-----------|--------|\n");
-    printf ("\t\t\t|    7      |   Anyelir 7     |Tiga Lantai, AC,             | Rp. 4.800.000   | Rp.2.000.000 | 7 orang   |14.00 WITA |13.30 WITA |2 hari  |\n");
+    printf ("\t\t\t|    7      |   Anyelir 7     |Tiga Lantai, AC,             | Rp. 4.800.000   | Rp.2.000.000 | 7 orang   |14.00 WITA |12.00 WITA |2 hari  |\n");
     printf ("\t\t\t|           |(Jl. Raya Uluwatu|4 Kamar Tidur, 8 Kasur       |                 |              |           |           |           |1 malam |\n");
     printf ("\t\t\t|           |      No.121     |4 Kamar Mandi dgn Bathup     |                 |              |           |           |           |        |\n");
     printf ("\t\t\t|           | Jimbaran, Bali )|Satu Ruang Makan, Satu Dapur |                 |              |           |           |           |        |\n");
@@ -999,7 +999,7 @@ void list_villa (){
     printf ("\t\t\t|           |                 |4 Towel, 1 Ruang Tamu        |                 |              |           |           |           |        |\n");
     printf ("\t\t\t|           |                 |Kolam Renang Lt.2            |                 |              |           |           |           |        |\n"); 
     printf ("\t\t\t|-----------|-----------------|-----------------------------|-----------------|--------------|-----------|-----------|-----------|--------|\n");
-    printf ("\t\t\t|    8      |   Anyelir 8     |Dua Lantai, AC,              | Rp. 4.300.000   | Rp.2.000.000 | 6 orang   |14.00 WITA |14.00 WITA |2 hari  |\n");
+    printf ("\t\t\t|    8      |   Anyelir 8     |Dua Lantai, AC,              | Rp. 4.300.000   | Rp.2.000.000 | 6 orang   |14.00 WITA |12.00 WITA |2 hari  |\n");
     printf ("\t\t\t|           |(Jl. Bukit Permai|2 Kamar Tidur, 2 Kasur Besar |                 |              |           |           |           |1 malam |\n");
     printf ("\t\t\t|           |      No.66      |2 Kamar Mandi dgn Bathup     |                 |              |           |           |           |        |\n");
     printf ("\t\t\t|           | Jimbaran, Bali )|Satu Ruang Makan, Satu Dapur |                 |              |           |           |           |        |\n");
@@ -1008,7 +1008,7 @@ void list_villa (){
     printf ("\t\t\t|           |                 |Kolam Renang Lt.2, Satu      |                 |              |           |           |           |        |\n"); 
     printf ("\t\t\t|           |                 |Kamar Utama dengan 2 Kasur   |                 |              |           |           |           |        |\n"); 
     printf ("\t\t\t|-----------|-----------------|-----------------------------|-----------------|--------------|-----------|-----------|-----------|--------|\n");
-    printf ("\t\t\t|    9      |   Anyelir 9     |Tiga Lantai, AC, Shower      | Rp. 5.960.000   | Rp.3.000.000 | 40 orang  |14.00 WITA |15.00 WITA |2 hari  |\n");
+    printf ("\t\t\t|    9      |   Anyelir 9     |Tiga Lantai, AC, Shower      | Rp. 5.960.000   | Rp.3.000.000 | 40 orang  |14.00 WITA |12.00 WITA |2 hari  |\n");
     printf ("\t\t\t|           |(Jl. Raya Uluwatu|4 Kamar Tidur, 4 Kasur Besar |                 |              |           |           |           |1 malam |\n");
     printf ("\t\t\t|           |      No.46      |4 Kamar Mandi dgn Bathup     |                 |              |           |           |           |        |\n");
     printf ("\t\t\t|           | Jimbaran, Bali )|Satu Ruang Makan, Satu Dapur |                 |              |           |           |           |        |\n");
@@ -1019,7 +1019,7 @@ void list_villa (){
 	printf ("\t\t\t|           |                 |Ruang Tamu Biasa, Karaoke,   |                 |              |           |           |           |        |\n"); 
     printf ("\t\t\t|           |                 |Ruang Party                  |                 |              |           |           |           |        |\n"); 
     printf ("\t\t\t|-----------|-----------------|-----------------------------|-----------------|--------------|-----------|-----------|-----------|--------|\n");
-    printf ("\t\t\t|    10     |   Anyelir 10    |Dua Lantai, Ruang Dinner     | Rp. 2.750.000   | Rp.1.000.000 | 6 orang   |14.00 WITA |14.00 WITA |2 hari  |\n");
+    printf ("\t\t\t|    10     |   Anyelir 10    |Dua Lantai, Ruang Dinner     | Rp. 2.750.000   | Rp.1.000.000 | 6 orang   |14.00 WITA |12.00 WITA |2 hari  |\n");
     printf ("\t\t\t|           |(Jl. Sahadewi    |3 Kamar Tidur, 3 Kasur       |                 |              |           |           |           |1 malam |\n");
     printf ("\t\t\t|           |      No.21      |1 Kamar Mandi dgn Bathup     |                 |              |           |           |           |        |\n");
     printf ("\t\t\t|           | Br. Umacandi, Ds|Satu Ruang Makan, Satu Dapur,|                 |              |           |           |           |        |\n");
@@ -1029,7 +1029,7 @@ void list_villa (){
     printf ("\t\t\t|           |                 |Satu Ruang Tamu Utama,       |                 |              |           |           |           |        |\n");
     printf ("\t\t\t|           |                 |Ruang Mandi Air Hangat       |                 |              |           |           |           |        |\n"); 
     printf ("\t\t\t|-----------|-----------------|-----------------------------|-----------------|--------------|-----------|-----------|-----------|--------|\n");
-    printf ("\t\t\t|    11     |   Anyelir 11    |Tiga Lantai, Ruang Dinner    | Rp. 4.120.000   | Rp.1.800.000 | 8 orang   |14.00 WITA |16.00 WITA |2 hari  |\n");
+    printf ("\t\t\t|    11     |   Anyelir 11    |Tiga Lantai, Ruang Dinner    | Rp. 4.120.000   | Rp.1.800.000 | 8 orang   |14.00 WITA |12.00 WITA |2 hari  |\n");
     printf ("\t\t\t|           |(Jl. Pantai      |5 Kamar Tidur, 5 Kasur       |                 |              |           |           |           |1 malam |\n");
     printf ("\t\t\t|           |   Berawa No.61  |3 Kamar Mandi dgn 1 Bathup   |                 |              |           |           |           |        |\n");
     printf ("\t\t\t|           | Canggu, Bali)   |Satu Ruang Makan, Satu Dapur,|                 |              |           |           |           |        |\n");
@@ -1039,7 +1039,7 @@ void list_villa (){
     printf ("\t\t\t|           |                 |Satu Ruang Tamu Utama,       |                 |              |           |           |           |        |\n");
     printf ("\t\t\t|           |                 |Ruang Mandi Air Hangat       |                 |              |           |           |           |        |\n");
 	printf ("\t\t\t|-----------|-----------------|-----------------------------|-----------------|--------------|-----------|-----------|-----------|--------|\n");
-    printf ("\t\t\t|    12     |   Anyelir 12    |Tiga Lantai, Ruang Dinner    | Rp. 4.800.000   | Rp.1.500.000 | 25 orang  |14.00 WITA |15.00 WITA |2 hari  |\n");
+    printf ("\t\t\t|    12     |   Anyelir 12    |Tiga Lantai, Ruang Dinner    | Rp. 4.800.000   | Rp.1.500.000 | 25 orang  |14.00 WITA |12.00 WITA |2 hari  |\n");
     printf ("\t\t\t|           | (Jl. Nelayan    |6 Kamar Tidur, 6 Kasur       |                 |              |           |           |           |1 malam |\n");
     printf ("\t\t\t|           |    No.81        |5 Kamar Mandi dgn 2 Bathup   |                 |              |           |           |           |        |\n");
     printf ("\t\t\t|           | Canggu, Bali)   |Satu Ruang Makan, Satu Dapur,|                 |              |           |           |           |        |\n");
