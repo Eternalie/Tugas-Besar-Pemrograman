@@ -119,7 +119,20 @@ void header (){
 	getchar ();
   system ("cls");
 }
-
+//=======================================================================//
+//*****         Fungsi Untuk Menampilkan Menu Masuk Program         *****//
+//=======================================================================//
+// Nama Fungsi    : menu_masuk                                           //
+// Input Argumen  : int pilihan                                          //
+// Output Argumen : -                                                    //
+// Deskripsi      : Fungsi ini berfungsi untuk menampilkan menu masuk    //
+//                  ke program dengan menginputkan angka sesuai dengan   //
+//                  pilihan dari pengguna program                        //
+// Versi : 1.0                                      Rev. 0               //
+// Tgl   : 13-12-2021                               Tgl: -               //
+// Putu Eternalie Prajnani Welaga - 2105551046                           //
+// Kelas B                                                               //
+//=======================================================================//
 void menu_masuk (){
 	system ("cls");
 	// Variabel pilihan yang digunakan untuk menyimpan pilihan pengguna antara Masuk dengan Registrasi
