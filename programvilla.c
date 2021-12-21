@@ -479,7 +479,22 @@ void error_alert (){
     printf   ("\t\t\t\t\t||      Silahkan Memilih Pilihan yang Sudah ada        || \n");
     printf   ("\t\t\t\t\t=========================================================  \n");
 }
-
+//=======================================================================//
+//*****             Fungsi Untuk Menampilkan Menu Admin             *****//
+//=======================================================================//
+// Nama Fungsi    : menuadm                                              //
+// Input Argumen  : char a, int kategori                                 //
+// Output Argumen : -                                                    //
+// Deskripsi      : Fungsi ini berfungsi untuk menampilkan kategori menu //
+//                  khusus untuk pegawai atau admin, yaitu 1 untuk lihat //
+//                  list villa, 2 untuk pesan villa, 3 untuk lihat data  //
+//                  pesanan, 4 untuk hapus pesanan dan 5 untuk exit atau //
+//                  keluar                                               //
+// Versi : 1.0                                      Rev. 0               //
+// Tgl   : 13-12-2021                               Tgl: -               //
+// Putu Eternalie Prajnani Welaga - 2105551046                           //
+// Kelas B                                                               //
+//=======================================================================//
 void menuadm (){
 	char a ;
 	int kategori ;
