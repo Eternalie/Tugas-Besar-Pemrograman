@@ -843,7 +843,19 @@ void lihat_data_pesanan (){
 	else //jika selain Y atau y maka akan balik pada opsi
 	    goto opsi ;
 }
-
+//=======================================================================//
+//*****          Fungsi Untuk Menampilkan List Data Pemesan         *****//
+//=======================================================================//
+// Nama Fungsi    : list_data_pemesan                                    //
+// Input Argumen  : -                                                    //
+// Output Argumen : -                                                    //
+// Deskripsi      : Fungsi ini berfungsi untuk menampilkan list data     //
+//                  dari pemesan Villa dan khusus untuk pegawai          //
+// Versi : 1.0                                      Rev. 0               //
+// Tgl   : 13-12-2021                               Tgl: -               //
+// Putu Eternalie Prajnani Welaga - 2105551046                           //
+// Kelas B                                                               //
+//=======================================================================//
 void list_data_pemesan (){
 	system ("cls");
 	printf ("\t\t|======================================================================================================================================================|\n");
@@ -1059,7 +1071,20 @@ void menu_pengunjung (){
 		goto tekan_benar ;
 	}
 }
-
+//=======================================================================//
+//*****            Fungsi Untuk Menampilkan Data Pemesan            *****//
+//=======================================================================//
+// Nama Fungsi    : tampilan_pemesan                                     //
+// Input Argumen  : int pilih1                                           //
+// Output Argumen : -                                                    //
+// Deskripsi      : Fungsi ini berfungsi untuk memperlihatkan data       //
+//                  para pemesan yang dikhususkan untuk pengguna agar    //
+//                  tidak terjadinya pembookingan yang sama              //
+// Versi : 1.0                                      Rev. 0               //
+// Tgl   : 13-12-2021                               Tgl: -               //
+// Putu Eternalie Prajnani Welaga - 2105551046                           //
+// Kelas B                                                               //
+//=======================================================================//
 void tampilan_pemesanan (){
 	int pilih1 ;
 	system ("cls");
