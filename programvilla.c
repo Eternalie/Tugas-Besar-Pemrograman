@@ -792,7 +792,19 @@ int BknFeb (int thn, int bln){
 		return 30 ;
 	}
 }
-
+//=======================================================================//
+//*****                  Fungsi Untuk Menampilkan Hari              *****//
+//=======================================================================//
+// Nama Fungsi    : hari                                                 //
+// Input Argumen  : -                                                    //
+// Output Argumen : -                                                    //
+// Deskripsi      : Fungsi ini berfungsi untuk menampilkan hari pada     //
+//                  program yang akan ditampilkan pada detail pemesanan  //
+// Versi : 1.0                                      Rev. 0               //
+// Tgl   : 13-12-2021                               Tgl: -               //
+// Putu Eternalie Prajnani Welaga - 2105551046                           //
+// Kelas B                                                               //
+//=======================================================================//
 void hari (){
 	switch (hari1){
 		case 1 : printf ("SENIN"); break ;
