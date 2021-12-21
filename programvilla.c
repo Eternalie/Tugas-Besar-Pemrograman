@@ -235,7 +235,20 @@ void ambil_password(){
 	fscanf(file, "%s", passwordP);
 	fclose(file); //menutup file "passwordAdmin"
 }
-
+//=======================================================================//
+//*****                    Fungsi Untuk Daftar Akun                 *****//
+//=======================================================================//
+// Nama Fungsi    : daftar                                               //
+// Input Argumen  : -                                                    //
+// Output Argumen : -                                                    //
+// Deskripsi      : Fungsi ini berfungsi untuk menampilkan bahwa login   //
+//                  yang dilakukan oleh pegawai sudah berhasil atau      //
+//                  sukses                                               //
+// Versi : 1.0                                      Rev. 0               //
+// Tgl   : 13-12-2021                               Tgl: -               //
+// Putu Eternalie Prajnani Welaga - 2105551046                           //
+// Kelas B                                                               //
+//=======================================================================//   
 void selesai(){
 	printf("\t\t\t\t\t\t\tLOGIN SUKSES!\n");
 	getch(); fflush(stdin);
