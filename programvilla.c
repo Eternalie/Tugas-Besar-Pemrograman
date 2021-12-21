@@ -1115,7 +1115,20 @@ void tampilan_pemesanan (){
 		printf ("\t\t\t\t\t| Silahkan ketik ulang 1 \n");
 		goto tekan1 ;
 }
-
+//=======================================================================//
+//*****               Fungsi Untuk Mengecek Lokasi Villa            *****//
+//=======================================================================//
+// Nama Fungsi    : lokasi_villa                                         //
+// Input Argumen  : int pilih1                                           //
+// Output Argumen : -                                                    //
+// Deskripsi      : Fungsi ini berfungsi untuk mengecek lokasi villa yang//
+//                  ada dengan memperlihatkan daerah dan alamat villa    //
+//                  untuk memudahi pengguna dalam memilih villa          //
+// Versi : 1.0                                      Rev. 0               //
+// Tgl   : 13-12-2021                               Tgl: -               //
+// Putu Eternalie Prajnani Welaga - 2105551046                           //
+// Kelas B                                                               //
+//=======================================================================//
 void lokasi_villa (){
 	int pilih1 ;
 	system ("cls");
