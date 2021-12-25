@@ -378,7 +378,7 @@ void daftar (){
     if (regis == NULL)
     {
         fputs("ERROR, Tidak ada File!", stderr);
-        exit(1);
+        menu_masuk ();
     }
 
     // Instruksi untuk menginput nama
@@ -978,7 +978,7 @@ int checkNomor(pesan_villa pesanvl,int id){
 //=======================================================================//
 //***********      Fungsi Untuk Menghapus Pesanan Villa     *************//
 //=======================================================================//
-// Nama Fungsi    : lihat_data_pesanan                                   //
+// Nama Fungsi    : hapus_pesanan                                        //
 // Input Argumen  : int pil_hapus                                        //
 // Output Argumen : -                                                    //
 // Deskripsi      : Fungsi ini digunakan untuk menghapus pesanan dengan  //
@@ -1174,11 +1174,11 @@ void menu_pengunjung (){
 void tampilan_pemesanan (){
 	int pilih1 ;
 	system ("cls");
-	printf ("\t\t\t\t\t|=============================================|\n");
-	printf ("\t\t\t\t\t|          DATA PEMESAN VILLA ANYELIR         |\n");
-	printf ("\t\t\t\t\t|=============================================|\n");
-	printf ("\t\t\t\t\t| Id Pemesanan | Kode Villa |     Check In    |\n");
-	printf ("\t\t\t\t\t|--------------|------------|-----------------|\n");                                                                                          
+	printf ("\t\t\t\t\t|================================================|\n");
+	printf ("\t\t\t\t\t|            DATA PEMESAN VILLA ANYELIR          |\n");
+	printf ("\t\t\t\t\t|================================================|\n");
+	printf ("\t\t\t\t\t| Id Pemesanan | Kode/Id Villa |     Check In    |\n");
+	printf ("\t\t\t\t\t|--------------|---------------|-----------------|\n");                                                                                          
 	FILE*dtpesan ; // Membuat pointer dtpesan untuk menunjuk pada file "datapesan.txt"
     dtpesan = fopen ("datapesan.txt", "rt"); //membuka file "datapesan.txt" dengan rt
     if (dtpesan== NULL ){ // Melakukan Pengecekan apakah pointer dtpesan menunjuk kepada file yang dituju ("datapesan.txt")
@@ -1189,9 +1189,9 @@ void tampilan_pemesanan (){
 	while ((fread(&pesanvl, sizeof(pesanvl), JUM_BLOK, dtpesan)) == JUM_BLOK )
 	printf ("\t\t\t\t\t|     %d          %d           %d/%d/%d        \n", pesanvl.id_pesan, pesanvl.nomor_villa,pesanvl.tglCI, pesanvl.blnCI, pesanvl.thnCI);
 	fclose(dtpesan);
-	printf ("\t\t\t\t\t|=============================================|\n");
-	printf ("\t\t\t\t\t|   Tekan  1 untuk kembali ke menu pengunjung |\n");
-    printf ("\t\t\t\t\t|=============================================|\n");
+	printf ("\t\t\t\t\t|================================================|\n");
+	printf ("\t\t\t\t\t|   Tekan  1 untuk kembali ke menu pengunjung    |\n");
+    printf ("\t\t\t\t\t|================================================|\n");
     tekan1 :
     printf ("\t\t\t\t\t| Tekan      : ") ;
 	scanf  ("%d", &pilih1);
@@ -1272,7 +1272,7 @@ void lokasi_villa (){
 // Deskripsi      : Fungsi ini digunakan untuk menampilkan list villa    //
 // Versi : 1.0                                      Rev. 0               //
 // Tgl   : 10-12-2020                               Tgl: -               //
-// Gusti Ayu Wahyu Whurapsari - 2105551042                               //
+//  Putu Eternalie Prajnani Welaga - 2105551046                          //
 // Kelas B                                                               //
 //=======================================================================//
 void list_villa (){
