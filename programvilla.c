@@ -2,7 +2,7 @@
 #include <stdlib.h>  //header standar input output dalam bahasa C
 #include <string.h>  //header yang berisi fungsi-fungsi yang digunakan untuk pengoprasian string dan array
 #include <time.h>    //header yang digunakan untuk menampilkan format tanggal dan waktu
-#define JUM_BLOK 1	//berfungsi untuk penggunaan saat pengoprasian file
+#define JUM_BLOK 1	//berfungsi untuk mendefine nilai jum_lok satu saaat pengoprasian file
 
 // Note : Pada beberapa compiler kode system ("clear") dapat dituliskan system ("cls");
 
