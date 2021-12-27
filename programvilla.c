@@ -2,7 +2,7 @@
 #include <stdlib.h>  //header standar input output dalam bahasa C
 #include <string.h>  //header yang berisi fungsi-fungsi yang digunakan untuk pengoprasian string dan array
 #include <time.h>    //header yang digunakan untuk menampilkan format tanggal dan waktu
-#define JUM_BLOK 1	//berfungsi untuk penggunaan saat pengoprasian file
+#define JUM_BLOK 1	 //sebuah record 
 
 // Note : Pada beberapa compiler kode system ("clear") dapat dituliskan system ("cls");
 
@@ -57,7 +57,6 @@ void masuk_pengunjung ();                         /*Merupakan fungsi untuk masuk
 void ambil_password();                            /*Merupakan fungsi untuk mengambil password yang diinput dan dicek pada file passwordAdmin.txt*/
 void selesai();                                   /*Merupakan fungsi untuk menampilkan kata-kata selesai yang digunakan bila berhasil login*/
 void menuadm();                                   /*Merupakan fungsi untuk menu admin yang berisi 4 opsi yaitu Lihat List Villa, Pesan Villa, Lihat Data Pesanan, Hapus Pesanan, dan Exit*/
-void record(User u, char file[]);                 /*Merupakan fungsi yang digunakan untuk memperlihatkan track record dari file "Record.dat"*/
 void waktu();                                     /*Merupakan fungsi yang digunakan untuk menampilkan waktu pada sistem tempat user mengakses*/
 void menu_pengunjung();                           /*Merupakan fungsi untuk menu pengunjung ketika berhasil login atau masuk dengan menghadirkan 4 opsi yaitu untuk melihat lokasi villa, list villa, riwayat pesan villa, dan Exit*/
 void list_villa ();                               /*Merupakan fungsi untuk menampilkan list villa anyelir */
@@ -173,6 +172,7 @@ void menu_masuk (){
         daftar();
         break;
     case 4:
+    	printf ("\t\t\t\t\t  TERIMAKASIH TELAH MENGGUNAKAN PROGRAM INI ....  \n");
         exit(1);
         break;
     default:
@@ -410,40 +410,7 @@ void daftar (){
     menu_pengunjung();
 }
 
-//=======================================================================//
-//**************  Fungsi Untuk Menampilkan Record User   ****************//
-//=======================================================================//
-// Nama Fungsi    : record                                               //
-// Passing Argumen: struct User u, char file[]                           //
-// Output Argumen : u.nama                                               //
-// Deskripsi      : Fungsi ini ditujukan untuk menampilkan data yang     //
-//                  dimasukan oleh user yaitu berupa nama yang ada pada  //
-//                  logRecord.txt                                        //
-// Versi : 1.0                                      Rev. 0               //
-// Tgl: 14-12-2021                                  Tgl: -               //
-// Gusti Ayu Wahyu Whurapsari - 2105551042                               //
-// Kelas B                                                               //
-//=======================================================================//
-void record(User u, char file[] ){
-    time( & waktuserver);
-    struct tm * waktu = localtime( & waktuserver);
-    //Mendeklarasikan tipe data file dengan pointer *rc yang bertujuan untuk pointer pada file "logRecord.txt"
-    FILE *rc;
-    //Assign rc untuk membuka file binary Record.dat dan menggunakan mode "r" untuk membaca textfile
-    rc = fopen(file, "r");
-    //Menggunakan fungsi fread untuk membaca isi dari file "logRecord.txt"
-    fread (&u, sizeof(u), 1, rc);
-    //Menggunakan fungsi fclose untuk menutup file "logRecord.txt" agar tidak diproses lagi
-    fclose (rc);
 
-    //Menampilkan hasil dari Record nama user dan nomor telepon yang diinput oleh user
-    //Menampilkan hasil dari Record nama user dan nomor telepon yang diinput oleh user
-    printf("\t\t\t\t\t|=========================================================|\n");
-    printf("\t\t\t\t\t|    Nama        Username       Tanggal      \n");
-    printf("\t\t\t\t\t| %s\t%s\t\t%i-%i-%i\n",u.nama, u.username, waktu -> tm_mday, waktu -> tm_mon + 1, waktu -> tm_year + 1900);
-    printf("\t\t\t\t\t|=========================================================|\n");
-
-}
 
 //=======================================================================//
 //***********     Fungsi Untuk Menampilkan Waktu Sistem     *************//
@@ -633,7 +600,7 @@ void pesan_villa_anyelir (){
 		}
 		detPemesanan (); //mencetak struk dengan memanggil fungsi detPemesanan
 		printf ("\t\t\t\t\t Data pemesanan tersimpan. \n");
-		printf("\t\t\t\t\t  Pesan villa lagi? (Y/T) : "); fflush(stdin); //menghadirkan opsi jika ingin pesan villa lagi
+		printf("\t\t\t\t\t Pesan villa lagi? (Y/T) : "); fflush(stdin); //menghadirkan opsi jika ingin pesan villa lagi
 	    scanf("%s", &jawab)	;
 	}
 	while (jawab == 'Y'||jawab=='y'); //jika user menginput Y atau Y maka akan balik lagi ke awal perulangan do
@@ -780,7 +747,7 @@ void kalenderuntukCO (){
 				pesanvl.tglCO = pesanvl.tglCI + hari2 - pesanvl.tglCO ;
 
 			}
-			else
+			else //jika statement if tidak memenuhi maka tanggal CO hanya ditambah dengan hari2=1, bulan dan tahun tetap
 			{
 				pesanvl.tglCO= pesanvl.tglCI+hari2;
 				pesanvl.blnCO=pesanvl.blnCI;
@@ -788,23 +755,23 @@ void kalenderuntukCO (){
 			}
 		
 		}
-		else 
+		else //jika statement if tidak memenuhi maka else ini akan dieksekusi
 		{
-			if (pesanvl.blnCI == 2)
+			if (pesanvl.blnCI == 2) //jika bulan CI = 2 maka akan memanggil fungsi Februari
 				pesanvl.tglCO = Februari (pesanvl.blnCI);
-			else 
+			else //jika bulan CI selain Februari maka akan memanggil fungsi BknFeb
 				pesanvl.tglCO = BknFeb (pesanvl.thnCI,pesanvl.blnCI);
 				hari2 = hari2 - pesanvl.tglCO;
-			if (pesanvl.blnCI == 12)
+			if (pesanvl.blnCI == 12)//jika bulan CI = 12 atau Desember
 			{
-				pesanvl.blnCI = 1 ;
+				pesanvl.blnCI = 1 ; 
 				pesanvl.thnCI = pesanvl.thnCI + 1 ;
 			}
 			else
 				pesanvl.blnCI = pesanvl.blnCI + 1 ;
 		}
 	}
-	while (pesanvl.thnCO== 0);
+	while (pesanvl.thnCO== 0); //akan mengalami perualangan ke do jika tahun CO=0
 }
 
 //=======================================================================//
@@ -823,11 +790,11 @@ void kalenderuntukCO (){
 //=======================================================================//
 int Februari (int thn){
 	thn = pesanvl.thnCI;
-	if ((pesanvl.thnCI % 100 != 0) && (pesanvl.thnCI % 4 == 0)||(pesanvl.thnCI % 400 == 0)){
-		return 29 ;
+	if ((pesanvl.thnCI % 100 != 0) && (pesanvl.thnCI % 4 == 0)||(pesanvl.thnCI % 400 == 0)){ //perhitungan bila jumlah tanggal pada bulan februari sebanyak 29
+		return 29 ; //mengembalikan nilai 29
 	}
 	else {
-		return 28 ;
+		return 28 ; //mengembalikan nilai 28
 	}		
 }
 
@@ -1124,7 +1091,7 @@ void menu_pengunjung (){
     printf ("\t\t\t\t\t|kolam renang di dalamnya.                                |\n");
     printf ("\t\t\t\t\t|                                                         |\n");
     printf ("\t\t\t\t\t|Villa Anyelir memadukan arsitektur Bali dan modern yang  |\n");
-    printf ("\t\t\t\t\t|membuat pengunjung senantiasa nyaman saat berada dalam i |\n");
+    printf ("\t\t\t\t\t|membuat pengunjung senantiasa nyaman saat berada dalam   |\n");
     printf ("\t\t\t\t\t|villa ini. Jika ingin melakukan pemesanan segera hubungi |\n");
     printf ("\t\t\t\t\t|admin.                                                   |\n");
     printf ("\t\t\t\t\t|=========================================================|\n");
@@ -1442,7 +1409,7 @@ void cara_pesan_villa (){
     printf ("\t\t\t\t\t|===========================================================|\n");
     printf ("\t\t\t\t\t|Berikut adalah hal yang harus anda ketahui bila ingin      |\n");
     printf ("\t\t\t\t\t|memesan Villa Anyelir :                                    |\n");
-    printf ("\t\t\t\t\t|1. Pemesanan hanya bisa dilakukan oleh admin villa anyelir |\n");
+    printf ("\t\t\t\t\t|1. Pemesanan dilayani oleh admin / pegawai  villa anyelir  |\n");
     printf ("\t\t\t\t\t|2. Setiap memesan harus persiapkan DP sesuai dengan        |\n");
     printf ("\t\t\t\t\t|   DP minimal masing-masing villa (DP bisa dilihat pada    |\n");
     printf ("\t\t\t\t\t|   menu list villa)                                        |\n");
