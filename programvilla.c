@@ -120,7 +120,7 @@ void header (){
 	printf  ("\t\t\t\t\t=========================================================\n");
 	printf  ("\t\t\t\t\t              Tekan ENTER  untuk melanjutkan....\n");
     printf  ("\t\t\t\t\t=========================================================\n");
-	getchar ();
+	getchar (); //digunakan untuk membaca data yang bertipe karakter yang harus diakhiri oleh enter
   system ("cls");
 }
 //=======================================================================//
