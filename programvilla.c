@@ -87,6 +87,7 @@ int main (){
    header (); //pemanggilan fungsi header
    menu_masuk (); //pemanggilan fungsi menu masuk
 }
+
 //=======================================================================//
 //*****           Fungsi Untuk Menampilkan Header Program           *****//
 //=======================================================================//
@@ -243,7 +244,7 @@ void ambil_password(){
 //=======================================================================//
 //*****                        Fungsi Selesai                       *****//
 //=======================================================================//
-// Nama Fungsi    : selesa                                               //
+// Nama Fungsi    : selesai                                              //
 // Input Argumen  : -                                                    //
 // Output Argumen : -                                                    //
 // Deskripsi      : Fungsi ini berfungsi untuk menampilkan bahwa login   //
@@ -266,7 +267,7 @@ void selesai(){
 // Nama Fungsi    : masuk_pengunjung                                     //
 // Input Argumen  : char username[12], char password[10], dan int pilihan//
 // Output Argumen : -                                                    //
-// Deskripsi      : Menginput username dan passowrd saat masuk pengunjung//
+// Deskripsi      : Menginput username dan passoword saat masuk pengunjung//
 //                  yang sesuai dengan rekaman pada logrecord.txt        //
 //                  akan berlanjut pada menu pengunjung                  //
 // Versi : 1.0                                      Rev. 0               //
@@ -614,7 +615,8 @@ void pesan_villa_anyelir (){
 // Nama Fungsi    : pemesanan_villa                                      //
 // Input Argumen  : -                                                    //
 // Output Argumen : -                                                    //
-// Deskripsi      : Menampilkan sistem harga total pembayaran Villa      //
+// Deskripsi      : Fungsi ini berfungsi untuk menampilkan sistem harga  //
+//                  total pembayaran Villa                               //
 // Versi : 1.0                                      Rev. 0               //
 // Tgl   : 13-12-2021                               Tgl: -               //
 // Gusti Ayu Wahyu Whurapsari - 2105551042                               //
@@ -713,7 +715,7 @@ void detPemesanan (){
 // Input Argumen  : -                                                    //
 // Output Argumen : -                                                    //
 // Deskripsi      : Fungsi ini berfungsi untuk menampilkan tanggal check //
-//                  out Villa                                            //
+//                  out Villa yang akan tampil di detPemesanan.          //
 // Versi : 1.0                                      Rev. 0               //
 // Tgl   : 13-12-2021                               Tgl: -               //
 // Gusti Ayu Wahyu Whurapsari - 2105551042                               //
