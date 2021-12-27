@@ -57,7 +57,6 @@ void masuk_pengunjung ();                         /*Merupakan fungsi untuk masuk
 void ambil_password();                            /*Merupakan fungsi untuk mengambil password yang diinput dan dicek pada file passwordAdmin.txt*/
 void selesai();                                   /*Merupakan fungsi untuk menampilkan kata-kata selesai yang digunakan bila berhasil login*/
 void menuadm();                                   /*Merupakan fungsi untuk menu admin yang berisi 4 opsi yaitu Lihat List Villa, Pesan Villa, Lihat Data Pesanan, Hapus Pesanan, dan Exit*/
-void record(User u, char file[]);                 /*Merupakan fungsi yang digunakan untuk memperlihatkan track record dari file "Record.dat"*/
 void waktu();                                     /*Merupakan fungsi yang digunakan untuk menampilkan waktu pada sistem tempat user mengakses*/
 void menu_pengunjung();                           /*Merupakan fungsi untuk menu pengunjung ketika berhasil login atau masuk dengan menghadirkan 4 opsi yaitu untuk melihat lokasi villa, list villa, riwayat pesan villa, dan Exit*/
 void list_villa ();                               /*Merupakan fungsi untuk menampilkan list villa anyelir */
@@ -74,6 +73,11 @@ void detPemesanan ();                             /*Merupakan fungsi berupa outp
 void kalenderuntukCO ();                          /*Merupakan fungsi yang digunakan untuk perhitungan kalender pada saat check out */
 void hari ();                                     /*Merupakan fungsi yang digunakan untuk menampilkan nama-nama hari*/
 void tampilan_pemesanan ();                       /*Merupakan fungsi yang digunakan untuk menampilkan pesanan namun secara singkat berisi id pemesan, id villa dan tanggal check in yang bisa dilihat oleh pengunjung villa*/
+void cara_pesan_villa ();                         /*Merupakan fungsi yang digunakan untuk menampilkan tata cara pemesanan villa yang dapat dibaca dan diakses oleh pengunjung villa*/
+int Februari (int thn);                           /*Merupakan fungsi untuk menyeleksi bulan februari, karena bulan februari ada yang jumlahnya 28 atau 29*/
+int BknFeb (int thn, int bln);                    /*Merupakan fungsi untuk menyeleksi selain bulan Februari*/
+int checkNomor(pesan_villa pesanvl,int id);       /*Merupakan fungsi yang digunakan untuk mengecek nomor atau id villa apakah tersedia, yang berfungsi saat menghapus villa.*/
+
 
 // assign namaFile (nF) agar menyimpan string "logRecord.txt"
 char namaFile[] = "logRecord.txt";
@@ -169,6 +173,7 @@ void menu_masuk (){
         daftar();
         break;
     case 4:
+    	printf ("\t\t\t\t\t  TERIMAKASIH TELAH MENGGUNAKAN PROGRAM INI ....  \n");
         exit(1);
         break;
     default:
@@ -235,6 +240,7 @@ void ambil_password(){
 	fscanf(file, "%s", passwordP);
 	fclose(file); //menutup file "passwordAdmin"
 }
+
 //=======================================================================//
 //*****                    Fungsi Untuk Daftar Akun                 *****//
 //=======================================================================//
@@ -405,40 +411,6 @@ void daftar (){
     menu_pengunjung();
 }
 
-//=======================================================================//
-//**************  Fungsi Untuk Menampilkan Record User   ****************//
-//=======================================================================//
-// Nama Fungsi    : record                                               //
-// Passing Argumen: struct User u, char file[]                           //
-// Output Argumen : u.nama                                               //
-// Deskripsi      : Fungsi ini ditujukan untuk menampilkan data yang     //
-//                  dimasukan oleh user yaitu berupa nama yang ada pada  //
-//                  logRecord.txt                                        //
-// Versi : 1.0                                      Rev. 0               //
-// Tgl: 14-12-2021                                  Tgl: -               //
-// Gusti Ayu Wahyu Whurapsari - 2105551042                               //
-// Kelas B                                                               //
-//=======================================================================//
-void record(User u, char file[] ){
-    time( & waktuserver);
-    struct tm * waktu = localtime( & waktuserver);
-    //Mendeklarasikan tipe data file dengan pointer *rc yang bertujuan untuk pointer pada file "logRecord.txt"
-    FILE *rc;
-    //Assign rc untuk membuka file binary Record.dat dan menggunakan mode "r" untuk membaca textfile
-    rc = fopen(file, "r");
-    //Menggunakan fungsi fread untuk membaca isi dari file "logRecord.txt"
-    fread (&u, sizeof(u), 1, rc);
-    //Menggunakan fungsi fclose untuk menutup file "logRecord.txt" agar tidak diproses lagi
-    fclose (rc);
-
-    //Menampilkan hasil dari Record nama user dan nomor telepon yang diinput oleh user
-    //Menampilkan hasil dari Record nama user dan nomor telepon yang diinput oleh user
-    printf("\t\t\t\t\t|=========================================================|\n");
-    printf("\t\t\t\t\t|    Nama        Username       Tanggal      \n");
-    printf("\t\t\t\t\t| %s\t%s\t\t%i-%i-%i\n",u.nama, u.username, waktu -> tm_mday, waktu -> tm_mon + 1, waktu -> tm_year + 1900);
-    printf("\t\t\t\t\t|=========================================================|\n");
-
-}
 
 //=======================================================================//
 //***********     Fungsi Untuk Menampilkan Waktu Sistem     *************//
@@ -459,6 +431,7 @@ void waktu(){
     struct tm * waktu = localtime( & waktuserver);
     printf ("\t\t\t\t\t|=====================Tanggal: %i/%i/%i=================|\n", waktu -> tm_mday, waktu -> tm_mon + 1, waktu -> tm_year + 1900);                      
 }
+
 //=======================================================================//
 //*****                      Fungsi Error Program                   *****//
 //=======================================================================//
@@ -479,6 +452,7 @@ void error_alert (){
     printf   ("\t\t\t\t\t||      Silahkan Memilih Pilihan yang Sudah ada        || \n");
     printf   ("\t\t\t\t\t=========================================================  \n");
 }
+
 //=======================================================================//
 //*****             Fungsi Untuk Menampilkan Menu Admin             *****//
 //=======================================================================//
@@ -516,7 +490,9 @@ void menuadm (){
     printf ("\t\t\t\t\t| Masukkan No Pilihan Anda : ");
 	scanf  ("%d",&kategori);
     system ("cls");
-    switch (kategori){
+    switch (kategori){ 
+    	//case 1 dari menu switch (kategori) ini mengeksekusi perintah jika pegawai memilih lihat list villa pada kategori menu pegawai villa anyelir. 
+		//Pada case ini memanggil fungsi list_villa untuk menampilkan detail villa jika pegawai ingin memesan juga bisa langsung dari sini dengan klik Y atau y pada 
     	case 1 :
     	list_villa ();
     		printf ("\t\t\t|                                                     Proses Pemesanan [Y/T]? : ");
@@ -527,34 +503,45 @@ void menuadm (){
     			menuadm ();
     	break ;
     	
+    	//case 2 dari menu switch (kategori) ini mengeksekusi perintah jika pegawai miilih pesan villa pada kategori menu pegawai villa anyelir, dalam case 2 ini terdapat pemanggilan fungsi pesan_villa_anyelir
     	case 2 :
     		pesan_villa_anyelir ();
     	break ;
     	
+    	//case 3 dari menu switch (kategori) ini mengeksekusi perintah jika pegawai miilih lihat data pesanan pada kategori menu pegawai villa anyelir, dalam case 3 ini terdapat pemanggilan fungsi lihat_data_pesanan
     	case 3 :
     		lihat_data_pesanan ();
     	break ;
     
+    	//case 4 dari menu switch (kategori) ini mengeksekusi perintah jika pegawai miilih hapus pesanan pada kategori menu pegawai villa anyelir, dalam case 4 ini terdapat pemanggilan fungsi hapus_pesanan
     	case 4 :
     		hapus_pesanan ();
     	break ;
     	
+    	//case 5 dari menu switch (kategori) ini mengeksekusi perintah jika pegawai miilih EXIT pada kategori menu pegawai villa anyelir, dalam case 4 ini user akan diarahkan langsung keluar yaitu pada menu masuk dengan memanggil fungsi menu_masuk
     	case 5 :
     		menu_masuk ();
     	break ;
     	
+    	//Jika user menginput pilihan yang salah, atau menginput nilai yang tidak ada pada tampilan menu maka pegawao villa anyelir maka akan mengesekusi pada bagian default seperti di bawah ini dengan memanggil fungsi error_alert
     	default :
     		error_alert ();
     		goto ulangi ;
     	break ;
 	}
 }
+
+
 //=======================================================================//
 //*****           Fungsi Untuk Menampilkan Pesanan Villa            *****//
 //=======================================================================//
 // Nama Fungsi    : pesan_villa_anyelir                                  //
-// Input Argumen  : -                                                    //
-// Output Argumen : -                                                    //
+// Input Argumen  : pesanvl.nomor_villa, pesanvl.id_pesan,               //
+//                  pesanvl.nama_pemesan, pesanvl.noHP, pesanvl.email    //
+//                  pesanvl.orang, int hari1, pesanvl.tglCI, pesanvl.blnCI//
+//                  pesanvl.thnCI, dan pesanvl.DPpemesan                 //
+// Output Argumen : deposito, biaya_ADM,pesanvl.totalPembayaran,         //
+//                  pesanvl.sisaPembayaran                               //
 // Deskripsi      : Menampilkan program pesan villa dengan menginputkan  //
 //                  data diri pengguna dan juga detail dari pesanan      //
 //                  seperti biaya dan juga tanggal check in yang nantinya//
@@ -566,22 +553,27 @@ void menuadm (){
 //=======================================================================//
 void pesan_villa_anyelir (){
 	system ("cls");
-	list_villa ();
-	printf ("\n\n");
+	list_villa (); //memanggil fungsi list_villa untuk menampilkan list villa anyelir
+	printf ("\n\n"); 
 	printf ("\t\t\t\t\t|=========================================================|\n");
     printf ("\t\t\t\t\t|                   PESAN VILLA ANYELIR                   |\n");
     printf ("\t\t\t\t\t|=========================================================|\n");
-    FILE*dtpesan ;
-    dtpesan = fopen ("datapesan.txt", "ab");
+    FILE*dtpesan ; // Membuat pointer dtpesan untuk menunjuk pada file "datapesan.txt"
+    dtpesan = fopen ("datapesan.txt", "ab"); // Membuka file "datapesan.txt" dengan mode "ab"
+    
+    // Melakukan Pengecekan apakah pointer dtpesan menunjuk kepada file yang dituju ("datapesan.txt")
     if (dtpesan== NULL ){
 		printf("\t\t\t\t\t|File tidak dapat dibuat!\r\n");
 		menuadm();
 	}
+	
 	do {
+		//intruksi untuk menginput id villa
 		printf ("\t\t\t\t\t| Masukkan Id Villa     : ");
 		scanf  ("%d", &pesanvl.nomor_villa);
+		//karena id villa hanya ada 1-12 maka jika memilih dengan benar maka akan dieksekusi di dalam if ini
 		if (pesanvl.nomor_villa >=1 && pesanvl.nomor_villa <=12){
-			pemesanan_villa ();
+			pemesanan_villa (); //untuk menyeleksi harga villa sesuai dengan id villa masing-masing dengan memanggil fungsi pemesanan_villa
 				printf ("\t\t\t\t\t| Id Pemesanan          : "); fflush(stdin); scanf ("%d", &pesanvl.id_pesan);
 				printf ("\t\t\t\t\t| Nama Pemesan          : "); fflush(stdin); gets (pesanvl.nama_pemesan);
 				printf ("\t\t\t\t\t| No HP Pemesan         : "); fflush(stdin); scanf ("%s", &pesanvl.noHP);
@@ -596,32 +588,37 @@ void pesan_villa_anyelir (){
 				printf ("\t\t\t\t\t| DP Pemesan            : "); fflush(stdin); scanf ("%f", &pesanvl.DPpemesan);
 				pesanvl.sisaPembayaran = pesanvl.totalPembayaran - pesanvl.DPpemesan ;
 				printf ("\t\t\t\t\t| Sisa Pembayaran       : Rp.%.2f\n", pesanvl.sisaPembayaran);
+				// Menuliskan semua data yang sebelumnya yang diinput oleh pengguna kedalam file "datapesan.txt"
 		    	fwrite(&pesanvl, sizeof(pesanvl), 1, dtpesan);
 		}
+		//jika memilih id villa selain 1-12 tersebut maka akan dieksekusi pada else berikut
 		else {
 			fflush(stdin);
 			printf ("\t\t\t\t\t| HARAP MASUKKAN ID VILLA DENGAN BENAR \n");
 			getch();
-			pesan_villa_anyelir();
+			pesan_villa_anyelir(); //memanggil fungsi pesan_villa_anyelir
 				
 		}
-		detPemesanan ();
+		detPemesanan (); //mencetak struk dengan memanggil fungsi detPemesanan
 		printf ("\t\t\t\t\t Data pemesanan tersimpan. \n");
-		printf("\t\t\t\t\t  Pesan villa lagi? (Y/T) : "); fflush(stdin);
+		printf("\t\t\t\t\t Pesan villa lagi? (Y/T) : "); fflush(stdin); //menghadirkan opsi jika ingin pesan villa lagi
 	    scanf("%s", &jawab)	;
 	}
-	while (jawab == 'Y'||jawab=='y');
-	fclose(dtpesan);		
+	while (jawab == 'Y'||jawab=='y'); //jika user menginput Y atau Y maka akan balik lagi ke awal perulangan do
+	fclose(dtpesan); //menutup file dengan fclose		
 	menuadm();
-}
+}  
+
 
 //=======================================================================//
-//*****                   Fungsi Untuk Pemesanan Villa              *****//
+//*****        Fungsi Menyeleksi Harga Total Pembayaran             *****//
 //=======================================================================//
 // Nama Fungsi    : pemesanan_villa                                      //
 // Input Argumen  : -                                                    //
 // Output Argumen : -                                                    //
 // Deskripsi      : Menampilkan sistem harga total pembayaran Villa      //
+//                  berdasarkan id masing-masing villa karena setiap     //
+//                  villa memiliki harga yang berbeda-beda               //
 // Versi : 1.0                                      Rev. 0               //
 // Tgl   : 13-12-2021                               Tgl: -               //
 // Gusti Ayu Wahyu Whurapsari - 2105551042                               //
@@ -665,15 +662,16 @@ void pemesanan_villa (){
 		pesanvl.totalPembayaran = 4800000 + biaya_ADM + deposito ;
 	}
 }
+
 //=======================================================================//
-//*****           Fungsi Untuk Menampilkan Harga Pemesanan          *****//
+//*****        Fungsi Untuk Menampilkan Detail Penesanan            *****//
 //=======================================================================//
-// Nama Fungsi    : pemesanan_villa                                      //
+// Nama Fungsi    : detPemesanan                                         //
 // Input Argumen  : -                                                    //
 // Output Argumen : -                                                    //
-// Deskripsi      : Fungsi ini berfungsi untuk menampilkan sistem harga  //
-//                  total pembayaran Villa yang akan ditampilkan untuk   //
-//                  pengguna yang sudah memesan villa                    //
+// Deskripsi      : Fungsi ini berfungsi untuk menampilkan detail        //
+//                  pemesanan yang akan tamppil saat setelah memesan     //
+//                  villa                                                //
 // Versi : 1.0                                      Rev. 0               //
 // Tgl   : 13-12-2021                               Tgl: -               //
 // Putu Eternalie Prajnani Welaga - 2105551046                           //
@@ -684,7 +682,7 @@ void detPemesanan (){
 	printf ("\t\t\t\t\t|=========================================================|\n");
     printf ("\t\t\t\t\t|                  DETAIL PEMESANAN VILLA                 |\n");
     printf ("\t\t\t\t\t|=========================================================|\n");
-	waktu ();
+	waktu (); //memanggil fungsi waktu
 	printf ("\t\t\t\t\t| Id Villa              : %d\n", pesanvl.nomor_villa);
 	printf ("\t\t\t\t\t| Id Pemesanan          : %d\n", pesanvl.id_pesan);
 	printf ("\t\t\t\t\t| Nama Pemesan          : %s\n", pesanvl.nama_pemesan);
@@ -692,14 +690,17 @@ void detPemesanan (){
 	printf ("\t\t\t\t\t| Email Pemesan         : %s\n", pesanvl.email);
 	printf ("\t\t\t\t\t| Jumlah Orang          : %d\n", pesanvl.orang);
 	printf ("\t\t\t\t\t| Check In              : ");
-	hari ();
+	hari (); //memanggil fungsi hari 
 	printf (" %d/%d/%d\n", pesanvl.tglCI, pesanvl.blnCI, pesanvl.thnCI);
-	kalenderuntukCO ();
+	kalenderuntukCO (); //memanggil fungsi kalenderuntukCO
+	
+	//rumus untuk perhitungan hari, karena input menggunakan angka maka akan diproses dengan rumus di bawah ini :
 	hari1=hari1+(hari2%7);
 	while (hari1>7)
 		hari1=hari1%7;
+		
 	printf ("\t\t\t\t\t| Check Out             : ");
-	hari ();
+	hari (); //memanggil fungsi hari 
 	printf (" %d/%d/%d\n", pesanvl.tglCO,pesanvl.blnCO, pesanvl.thnCO) ;
 	printf ("\t\t\t\t\t| Deposito              : Rp.%.2f\n", deposito);
 	printf ("\t\t\t\t\t| Biaya Admin           : Rp.%.2f\n", biaya_ADM);
@@ -708,6 +709,7 @@ void detPemesanan (){
 	printf ("\t\t\t\t\t| Sisa Pembayaran       : Rp.%.2f\n", pesanvl.sisaPembayaran);
 	printf ("\t\t\t\t\t|=========================================================|\n");
 }
+
 
 //=======================================================================//
 //*****          Fungsi Untuk Menampilkan Tanggal Check Out         *****//
@@ -723,29 +725,34 @@ void detPemesanan (){
 // Kelas B                                                               //
 //=======================================================================//
 void kalenderuntukCO (){
+	//tetapkan nilai dari tgl bulan dan thn checkout adalah 0
 	pesanvl.tglCO = 0 ;
 	pesanvl.blnCO = 0 ;
 	pesanvl.thnCO = 0 ;
+	//menggunakan do while 
 	do {
-		if (hari2 <= 31)
+		if (hari2 <= 31) //jika hari2 atau check out kurang dari sama dengan 31
 		{
-			if (pesanvl.blnCI == 2)
+			if (pesanvl.blnCI == 2) //jika bulannya 2 maka akan diproses pada bulan Februari dengan memanggil fungsi Februari (int thn)
 				pesanvl.tglCO = Februari (pesanvl.thnCI);
-			else
+			else //jika selain februari maka akan diproses dengan memanggil fungsi BknFeb (int thn, int bln)
 				pesanvl.tglCO = BknFeb (pesanvl.thnCI,pesanvl.blnCI);
-			if (pesanvl.tglCI + hari2 > pesanvl.tglCO)
+				
+			if (pesanvl.tglCI + hari2 > pesanvl.tglCO) 
 			{
 				pesanvl.blnCO = pesanvl.blnCI + 1 ;
+				
+				//jika bulannya lebih dari 12 karena tidak ada bulan yang jumlahnya lebih dari 12 maka kita akan ganti tahun menjadi + 1
 				if (pesanvl.blnCO>12){
 					pesanvl.thnCO=pesanvl.thnCI+1;
 					pesanvl.blnCO=1;
 				}
-				else
+				else // jika tidak lebih dari 12 bulannya maka tahunnya tetap
 				pesanvl.thnCO = pesanvl.thnCI ;
 				pesanvl.tglCO = pesanvl.tglCI + hari2 - pesanvl.tglCO ;
 
 			}
-			else
+			else //jika statement if tidak memenuhi maka tanggal CO hanya ditambah dengan hari2=1, bulan dan tahun tetap
 			{
 				pesanvl.tglCO= pesanvl.tglCI+hari2;
 				pesanvl.blnCO=pesanvl.blnCI;
@@ -753,45 +760,78 @@ void kalenderuntukCO (){
 			}
 		
 		}
-		else 
+		else //jika statement if tidak memenuhi maka else ini akan dieksekusi
 		{
-			if (pesanvl.blnCI == 2)
+			if (pesanvl.blnCI == 2) //jika bulan CI = 2 maka akan memanggil fungsi Februari
 				pesanvl.tglCO = Februari (pesanvl.blnCI);
-			else 
+			else //jika bulan CI selain Februari maka akan memanggil fungsi BknFeb
 				pesanvl.tglCO = BknFeb (pesanvl.thnCI,pesanvl.blnCI);
 				hari2 = hari2 - pesanvl.tglCO;
-			if (pesanvl.blnCI == 12)
+			if (pesanvl.blnCI == 12)//jika bulan CI = 12 atau Desember
 			{
-				pesanvl.blnCI = 1 ;
+				pesanvl.blnCI = 1 ; 
 				pesanvl.thnCI = pesanvl.thnCI + 1 ;
 			}
 			else
 				pesanvl.blnCI = pesanvl.blnCI + 1 ;
 		}
 	}
-	while (pesanvl.thnCO== 0);
+	while (pesanvl.thnCO== 0); //akan mengalami perualangan ke do jika tahun CO=0
 }
 
+
+//=======================================================================//
+//***** Fungsi Untuk Menyeleksi Jumlah Tanggal Pada Bulan Februari   ****//
+//=======================================================================//
+// Nama Fungsi    : int Februari                                         //
+// Passing Argumen: int thn                                              //
+// Input Argumen  : -                                                    //
+// Output Argumen : -                                                    //
+// Deskripsi      : Fungsi ini berfungsi untuk menyeleksi jumlah tanggal //
+//                  pada bulan Februari                                  //
+// Versi : 1.0                                      Rev. 0               //
+// Tgl   : 13-12-2021                               Tgl: -               //
+// Gusti Ayu Wahyu Whurapsari - 2105551042                               //
+// Kelas B                                                               //
+//=======================================================================//
 int Februari (int thn){
 	thn = pesanvl.thnCI;
-	if ((pesanvl.thnCI % 100 != 0) && (pesanvl.thnCI % 4 == 0)||(pesanvl.thnCI % 400 == 0)){
-		return 29 ;
+	if ((pesanvl.thnCI % 100 != 0) && (pesanvl.thnCI % 4 == 0)||(pesanvl.thnCI % 400 == 0)){ //perhitungan bila jumlah tanggal pada bulan februari sebanyak 29
+		return 29 ; //mengembalikan nilai 29
 	}
 	else {
-		return 28 ;
+		return 28 ; //mengembalikan nilai 28
 	}		
 }
 
+
+//=======================================================================//
+//****Fungsi Untuk Menyeleksi Jumlah Tanggal Pada Bulan Bukan Februari***//
+//=======================================================================//
+// Nama Fungsi    : int BknFeb                                           //
+// Passing Argumen: int thn, int bln                                     //
+// Input Argumen  : -                                                    //
+// Output Argumen : -                                                    //
+// Deskripsi      : Fungsi ini berfungsi untuk menyeleksi jumlah tanggal //
+//                  pada bulan selain Februari                           //
+// Versi : 1.0                                      Rev. 0               //
+// Tgl   : 13-12-2021                               Tgl: -               //
+// Gusti Ayu Wahyu Whurapsari - 2105551042                               //
+// Kelas B                                                               //
+//=======================================================================//
 int BknFeb (int thn, int bln){
 	thn = pesanvl.thnCI;
 	bln = pesanvl.blnCI;
+	//karena bulan 1,3,5,7,8,10,12 jumlah tanggalnya 31 maka mengembalikan nilai 31
 	if ((pesanvl.blnCI==1) || (pesanvl.blnCI==3) || (pesanvl.blnCI==5) || (pesanvl.blnCI==7) || (pesanvl.blnCI==8) || (pesanvl.blnCI==10) || (pesanvl.blnCI==12)){
 		return 31 ;
 	}
-	else {
+	else { //selain bulan yg tidak diseleksi pada if diatas maka mengembalikan nilai 30
 		return 30 ;
 	}
 }
+
+
 //=======================================================================//
 //*****                  Fungsi Untuk Menampilkan Hari              *****//
 //=======================================================================//
@@ -843,6 +883,7 @@ void lihat_data_pesanan (){
 	else //jika selain Y atau y maka akan balik pada opsi
 	    goto opsi ;
 }
+
 //=======================================================================//
 //*****          Fungsi Untuk Menampilkan List Data Pemesan         *****//
 //=======================================================================//
@@ -858,24 +899,38 @@ void lihat_data_pesanan (){
 //=======================================================================//
 void list_data_pemesan (){
 	system ("cls");
-	printf ("\t\t|======================================================================================================================================================|\n");
-	printf ("\t\t|                                                             DATA PEMESAN VILLA ANYELIR                                                               |\n");
-	printf ("\t\t|======================================================================================================================================================|\n");
-	printf ("\t\t| Id Pemesanan | Kode Villa |     Nama Pemesan      |        NO HP      |     Check In     |     Check Out     | Total Pembayaran  | Sisa Pembayaran   |\n");
-	printf ("\t\t|--------------|------------|-----------------------|-------------------|------------------|-------------------|-------------------|-------------------|\n");                                                                                          
-	FILE*dtpesan ;
-    dtpesan = fopen ("datapesan.txt", "rt");
-    if (dtpesan== NULL ){
+	printf ("\t\t|==================================================================================================================================|\n");
+	printf ("\t\t|                                                 DATA PEMESAN VILLA ANYELIR                                                       |\n");
+	printf ("\t\t|==================================================================================================================================|\n");
+	printf ("\t\t| Id Pemesanan | Kode Villa |     Nama Pemesan      |        NO HP      |     Check In     | Total Pembayaran  | Sisa Pembayaran   |\n");
+	printf ("\t\t|--------------|------------|-----------------------|-------------------|------------------|-------------------|-------------------|\n");                                                                                          
+	FILE*dtpesan ; // Membuat pointer dtpesan untuk menunjuk pada file "datapesan.txt"
+    dtpesan = fopen ("datapesan.txt", "rt"); // Membuka file "datapesan.txt" dengan mode "rt"
+    if (dtpesan== NULL ){ // Melakukan Pengecekan apakah pointer dtpesan menunjuk kepada file yang dituju ("datapesan.txt")
 		printf("\t\t\t| FILE TIDAK DAPAT DIBUKA!\r\n");
 		menuadm();
 	}
 		/* Ambil isi file ngenggunakan fungsi fread(), lalu tampilkan ke layar */
 	while ((fread(&pesanvl, sizeof(pesanvl), JUM_BLOK, dtpesan)) == JUM_BLOK )
-	printf ("\t\t|     %d          %d           %s               %s           %d/%d/%d        %d/%d/%d        Rp.%.2f      Rp.%.2f\n", pesanvl.id_pesan, pesanvl.nomor_villa, pesanvl.nama_pemesan, pesanvl.noHP, pesanvl.tglCI, pesanvl.blnCI, pesanvl.thnCI, pesanvl.tglCO,pesanvl.blnCO,pesanvl.thnCO,pesanvl.totalPembayaran, pesanvl.sisaPembayaran);
+	printf ("\t\t|     %d          %d           %s               %s           %d/%d/%d      Rp.%.2f      Rp.%.2f\n", pesanvl.id_pesan, pesanvl.nomor_villa, pesanvl.nama_pemesan, pesanvl.noHP, pesanvl.tglCI, pesanvl.blnCI, pesanvl.thnCI, pesanvl.totalPembayaran, pesanvl.sisaPembayaran);
 	fclose(dtpesan);
-	printf ("\t\t|=====================================================================================================================================================|\n");
+	printf ("\t\t|==================================================================================================================================|\n");
 }
 
+//=======================================================================//
+//*****            Fungsi Untuk Check Nomor ID Pemesanan            *****//
+//=======================================================================//
+// Nama Fungsi    : checkNomor                                           //
+// Passing Argumen: pesan_villa pesanvl,int id                           //
+// Input Argumen  : -                                                    //
+// Output Argumen : -                                                    //
+// Deskripsi      : Fungsi ini berfungsi untuk mengecek nomor ID Pemesanan//
+//                   yang digunakan saat menghapus data pemesanan        //
+// Versi : 1.0                                      Rev. 0               //
+// Tgl   : 13-12-2021                               Tgl: -               //
+// Putu Eternalie Prajnani Welaga - 2105551046                           //
+// Kelas B                                                               //
+//=======================================================================//
 int checkNomor(pesan_villa pesanvl,int id){
 	FILE *dtpesan;
 	int c = 1;
@@ -963,6 +1018,7 @@ void hapus (){
 //*******       Fungsi Untuk Menghapus Database Pemesanan         *******//
 //=======================================================================//
 // Nama Fungsi    : hapusdtpesan                                         //
+// Passing Argumen: pesan_villa pesanvl, int r                           //
 // Input Argumen  : int r, int s                                         //
 // Output Argumen : -                                                    //
 // Deskripsi      : Fungsi ini digunakan untuk menghapus pesanan dengan  //
@@ -1032,26 +1088,27 @@ void menu_pengunjung (){
     printf ("\t\t\t\t\t|*       *  *     *       *     *****   *****  ***   *  * |\n");
     printf ("\t\t\t\t\t|             SELAMAT DATANG DI VILLA ANYELIR             |\n");
     printf ("\t\t\t\t\t|=========================================================|\n");
-    printf ("\t\t\t\t\t|Villa  Anyelir  adalah  salah  satu  villa  yang  baru   |\n");
-    printf ("\t\t\t\t\t|beroperasi sejak bulan November 2021. Villa ini memiliki |\n");
-    printf ("\t\t\t\t\t|5 cabang yang telah menyebar di sekitar Denpasar, Kuta   |\n");
-    printf ("\t\t\t\t\t|Ubud, Jimbaran, dan Canggu.                              |\n");
+    printf ("\t\t\t\t\t|Villa  Anyelir  adalah  salah  satu  villa  yang  berada |\n");
+    printf ("\t\t\t\t\t|di Pulau Bali yang memiliki 5 cabang yang telah menyebar |\n");
+    printf ("\t\t\t\t\t|di sekitar Denpasar, Kuta, Ubud, Jimbaran, dan Canggu.   |\n");
+    printf ("\t\t\t\t\t|                                                         |\n");
     printf ("\t\t\t\t\t|Villa Anyelir memiliki beberapa fasilitas seperti kamar  |\n");
     printf ("\t\t\t\t\t|yang nyaman,  kamar mandi luas,  ruangan ber AC, dan ada |\n");
     printf ("\t\t\t\t\t|kolam renang di dalamnya.                                |\n");
     printf ("\t\t\t\t\t|                                                         |\n");
     printf ("\t\t\t\t\t|Villa Anyelir memadukan arsitektur Bali dan modern yang  |\n");
-    printf ("\t\t\t\t\t|membuat pengunjung senantiasa nyaman sehingga ingin lagi |\n");
-    printf ("\t\t\t\t\t|menyewa villa ini. Jika ingin melakukan pemesanan segera |\n");
-    printf ("\t\t\t\t\t|hubungi admin.                                           |\n");
+    printf ("\t\t\t\t\t|membuat pengunjung senantiasa nyaman saat berada dalam   |\n");
+    printf ("\t\t\t\t\t|villa ini. Jika ingin melakukan pemesanan segera hubungi |\n");
+    printf ("\t\t\t\t\t|admin.                                                   |\n");
     printf ("\t\t\t\t\t|=========================================================|\n");
     printf ("\t\t\t\t\t|          Tekan 1 untuk melihat lokasi vila              |\n");
 	printf ("\t\t\t\t\t|          Tekan 2 untuk melihat list vila                |\n");
 	printf ("\t\t\t\t\t|          Tekan 3 untuk melihat riwayat pesan villa      |\n");
-	printf ("\t\t\t\t\t|          Tekan 4 untuk kembali ke menu                  |\n");          
+	printf ("\t\t\t\t\t|          Tekan 4 untuk melihat aturan pesan villa       |\n"); 
+	printf ("\t\t\t\t\t|          Tekan 5 untuk kembali ke menu                  |\n");          
     printf ("\t\t\t\t\t|=========================================================|\n");
     tekan_benar :
-    printf ("\t\t\t\t\t|                      Tekan : ");
+    printf ("\t\t\t\t\t                       Tekan : ");
     scanf  ("%d", &pilihan_deskripsi);
     if (pilihan_deskripsi==1){ //jika menekan 1 maka akan mengarah pada fungsi lokasi_villa
     	lokasi_villa ();
@@ -1061,16 +1118,20 @@ void menu_pengunjung (){
 	}
 	else if (pilihan_deskripsi==3){ //jika menekan 3 maka akan mengarah pada fungsi tampilan_pemesanan
 		tampilan_pemesanan ();
-		
 	}
-	else if (pilihan_deskripsi==4){ //jika menekan 4 maka akan kembali pada fungsi menu_masuk
-		menu_masuk ();
+	else if (pilihan_deskripsi==4){ //jika menekan 4 maka akan mengarah pada fungsi cara_pesan_villa
+		cara_pesan_villa ();
+	}
+	else if(pilihan_deskripsi==5){ //jika menekan 5 maka akan kembali pada fungsi menu_masuk
+		menu_masuk();
 	}
 	else { //jika user salah menekan (tidak ada dipilihan) maka akan terpanggil fungsi error_alert dan akan kembali diminta memilih sesuai dengan opsi yang ada
 		error_alert ();
 		goto tekan_benar ;
 	}
 }
+
+
 //=======================================================================//
 //*****            Fungsi Untuk Menampilkan Data Pemesan            *****//
 //=======================================================================//
@@ -1088,14 +1149,14 @@ void menu_pengunjung (){
 void tampilan_pemesanan (){
 	int pilih1 ;
 	system ("cls");
-	printf ("\t\t\t\t\t|=============================================|\n");
-	printf ("\t\t\t\t\t|          DATA PEMESAN VILLA ANYELIR         |\n");
-	printf ("\t\t\t\t\t|=============================================|\n");
-	printf ("\t\t\t\t\t| Id Pemesanan | Kode Villa |     Check In    |\n");
-	printf ("\t\t\t\t\t|--------------|------------|-----------------|\n");                                                                                          
-	FILE*dtpesan ;
-    dtpesan = fopen ("datapesan.txt", "rt");
-    if (dtpesan== NULL ){
+	printf ("\t\t\t\t\t|================================================|\n");
+	printf ("\t\t\t\t\t|            DATA PEMESAN VILLA ANYELIR          |\n");
+	printf ("\t\t\t\t\t|================================================|\n");
+	printf ("\t\t\t\t\t| Id Pemesanan | Kode/Id Villa |     Check In    |\n");
+	printf ("\t\t\t\t\t|--------------|---------------|-----------------|\n");                                                                                          
+	FILE*dtpesan ; // Membuat pointer dtpesan untuk menunjuk pada file "datapesan.txt"
+    dtpesan = fopen ("datapesan.txt", "rt"); //membuka file "datapesan.txt" dengan rt
+    if (dtpesan== NULL ){ // Melakukan Pengecekan apakah pointer dtpesan menunjuk kepada file yang dituju ("datapesan.txt")
 		printf("\t\t\t| FILE TIDAK DAPAT DIBUKA!\r\n");
 		menuadm();
 	}
@@ -1103,18 +1164,20 @@ void tampilan_pemesanan (){
 	while ((fread(&pesanvl, sizeof(pesanvl), JUM_BLOK, dtpesan)) == JUM_BLOK )
 	printf ("\t\t\t\t\t|     %d          %d           %d/%d/%d        \n", pesanvl.id_pesan, pesanvl.nomor_villa,pesanvl.tglCI, pesanvl.blnCI, pesanvl.thnCI);
 	fclose(dtpesan);
-	printf ("\t\t\t\t\t|=============================================|\n");
-	printf ("\t\t\t\t\t|   Tekan  1 untuk kembali ke menu pengunjung |\n");
-    printf ("\t\t\t\t\t|=============================================|\n");
+	printf ("\t\t\t\t\t|================================================|\n");
+	printf ("\t\t\t\t\t|   Tekan  1 untuk kembali ke menu pengunjung    |\n");
+    printf ("\t\t\t\t\t|================================================|\n");
     tekan1 :
     printf ("\t\t\t\t\t| Tekan      : ") ;
 	scanf  ("%d", &pilih1);
-	if (pilih1== 1)
+	if (pilih1== 1) //jika menekan 1 maka akan diarahkan pada menu pengunjung dengan memanggil fungsi menu_pengunjung
 		menu_pengunjung ();
-	else 
-		printf ("\t\t\t\t\t| Silahkan ketik ulang 1 \n");
+	else  //jika menekan selain 1 maka akan diminta untuk mengetik 1 sampai benar
+		printf ("\t\t\t\t\t| Silahkan ketik ulang 1 \n"); 
 		goto tekan1 ;
 }
+
+
 //=======================================================================//
 //*****               Fungsi Untuk Mengecek Lokasi Villa            *****//
 //=======================================================================//
@@ -1185,7 +1248,7 @@ void lokasi_villa (){
 // Deskripsi      : Fungsi ini digunakan untuk menampilkan list villa    //
 // Versi : 1.0                                      Rev. 0               //
 // Tgl   : 10-12-2020                               Tgl: -               //
-// Gusti Ayu Wahyu Whurapsari - 2105551042                               //
+// Putu Eternalie Prajnani Welaga - 2105551046                           //
 // Kelas B                                                               //
 //=======================================================================//
 void list_villa (){
@@ -1332,3 +1395,50 @@ void list_villa_pengunjung (){
 		goto masukkan1 ;
 	}
 }
+
+//=======================================================================//
+//****          Fungsi Untuk Menampilkan Cara Pesan Villa            ****//
+//=======================================================================//
+// Nama Fungsi    : cara_pesan_villa                                     //
+// Input Argumen  : int opsi                                             //
+// Output Argumen : -                                                    //
+// Deskripsi      : Fungsi ini digunakan untuk menampilkan cara pemesanan//
+//                  villa anyelir                                        //
+// Versi : 1.0                                      Rev. 0               //
+// Tgl   : 10-12-2020                               Tgl: -               //
+// Gusti Ayu Wahyu Whurapsari - 2105551042                               //
+// Kelas B                                                               //
+//=======================================================================//
+void cara_pesan_villa (){
+	system ("cls");
+	printf ("\n\n");
+	int opsi ;
+	printf ("\t\t\t\t\t|===========================================================|\n");
+    printf ("\t\t\t\t\t|                  PEMESANAN VILLA ANYELIR                  |\n");
+    printf ("\t\t\t\t\t|===========================================================|\n");
+    printf ("\t\t\t\t\t|Berikut adalah hal yang harus anda ketahui bila ingin      |\n");
+    printf ("\t\t\t\t\t|memesan Villa Anyelir :                                    |\n");
+    printf ("\t\t\t\t\t|1. Pemesanan dilayani oleh admin / pegawai  villa anyelir  |\n");
+    printf ("\t\t\t\t\t|2. Setiap memesan harus persiapkan DP sesuai dengan        |\n");
+    printf ("\t\t\t\t\t|   DP minimal masing-masing villa (DP bisa dilihat pada    |\n");
+    printf ("\t\t\t\t\t|   menu list villa)                                        |\n");
+    printf ("\t\t\t\t\t|3. Setiap pemesanan akan dikenakan biaya admin Rp.2000.00  |\n");
+    printf ("\t\t\t\t\t|4. Pemesan akan dikenakan deposito sebesar Rp.500.000.00   |\n");
+    printf ("\t\t\t\t\t|   deposito akan dikembalikan saat check out bila tidak ada|\n");
+    printf ("\t\t\t\t\t|   kerusakan barang atau fasilitas saat menempati villa    |\n");
+    printf ("\t\t\t\t\t|5. Waktu check in setiap villa sama pukul 14.00 WITA dan   |\n");
+    printf ("\t\t\t\t\t|   waktu check out pukul 12.00 WITA                        |\n");
+    printf ("\t\t\t\t\t|6. Lama waktu menginap semua villa sama yakni 2 hari 1     |\n");
+    printf ("\t\t\t\t\t|   malam, bila ingin menambah hari maka harus memesan lagi |\n");
+    printf ("\t\t\t\t\t|===========================================================|\n");
+    opsi1 :
+	printf ("\t\t\t\t\t  Kembali Tekan 1 : ");
+    scanf ("%d", &opsi);
+    if (opsi==1){ //jika menekan 1 maka akan mengarah ke menu_pengunjung
+    	menu_pengunjung ();
+	}
+	else //jika menekan selain 1 akan diminta ulang menekan
+		printf ("\t\t\t\t\t| Silahkan ketik ulang 1 \n");
+		goto opsi1 ;
+}
+
