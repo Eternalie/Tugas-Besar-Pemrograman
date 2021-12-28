@@ -950,7 +950,7 @@ int checkNomor(pesan_villa pesanvl,int id){
 }
 
 //=======================================================================//
-//***********      Fungsi Untuk Menghapus Pesanan Villa     *************//
+//***********    Fungsi Untuk Melihat Data Pesanan Villa    *************//
 //=======================================================================//
 // Nama Fungsi    : lihat_data_pesanan                                   //
 // Input Argumen  : int pil_hapus                                        //
