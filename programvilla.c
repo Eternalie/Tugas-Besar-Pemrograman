@@ -1100,6 +1100,10 @@ void menu_pengunjung (){
     printf ("\t\t\t\t\t|membuat pengunjung senantiasa nyaman saat berada dalam   |\n");
     printf ("\t\t\t\t\t|villa ini. Jika ingin melakukan pemesanan segera hubungi |\n");
     printf ("\t\t\t\t\t|admin.                                                   |\n");
+    printf ("\t\t\t\t\t|                                                         |\n");
+    printf ("\t\t\t\t\t|Pusat Villa  : Jalan Anyelir No.61, Denpasar Timur, Bali |\n");
+    printf ("\t\t\t\t\t|Email Villa  : anyelirvilla@gmail.com                    |\n");
+    printf ("\t\t\t\t\t|Kontak Villa : 0361 974 311                              |\n");
     printf ("\t\t\t\t\t|=========================================================|\n");
     printf ("\t\t\t\t\t|          Tekan 1 untuk melihat lokasi vila              |\n");
 	printf ("\t\t\t\t\t|          Tekan 2 untuk melihat list vila                |\n");
