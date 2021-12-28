@@ -952,7 +952,7 @@ int checkNomor(pesan_villa pesanvl,int id){
 //=======================================================================//
 //***********    Fungsi Untuk Melihat Data Pesanan Villa    *************//
 //=======================================================================//
-// Nama Fungsi    : hapus_pesanan                                   //
+// Nama Fungsi    : hapus_pesanan                                        //
 // Input Argumen  : int pil_hapus                                        //
 // Output Argumen : -                                                    //
 // Deskripsi      : Fungsi ini digunakan untuk menghapus pesanan dengan  //
@@ -1392,7 +1392,7 @@ void list_villa_pengunjung (){
 	}
 	else { //jika user salah memilih maka akan kembali pada masukkan 1
 		printf ("\t\t\t| Silahkan ketik ulang 1 \n");
-		goto masukkan1 ;
+		goto masukkan1 ; //kembali pada masukkan1
 	}
 }
 
@@ -1439,6 +1439,6 @@ void cara_pesan_villa (){
 	}
 	else //jika menekan selain 1 akan diminta ulang menekan
 		printf ("\t\t\t\t\t| Silahkan ketik ulang 1 \n");
-		goto opsi1 ;
+		goto opsi1 ; //kembali pada opsi
 }
 
