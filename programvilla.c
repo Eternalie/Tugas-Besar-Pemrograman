@@ -963,7 +963,7 @@ int checkNomor(pesan_villa pesanvl,int id){
 // Gusti Ayu Wahyu Whurapsari - 2105551042                               //
 // Kelas B                                                               //
 //=======================================================================//
-void hapus_pesanan (){
+void lihat_data_pesanan (){
 	system ("cls");
 	int pil_hapus ; //deklarasi variabel pil_hapus bertipe data integer
 	list_data_pemesan (); //memanggil fungsi list_data_pemesan
