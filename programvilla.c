@@ -952,7 +952,7 @@ int checkNomor(pesan_villa pesanvl,int id){
 //=======================================================================//
 //***********      Fungsi Untuk Menghapus Pesanan Villa     *************//
 //=======================================================================//
-// Nama Fungsi    : lihat_data_pesanan                                   //
+// Nama Fungsi    : hapus_pesanan                                        //
 // Input Argumen  : int pil_hapus                                        //
 // Output Argumen : -                                                    //
 // Deskripsi      : Fungsi ini digunakan untuk menghapus pesanan dengan  //
@@ -1019,7 +1019,7 @@ void hapus (){
 //=======================================================================//
 // Nama Fungsi    : hapusdtpesan                                         //
 // Passing Argumen: pesan_villa pesanvl, int r                           //
-// Input Argumen  : int r, int s                                         //
+// Input Argumen  : int s                                                //
 // Output Argumen : -                                                    //
 // Deskripsi      : Fungsi ini digunakan untuk menghapus pesanan dengan  //
 //                  memilih id pemesanan yang akan dihapus serta         //
