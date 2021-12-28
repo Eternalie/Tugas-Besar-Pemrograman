@@ -952,7 +952,7 @@ int checkNomor(pesan_villa pesanvl,int id){
 //=======================================================================//
 //***********    Fungsi Untuk Melihat Data Pesanan Villa    *************//
 //=======================================================================//
-// Nama Fungsi    : lihat_data_pesanan                                   //
+// Nama Fungsi    : hapus_pesanan                                   //
 // Input Argumen  : int pil_hapus                                        //
 // Output Argumen : -                                                    //
 // Deskripsi      : Fungsi ini digunakan untuk menghapus pesanan dengan  //
@@ -963,7 +963,7 @@ int checkNomor(pesan_villa pesanvl,int id){
 // Gusti Ayu Wahyu Whurapsari - 2105551042                               //
 // Kelas B                                                               //
 //=======================================================================//
-void lihat_data_pesanan (){
+void hapus_pesanan (){
 	system ("cls");
 	int pil_hapus ; //deklarasi variabel pil_hapus bertipe data integer
 	list_data_pemesan (); //memanggil fungsi list_data_pemesan
