@@ -952,7 +952,7 @@ int checkNomor(pesan_villa pesanvl,int id){
 //=======================================================================//
 //***********    Fungsi Untuk Melihat Data Pesanan Villa    *************//
 //=======================================================================//
-// Nama Fungsi    : hapus_pesanan                                   //
+// Nama Fungsi    : hapus_pesanan                                        //
 // Input Argumen  : int pil_hapus                                        //
 // Output Argumen : -                                                    //
 // Deskripsi      : Fungsi ini digunakan untuk menghapus pesanan dengan  //
@@ -1100,6 +1100,10 @@ void menu_pengunjung (){
     printf ("\t\t\t\t\t|membuat pengunjung senantiasa nyaman saat berada dalam   |\n");
     printf ("\t\t\t\t\t|villa ini. Jika ingin melakukan pemesanan segera hubungi |\n");
     printf ("\t\t\t\t\t|admin.                                                   |\n");
+    printf ("\t\t\t\t\t|                                                         |\n");
+    printf ("\t\t\t\t\t|Pusat Villa  : Jalan Anyelir No.61, Denpasar Timur, Bali |\n");
+    printf ("\t\t\t\t\t|Email Villa  : anyelirvilla@gmail.com                    |\n");
+    printf ("\t\t\t\t\t|Kontak Villa : 0361 974 311                              |\n");
     printf ("\t\t\t\t\t|=========================================================|\n");
     printf ("\t\t\t\t\t|          Tekan 1 untuk melihat lokasi vila              |\n");
 	printf ("\t\t\t\t\t|          Tekan 2 untuk melihat list vila                |\n");
@@ -1392,7 +1396,7 @@ void list_villa_pengunjung (){
 	}
 	else { //jika user salah memilih maka akan kembali pada masukkan 1
 		printf ("\t\t\t| Silahkan ketik ulang 1 \n");
-		goto masukkan1 ;
+		goto masukkan1 ; //kembali pada masukkan1
 	}
 }
 
@@ -1439,6 +1443,6 @@ void cara_pesan_villa (){
 	}
 	else //jika menekan selain 1 akan diminta ulang menekan
 		printf ("\t\t\t\t\t| Silahkan ketik ulang 1 \n");
-		goto opsi1 ;
+		goto opsi1 ; //kembali pada opsi
 }
 
