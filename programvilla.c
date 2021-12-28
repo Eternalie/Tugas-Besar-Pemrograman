@@ -257,7 +257,7 @@ void ambil_password(){
 //=======================================================================//   
 void selesai(){
 	printf("\t\t\t\t\t\t\tLOGIN SUKSES!\n");
-	getch(); fflush(stdin);
+	getch(); fflush(stdin); //berfungsi untuk menghilangkan nilai buffer pada sistem
 	menuadm();
 }
 
@@ -952,7 +952,7 @@ int checkNomor(pesan_villa pesanvl,int id){
 //=======================================================================//
 //***********      Fungsi Untuk Menghapus Pesanan Villa     *************//
 //=======================================================================//
-// Nama Fungsi    : hapus_pesanan                                        //
+// Nama Fungsi    : lihat_data_pesanan                                   //
 // Input Argumen  : int pil_hapus                                        //
 // Output Argumen : -                                                    //
 // Deskripsi      : Fungsi ini digunakan untuk menghapus pesanan dengan  //
@@ -1019,7 +1019,7 @@ void hapus (){
 //=======================================================================//
 // Nama Fungsi    : hapusdtpesan                                         //
 // Passing Argumen: pesan_villa pesanvl, int r                           //
-// Input Argumen  : int s                                                //
+// Input Argumen  : int r, int s                                         //
 // Output Argumen : -                                                    //
 // Deskripsi      : Fungsi ini digunakan untuk menghapus pesanan dengan  //
 //                  memilih id pemesanan yang akan dihapus serta         //
