@@ -16,6 +16,7 @@ char jawab ;              //variabel jawab         => berfungsi untuk menyimpan 
 int hari1 ;               //variabel hari1         => berfungsi untuk menyimpan hari1 yaitu hari check in ke dalam variabel bertipe integer
 int hari2 = 1;            //variabel hari1         => berfungsi untuk menyimpan hari2 yaitu hari check out ke dalam variabel bertipe integer, dimana hari checkout ditentukkan berdasarkan hari checkin + 1 hari
 time_t waktuserver;       //variabel waktuserver   => berfungsi untuk mengambil waktu dari sistem.
+int id_pemesan;
 
 // Struct User untuk menyimpan member nama, username, password, email
 typedef struct {
@@ -47,6 +48,35 @@ typedef struct {
 }pesan_villa;
 pesan_villa pesanvl; //Mendeklarasikan variabel pesanvl pada struct pesan_villa
 
+FILE *dtvilla;
+//struct untuk menyimpan data villa
+typedef struct{
+	int kode_villa;
+	char nama_villa[15];
+	char tipe_fasilitasLain[10];
+	char tipe_kamar [25];
+	int harga_lunas;
+	int DP_villa;
+	int kapasitas;
+	char check_in[10];
+	char check_out[10];
+	char lama_inap [25];
+}data_villa;
+data_villa villa;
+
+FILE*dtpenilaian;
+//struct untuk menyimpan penilaian pengunjung villa
+typedef struct {
+	int idPemesan;
+	char nama_penilai[12];
+	int rating ;
+	int tglPenilaian;
+	int blnPenilaian;
+	int thnPenilaian;
+	char komentar[200];
+}data_ratingKomentar;
+data_ratingKomentar penilaian;
+
 //Deklarasi fungsi-fungsi yang digunakan pada program pemesanan villa :
 void header ();                                   /*Merupakan fungsi yang digunakan untuk menampilkan header program yang ditunjukkan pertama kali saat program dijalankan*/
 void menu_masuk();                                /*Merupakan fungsi menu masuk untuk user pegawai maupun user pengunjung yang berisi 4 opsi,Masuk Sebagai Admin,Masuk Sebagai Pengunjung,Registrasi Pengunjung, dan EXIT*/
@@ -77,6 +107,15 @@ void cara_pesan_villa ();                         /*Merupakan fungsi yang diguna
 int Februari (int thn);                           /*Merupakan fungsi untuk menyeleksi bulan februari, karena bulan februari ada yang jumlahnya 28 atau 29*/
 int BknFeb (int thn, int bln);                    /*Merupakan fungsi untuk menyeleksi selain bulan Februari*/
 int checkNomor(pesan_villa pesanvl,int id);       /*Merupakan fungsi yang digunakan untuk mengecek nomor atau id villa apakah tersedia, yang berfungsi saat menghapus villa.*/
+void inputVillaAnyelir ();                        /*Merupakan fungsi yang digunakan untuk menginput data villa anyelir baru*/
+void hapusdtvilla (data_villa villa, int r);      /*Merupakan fungsi yang digunakan untuk menghapus data villa*/
+int checkKode(data_villa villa,int id);           /*Merupakan fungsi untuk mengecek kode / id villa saat penghapusan villa*/
+void hapusvilla ();                               /*Merupakan fungsi untuk menghapus data villa (lanjutan dari fungsi hapus_villa)*/
+void hapus_villa();                               /*Merupakan fungsi untuk menghapus data villa yang terdapat pada menu pegawai villa anyelir*/
+void tipeFasilitasdanKamar ();                    /*Merupakan fungsi untuk menampilkan tipe fasilitas dan kamar pada villa anyelir*/
+void menuRatingPengunjung ();                     /*Merupakan fungsi untuk menampilkan rating pengunjung villa anyelir*/
+void ratingPengunjung ();                         /*Merupakan fungsi lanjutan dari menuRatingPengunjung yang digunakan untuk menginput nama, rating, dan komentar*/
+void tampilanPenilaian ();						  /*Merupakan fungsi untuk menampilakan Penilaian dari pengunjung yang sudah pernah memakai villa anyelir*/
 
 
 // assign namaFile (nF) agar menyimpan string "logRecord.txt"
@@ -88,6 +127,7 @@ int main (){
    header (); //pemanggilan fungsi header
    menu_masuk (); //pemanggilan fungsi menu masuk
 }
+
 //=======================================================================//
 //*****           Fungsi Untuk Menampilkan Header Program           *****//
 //=======================================================================//
@@ -123,6 +163,7 @@ void header (){
 	getchar (); //digunakan untuk membaca data yang bertipe karakter yang harus diakhiri oleh enter
   system ("cls");
 }
+
 //=======================================================================//
 //*****         Fungsi Untuk Menampilkan Menu Masuk Program         *****//
 //=======================================================================//
@@ -422,14 +463,14 @@ void daftar (){
 //                 Waktu sistem pada saat user mengakses program.        //
 //                                                                       //
 // Versi : 1.0                                      Rev. 0               //
-// Tgl   : 14-12-2020                               Tgl: -               //
+// Tgl   : 14-12-2021                               Tgl: -               //
 // Gusti Ayu Wahyu Whurapsari - 2105551042                               //
 // Kelas B                                                               //
 //=======================================================================//
 void waktu(){
     time( & waktuserver);
     struct tm * waktu = localtime( & waktuserver);
-    printf ("\t\t\t\t\t|=====================Tanggal: %i/%i/%i=================|\n", waktu -> tm_mday, waktu -> tm_mon + 1, waktu -> tm_year + 1900);                      
+    printf ("\t\t\t\t\t|=====================Tanggal: %i/%i/%i===================|\n", waktu -> tm_mday, waktu -> tm_mon + 1, waktu -> tm_year + 1900);                      
 }
 
 //=======================================================================//
@@ -472,6 +513,7 @@ void error_alert (){
 void menuadm (){
 	char a ;
 	int kategori ;
+	int opsi;
 	system ("cls");
 	ulangi :
 	printf ("\n\n");
@@ -481,21 +523,28 @@ void menuadm (){
     printf ("\t\t\t\t\t|=========================================================|\n");
     printf ("\t\t\t\t\t|   No  |    Pilihan Kategori                             |\n");
     printf ("\t\t\t\t\t|-------|-------------------------------------------------|\n");
-    printf ("\t\t\t\t\t|   1   |    Lihat List Villa                             |\n");
-    printf ("\t\t\t\t\t|   2   |    Pesan Villa                                  |\n");
-    printf ("\t\t\t\t\t|   3   |    Lihat Data Pesanan                           |\n");
-    printf ("\t\t\t\t\t|   4   |    Hapus Pesanan                                |\n"); 
-    printf ("\t\t\t\t\t|   5   |    Exit                                         |\n");
+    printf ("\t\t\t\t\t|   1   |    Input Data Villa                             |\n");
+    printf ("\t\t\t\t\t|   2   |    Lihat List Villa                             |\n");
+    printf ("\t\t\t\t\t|   3   |    Lihat List Fasilitas dan Tipe Kamar          |\n");
+    printf ("\t\t\t\t\t|   4   |    Hapus Data Villa                             |\n");
+    printf ("\t\t\t\t\t|   5   |    Pesan Villa                                  |\n");
+    printf ("\t\t\t\t\t|   6   |    Lihat Data Pesanan                           |\n");
+    printf ("\t\t\t\t\t|   7   |    Hapus Pesanan                                |\n"); 
+    printf ("\t\t\t\t\t|   8   |    Exit                                         |\n");
     printf ("\t\t\t\t\t|=========================================================|\n");
     printf ("\t\t\t\t\t| Masukkan No Pilihan Anda : ");
 	scanf  ("%d",&kategori);
     system ("cls");
     switch (kategori){ 
-    	//case 1 dari menu switch (kategori) ini mengeksekusi perintah jika pegawai memilih lihat list villa pada kategori menu pegawai villa anyelir. 
-		//Pada case ini memanggil fungsi list_villa untuk menampilkan detail villa jika pegawai ingin memesan juga bisa langsung dari sini dengan klik Y atau y pada 
     	case 1 :
+    		inputVillaAnyelir ();
+    	break ;
+    	
+    	//case 2 dari menu switch (kategori) ini mengeksekusi perintah jika pegawai memilih lihat list villa pada kategori menu pegawai villa anyelir. 
+		//Pada case ini memanggil fungsi list_villa untuk menampilkan detail villa jika pegawai ingin memesan juga bisa langsung dari sini dengan klik Y atau y pada 
+    	case 2 :
     	list_villa ();
-    		printf ("\t\t\t|                                                     Proses Pemesanan [Y/T]? : ");
+    		printf ("|                                                         Proses Pemesanan [Y/T]? : ");
     		scanf  ("%s", &a);
     		if (a=='Y'|| a=='y')
     			pesan_villa_anyelir();
@@ -503,23 +552,40 @@ void menuadm (){
     			menuadm ();
     	break ;
     	
-    	//case 2 dari menu switch (kategori) ini mengeksekusi perintah jika pegawai miilih pesan villa pada kategori menu pegawai villa anyelir, dalam case 2 ini terdapat pemanggilan fungsi pesan_villa_anyelir
-    	case 2 :
+    	case 3 :
+    		tipeFasilitasdanKamar ();
+			opsi1 :
+			printf ("\t\t\t\t\t  Kembali Tekan 1 : ");
+    		scanf ("%d", &opsi);
+    		if (opsi==1){ //jika menekan 1 maka akan mengarah ke menu_pengunjung
+    		menuadm ();
+			}
+			else //jika menekan selain 1 akan diminta ulang menekan
+			printf ("\t\t\t\t\t  Silahkan ketik ulang 1 \n");
+			goto opsi1 ; //kembali pada opsi
+    	break ;
+    	
+    	case 4 :
+    		hapus_villa ();
+    	break ;
+    	
+    	//case 5 dari menu switch (kategori) ini mengeksekusi perintah jika pegawai miilih pesan villa pada kategori menu pegawai villa anyelir, dalam case 2 ini terdapat pemanggilan fungsi pesan_villa_anyelir
+    	case 5 :
     		pesan_villa_anyelir ();
     	break ;
     	
-    	//case 3 dari menu switch (kategori) ini mengeksekusi perintah jika pegawai miilih lihat data pesanan pada kategori menu pegawai villa anyelir, dalam case 3 ini terdapat pemanggilan fungsi lihat_data_pesanan
-    	case 3 :
+    	//case 6 dari menu switch (kategori) ini mengeksekusi perintah jika pegawai miilih lihat data pesanan pada kategori menu pegawai villa anyelir, dalam case 3 ini terdapat pemanggilan fungsi lihat_data_pesanan
+    	case 6 :
     		lihat_data_pesanan ();
     	break ;
     
-    	//case 4 dari menu switch (kategori) ini mengeksekusi perintah jika pegawai miilih hapus pesanan pada kategori menu pegawai villa anyelir, dalam case 4 ini terdapat pemanggilan fungsi hapus_pesanan
-    	case 4 :
+    	//case 7 dari menu switch (kategori) ini mengeksekusi perintah jika pegawai miilih hapus pesanan pada kategori menu pegawai villa anyelir, dalam case 4 ini terdapat pemanggilan fungsi hapus_pesanan
+    	case 7 :
     		hapus_pesanan ();
     	break ;
     	
-    	//case 5 dari menu switch (kategori) ini mengeksekusi perintah jika pegawai miilih EXIT pada kategori menu pegawai villa anyelir, dalam case 4 ini user akan diarahkan langsung keluar yaitu pada menu masuk dengan memanggil fungsi menu_masuk
-    	case 5 :
+    	//case 8 dari menu switch (kategori) ini mengeksekusi perintah jika pegawai miilih EXIT pada kategori menu pegawai villa anyelir, dalam case 4 ini user akan diarahkan langsung keluar yaitu pada menu masuk dengan memanggil fungsi menu_masuk
+    	case 8 :
     		menu_masuk ();
     	break ;
     	
@@ -867,7 +933,7 @@ void hari (){
 //                  villa anyelir dengan memanggil fungsi                //
 //                  list_data_pemesan                                    //
 // Versi : 1.0                                      Rev. 0               //
-// Tgl   : 10-12-2020                               Tgl: -               //
+// Tgl   : 10-12-2021                               Tgl: -               //
 // Gusti Ayu Wahyu Whurapsari - 2105551042                               //
 // Kelas B                                                               //
 //=======================================================================//
@@ -959,7 +1025,7 @@ int checkNomor(pesan_villa pesanvl,int id){
 //                  memanggil fungsi hapus jika memilih 1 dan memanggil  //
 //                  fungsi menuadm jika memilih 2                        //
 // Versi : 1.0                                      Rev. 0               //
-// Tgl   : 10-12-2020                               Tgl: -               //
+// Tgl   : 10-12-2021                               Tgl: -               //
 // Gusti Ayu Wahyu Whurapsari - 2105551042                               //
 // Kelas B                                                               //
 //=======================================================================//
@@ -998,7 +1064,7 @@ void hapus_pesanan (){
 //                  meyakinkan user apakah yakin akan menghapus data     //
 //                  tersebut.                                            //
 // Versi : 1.0                                      Rev. 0               //
-// Tgl   : 10-12-2020                               Tgl: -               //
+// Tgl   : 10-12-2021                               Tgl: -               //
 // Gusti Ayu Wahyu Whurapsari - 2105551042                               //
 // Kelas B                                                               //
 //=======================================================================//
@@ -1026,7 +1092,7 @@ void hapus (){
 //                  meyakinkan user apakah yakin akan menghapus data     //
 //                  tersebut.                                            //
 // Versi : 1.0                                      Rev. 0               //
-// Tgl   : 10-12-2020                               Tgl: -               //
+// Tgl   : 10-12-2021                               Tgl: -               //
 // Gusti Ayu Wahyu Whurapsari - 2105551042                               //
 // Kelas B                                                               //
 //=======================================================================//
@@ -1073,12 +1139,13 @@ void hapusdtpesan (pesan_villa pesanvl, int r){
 //                  jung, tekan 3 mengarah pada fungsi tampilan pesanan  //
 //                  serta 4 exit yaitu kembali ke menu masuk             //
 // Versi : 1.0                                      Rev. 0               //
-// Tgl   : 10-12-2020                               Tgl: -               //
+// Tgl   : 10-12-2021                               Tgl: -               //
 // Gusti Ayu Wahyu Whurapsari - 2105551042                               //
 // Kelas B                                                               //
 //=======================================================================//
 void menu_pengunjung (){
     system ("cls");
+    int opsi ;
     int pilihan_deskripsi ; //deklarasi variabel bernama pilihan_deskripsi bertipe integer yang digunakan dalam fungsi menu_pengunjung
 	printf ("\t\t\t\t\t|=========================================================|\n");
     printf ("\t\t\t\t\t|    *      *     *   *      *  *****   *      ***   ***  |\n");
@@ -1105,28 +1172,51 @@ void menu_pengunjung (){
     printf ("\t\t\t\t\t|Email Villa  : anyelirvilla@gmail.com                    |\n");
     printf ("\t\t\t\t\t|Kontak Villa : 0361 974 311                              |\n");
     printf ("\t\t\t\t\t|=========================================================|\n");
-    printf ("\t\t\t\t\t|          Tekan 1 untuk melihat lokasi vila              |\n");
-	printf ("\t\t\t\t\t|          Tekan 2 untuk melihat list vila                |\n");
-	printf ("\t\t\t\t\t|          Tekan 3 untuk melihat riwayat pesan villa      |\n");
-	printf ("\t\t\t\t\t|          Tekan 4 untuk melihat aturan pesan villa       |\n"); 
-	printf ("\t\t\t\t\t|          Tekan 5 untuk kembali ke menu                  |\n");          
+    printf ("\t\t\t\t\t|        Tekan 1 untuk melihat rating dan komentar villa  |\n");
+    printf ("\t\t\t\t\t|        Tekan 2 untuk melihat lokasi vila                |\n");
+	printf ("\t\t\t\t\t|        Tekan 3 untuk melihat list vila                  |\n");
+	printf ("\t\t\t\t\t|        Tekan 4 untuk melihat riwayat pesan villa        |\n");
+	printf ("\t\t\t\t\t|        Tekan 5 untuk melihat aturan pesan villa         |\n");
+	printf ("\t\t\t\t\t|        Tekan 6 untuk melihat tipe fasilitas dan kamar   |\n"); 
+	printf ("\t\t\t\t\t|        Tekan 7 untuk beri rating dan komentar villa     |\n"); 
+	printf ("\t\t\t\t\t|        Tekan 8 untuk kembali ke menu                    |\n");          
     printf ("\t\t\t\t\t|=========================================================|\n");
     tekan_benar :
     printf ("\t\t\t\t\t                       Tekan : ");
     scanf  ("%d", &pilihan_deskripsi);
-    if (pilihan_deskripsi==1){ //jika menekan 1 maka akan mengarah pada fungsi lokasi_villa
+    if (pilihan_deskripsi==1){
+    	tampilanPenilaian ();
+	}
+    else if (pilihan_deskripsi==2){ //jika menekan 1 maka akan mengarah pada fungsi lokasi_villa
     	lokasi_villa ();
 	}
-	else if (pilihan_deskripsi==2){ //jika menekan 2 maka akan mengarah pada fungsi list_villa_pengunjung
+	else if (pilihan_deskripsi==3){ //jika menekan 2 maka akan mengarah pada fungsi list_villa_pengunjung
 		list_villa_pengunjung ();
 	}
-	else if (pilihan_deskripsi==3){ //jika menekan 3 maka akan mengarah pada fungsi tampilan_pemesanan
+	else if (pilihan_deskripsi==4){ //jika menekan 3 maka akan mengarah pada fungsi tampilan_pemesanan
 		tampilan_pemesanan ();
 	}
-	else if (pilihan_deskripsi==4){ //jika menekan 4 maka akan mengarah pada fungsi cara_pesan_villa
+	else if (pilihan_deskripsi==5){ //jika menekan 4 maka akan mengarah pada fungsi cara_pesan_villa
 		cara_pesan_villa ();
 	}
-	else if(pilihan_deskripsi==5){ //jika menekan 5 maka akan kembali pada fungsi menu_masuk
+	else if (pilihan_deskripsi==6){
+		tipeFasilitasdanKamar();
+		opsi1 :
+		printf ("\t\t\t\t\t  Kembali Tekan 1 : ");
+    	scanf ("%d", &opsi);
+    	if (opsi==1){ //jika menekan 1 maka akan mengarah ke menu_pengunjung
+    	menu_pengunjung ();
+		}
+		else //jika menekan selain 1 akan diminta ulang menekan
+		printf ("\t\t\t\t\t  Silahkan ketik ulang 1 \n");
+		goto opsi1 ; //kembali pada opsi	
+	}
+	
+	else if (pilihan_deskripsi==7){
+		menuRatingPengunjung ();
+	}
+	
+	else if(pilihan_deskripsi==8){ //jika menekan 7 maka akan kembali pada fungsi menu_masuk
 		menu_masuk();
 	}
 	else { //jika user salah menekan (tidak ada pada pilihan) maka akan terpanggil fungsi error_alert dan akan kembali diminta memilih sesuai dengan opsi yang ada
@@ -1251,123 +1341,441 @@ void lokasi_villa (){
 // Output Argumen : -                                                    //
 // Deskripsi      : Fungsi ini digunakan untuk menampilkan list villa    //
 // Versi : 1.0                                      Rev. 0               //
-// Tgl   : 10-12-2020                               Tgl: -               //
+// Tgl   : 10-12-2021                               Tgl: -               //
 // Putu Eternalie Prajnani Welaga - 2105551046                           //
 // Kelas B                                                               //
 //=======================================================================//
 void list_villa (){
 	system ("cls");
-	printf ("\t\t\t|=========================================================================================================================================|\n");
-    printf ("\t\t\t|                                                       LIST VILLA ANYELIR                                                                |\n");
-    printf ("\t\t\t|-----------------------------------------------------------------------------------------------------------------------------------------|\n");
-    printf ("\t\t\t|ID VILLA   |    NAMA VILLA   |         FASILITAS           |    HARGA LUNAS  |      DP      | KAPASITAS | CHECK IN  | CHECK OUT |  KET   |\n");
-    printf ("\t\t\t|-----------|-----------------|-----------------------------|-----------------|--------------|-----------|---------- |-----------|--------|\n");
-    printf ("\t\t\t|    1      |   Anyelir 1     |Dua Lantai, Kolam Renang     | Rp. 1.800.000   | Rp.900.000   | 6 orang   |14.00 WITA |12.00 WITA |2 hari  |\n");
-    printf ("\t\t\t|           |(Jl. Anyelir No  |Dua Kamar Tidur, Dua Kasur   |                 |              |           |           |           |1 malam |\n");
-    printf ("\t\t\t|           |  61, Denpasar   |Dua Kamar Mandi dengan Bathup|                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           | Timur, Bali )   |Satu Ruang Makan, Satu Dapur |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           |                 |Dua Balkon, TV, Towel, AC    |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|-----------|-----------------|-----------------------------|-----------------|--------------|-----------|-----------|-----------|--------|\n");
-    printf ("\t\t\t|    2      |   Anyelir 2     |Tiga Lantai, Kolam Renang    | Rp. 1.650.000   | Rp.750.000   | 4 orang   |14.00 WITA |12.00 WITA |2 hari  |\n");
-    printf ("\t\t\t|           |(Jl. Hayam Wuruk |Empat Kamar Tidur,Empat Kasur|                 |              |           |           |           |1 malam |\n");
-    printf ("\t\t\t|           | No.05, Denpasar |Satu Kamar Mandi dgn Bathup  |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           | Timur, Bali )   |Satu Ruang Makan, Satu Dapur |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           |                 |Tiga Balkon, TV, Towel, AC   |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|-----------|-----------------|-----------------------------|-----------------|--------------|-----------|-----------|-----------|--------|\n");
-    printf ("\t\t\t|    3      |   Anyelir 3     |Dua Lantai,Kolam Renang Lt.2 | Rp. 1.750.000   | Rp.800.000   | 2 orang   |14.00 WITA |12.00 WITA |2 hari  |\n");
-    printf ("\t\t\t|           |(Jl. Raya Kesambi|Dua Kamar Tidur, Dua Kasur   |                 |              |           |           |           |1 malam |\n");
-    printf ("\t\t\t|           |   No.42, Kuta   |Satu Kamar Mandi dgn Bathup  |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           |     Bali )      |Satu Ruang Makan, Satu Dapur |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           |                 |besar, Satu Balkon, TV, AC   |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           |                 |Tiga Towel, PRIVATE VILLA    |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|-----------|-----------------|-----------------------------|-----------------|--------------|-----------|-----------|-----------|--------|\n");
-    printf ("\t\t\t|    4      |   Anyelir 4     |Tiga Lantai,Kolam Renang Lt.3| Rp. 3.800.000   | Rp.1.400.000 | 5 orang   |14.00 WITA |12.00 WITA |2 hari  |\n");
-    printf ("\t\t\t|           |(Jl. Dewi Sri    |Dua Kamar Tidur, Empat Kasur |                 |              |           |           |           |1 malam |\n");
-    printf ("\t\t\t|           |   No.80 , Kuta  |Tiga Kamar Mandi dgn Bathup  |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           |     Bali )      |Satu Ruang Makan, Satu Dapur |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           |                 |besar, Satu Balkon, TV, AC,  |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           |                 |Tiga Towel, Satu Ruang Tamu  |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|-----------|-----------------|-----------------------------|-----------------|--------------|-----------|-----------|-----------|--------|\n");
-    printf ("\t\t\t|    5      |   Anyelir 5     |Tiga Lantai, AC, Shower,     | Rp. 7.750.000   | Rp.3.800.000 | 42 orang  |14.00 WITA |12.00 WITA |2 hari  |\n");
-    printf ("\t\t\t|           |(Jl. Raya Pengo- |7 Kamar Tidur, 14 Kasur Besar|                 |              |           |           |           |1 malam |\n");
-    printf ("\t\t\t|           |  sekan No.76    |Lima Kamar Mandi dgn Bathup  |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           |  Ubud, Bali )   |Satu Ruang Makan, Satu Dapur |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           |                 |besar, Empat Balkon, 8 TV,   |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           |                 |10 Towel, 1 Ruang Tamu Besar |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           |                 |Tempat Karaoke, Biliyard     |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           |                 |Kolam Renang Mini Lt.2       |                 |              |           |           |           |        |\n");  
-    printf ("\t\t\t|           |                 |Kolam Renang Besar Lt.3      |                 |              |           |           |           |        |\n"); 
-    printf ("\t\t\t|           |                 |Party Villa, Ruang Mandi Air |                 |              |           |           |           |        |\n"); 
-    printf ("\t\t\t|           |                 |Hangat                       |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|-----------|-----------------|-----------------------------|-----------------|--------------|-----------|-----------|-----------|--------|\n");
-    printf ("\t\t\t|    6      |   Anyelir 6     |Tiga Lantai, AC,             | Rp. 5.800.000   | Rp.1.500.000 | 30 orang  |14.00 WITA |12.00 WITA |2 hari  |\n");
-    printf ("\t\t\t|           |(Jl. Raya Pengo- |5 Kamar Tidur, 5 Kasur Besar |                 |              |           |           |           |1 malam |\n");
-    printf ("\t\t\t|           |  sekan No.102   |Lima Kamar Mandi dgn Shower  |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           |  Ubud, Bali )   |Satu Ruang Makan, Satu Dapur |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           |                 |besar, 3 Balkon, 5 TV,       |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           |                 |6 Towel, 1 Ruang Tamu Besar  |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           |                 |Sound System, Biliyard       |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           |                 |Kolam Renang Lt.3            |                 |              |           |           |           |        |\n"); 
-    printf ("\t\t\t|-----------|-----------------|-----------------------------|-----------------|--------------|-----------|-----------|-----------|--------|\n");
-    printf ("\t\t\t|    7      |   Anyelir 7     |Tiga Lantai, AC,             | Rp. 4.800.000   | Rp.2.000.000 | 7 orang   |14.00 WITA |12.00 WITA |2 hari  |\n");
-    printf ("\t\t\t|           |(Jl. Raya Uluwatu|4 Kamar Tidur, 8 Kasur       |                 |              |           |           |           |1 malam |\n");
-    printf ("\t\t\t|           |      No.121     |4 Kamar Mandi dgn Bathup     |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           | Jimbaran, Bali )|Satu Ruang Makan, Satu Dapur |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           |                 |besar, 3 Balkon, 2 TV,       |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           |                 |4 Towel, 1 Ruang Tamu        |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           |                 |Kolam Renang Lt.2            |                 |              |           |           |           |        |\n"); 
-    printf ("\t\t\t|-----------|-----------------|-----------------------------|-----------------|--------------|-----------|-----------|-----------|--------|\n");
-    printf ("\t\t\t|    8      |   Anyelir 8     |Dua Lantai, AC,              | Rp. 4.300.000   | Rp.2.000.000 | 6 orang   |14.00 WITA |12.00 WITA |2 hari  |\n");
-    printf ("\t\t\t|           |(Jl. Bukit Permai|2 Kamar Tidur, 2 Kasur Besar |                 |              |           |           |           |1 malam |\n");
-    printf ("\t\t\t|           |      No.66      |2 Kamar Mandi dgn Bathup     |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           | Jimbaran, Bali )|Satu Ruang Makan, Satu Dapur |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           |                 |besar, 1 Balkon, TV,         |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           |                 |Towel, 1 Ruang Tamu          |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           |                 |Kolam Renang Lt.2, Satu      |                 |              |           |           |           |        |\n"); 
-    printf ("\t\t\t|           |                 |Kamar Utama dengan 2 Kasur   |                 |              |           |           |           |        |\n"); 
-    printf ("\t\t\t|-----------|-----------------|-----------------------------|-----------------|--------------|-----------|-----------|-----------|--------|\n");
-    printf ("\t\t\t|    9      |   Anyelir 9     |Tiga Lantai, AC, Shower      | Rp. 5.960.000   | Rp.3.000.000 | 40 orang  |14.00 WITA |12.00 WITA |2 hari  |\n");
-    printf ("\t\t\t|           |(Jl. Raya Uluwatu|4 Kamar Tidur, 4 Kasur Besar |                 |              |           |           |           |1 malam |\n");
-    printf ("\t\t\t|           |      No.46      |4 Kamar Mandi dgn Bathup     |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           | Jimbaran, Bali )|Satu Ruang Makan, Satu Dapur |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           |                 |besar, 2 Balkon, TV,         |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           |                 |6 Towel, 1 Ruang Tamu        |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           |                 |Kolam Renang Lt.2,           |                 |              |           |           |           |        |\n"); 
-    printf ("\t\t\t|           |                 |Satu Ruang Tamu Utama, Satu  |                 |              |           |           |           |        |\n");
-	printf ("\t\t\t|           |                 |Ruang Tamu Biasa, Karaoke,   |                 |              |           |           |           |        |\n"); 
-    printf ("\t\t\t|           |                 |Ruang Party                  |                 |              |           |           |           |        |\n"); 
-    printf ("\t\t\t|-----------|-----------------|-----------------------------|-----------------|--------------|-----------|-----------|-----------|--------|\n");
-    printf ("\t\t\t|    10     |   Anyelir 10    |Dua Lantai, Ruang Dinner     | Rp. 2.750.000   | Rp.1.000.000 | 6 orang   |14.00 WITA |12.00 WITA |2 hari  |\n");
-    printf ("\t\t\t|           |(Jl. Sahadewi    |3 Kamar Tidur, 3 Kasur       |                 |              |           |           |           |1 malam |\n");
-    printf ("\t\t\t|           |      No.21      |1 Kamar Mandi dgn Bathup     |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           | Br. Umacandi, Ds|Satu Ruang Makan, Satu Dapur,|                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           | Buduk, Mengwi,  |1 Balkon, TV, AC             |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           |     Bali)       |3 Towel, 1 Ruang Tamu        |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           |                 |Kolam Renang Lt.1,           |                 |              |           |           |           |        |\n"); 
-    printf ("\t\t\t|           |                 |Satu Ruang Tamu Utama,       |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           |                 |Ruang Mandi Air Hangat       |                 |              |           |           |           |        |\n"); 
-    printf ("\t\t\t|-----------|-----------------|-----------------------------|-----------------|--------------|-----------|-----------|-----------|--------|\n");
-    printf ("\t\t\t|    11     |   Anyelir 11    |Tiga Lantai, Ruang Dinner    | Rp. 4.120.000   | Rp.1.800.000 | 8 orang   |14.00 WITA |12.00 WITA |2 hari  |\n");
-    printf ("\t\t\t|           |(Jl. Pantai      |5 Kamar Tidur, 5 Kasur       |                 |              |           |           |           |1 malam |\n");
-    printf ("\t\t\t|           |   Berawa No.61  |3 Kamar Mandi dgn 1 Bathup   |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           | Canggu, Bali)   |Satu Ruang Makan, Satu Dapur,|                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           |                 |2 Balkon, TV, AC             |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           |                 |4 Towel, 1 Ruang Tamu        |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           |                 |Kolam Renang Lt.1,           |                 |              |           |           |           |        |\n"); 
-    printf ("\t\t\t|           |                 |Satu Ruang Tamu Utama,       |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           |                 |Ruang Mandi Air Hangat       |                 |              |           |           |           |        |\n");
-	printf ("\t\t\t|-----------|-----------------|-----------------------------|-----------------|--------------|-----------|-----------|-----------|--------|\n");
-    printf ("\t\t\t|    12     |   Anyelir 12    |Tiga Lantai, Ruang Dinner    | Rp. 4.800.000   | Rp.1.500.000 | 25 orang  |14.00 WITA |12.00 WITA |2 hari  |\n");
-    printf ("\t\t\t|           | (Jl. Nelayan    |6 Kamar Tidur, 6 Kasur       |                 |              |           |           |           |1 malam |\n");
-    printf ("\t\t\t|           |    No.81        |5 Kamar Mandi dgn 2 Bathup   |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           | Canggu, Bali)   |Satu Ruang Makan, Satu Dapur,|                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           |                 |2 Balkon, TV, AC, Wi-Fi      |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           |                 |3 Towel, 1 Ruang Tamu        |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           |                 |Kolam Renang dekat pantai,   |                 |              |           |           |           |        |\n"); 
-    printf ("\t\t\t|           |                 |Satu Ruang Tamu Utama,       |                 |              |           |           |           |        |\n");
-    printf ("\t\t\t|           |                 |Ruang Mandi Air Hangat       |                 |              |           |           |           |        |\n");
-	printf ("\t\t\t|=========================================================================================================================================|\n");
+	printf ("|======================================================================================================================================================================|\n");
+    printf ("|                                                                     LIST VILLA ANYELIR                                                                               |\n");
+    printf ("|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n");
+    printf ("|ID/KODE VILLA|    NAMA VILLA   |   TIPE   FASILITAS  |    TIPE KAMAR   | HARGA LUNAS  |      DP      |   KAPASITAS   |   CHECK IN  | CHECK OUT |     LAMA INAP        |\n");
+    printf ("|-------------|-----------------|---------------------|-----------------|--------------|--------------|---------------|-------------|-----------|----------------------|\n");
+    	/* Buka file untuk dibaca isinya */
+	if ((dtvilla=fopen("datavilla.dat", "rt")) == NULL )
+		{
+			printf("\t\t File tidak dapat dibuka!\n");
+			exit(1);
+		}
+		/* Ambil isi file ngenggunakan fungsi fread(), lalu tampilkan ke layar */
+	while ((fread(&villa, sizeof(villa), JUM_BLOK, dtvilla)) == JUM_BLOK )
+	printf("|    %d\t          %-15s          %-10s     %-25s   Rp.%d      Rp.%d      %d Orang       %-10s  %-10s  %-25s\n", villa.kode_villa, villa.nama_villa, villa.tipe_fasilitasLain, villa.tipe_kamar, villa.harga_lunas, villa.DP_villa, villa.kapasitas, villa.check_in, villa.check_out, villa.lama_inap);
+	printf ("|======================================================================================================================================================================|\n");
+	fclose(dtvilla);		/* Tutup file */
+
 }
+
+//=======================================================================//
+//****              Fungsi Untuk Menghapus Data Villa (1)            ****//
+//=======================================================================//
+// Nama Fungsi    : hapus_villa                                          //
+// Passing Argumen: int pil_hapus  									   	 //
+// Input Argumen  : -                               		             //
+// Output Argumen : -                                                    //
+// Deskripsi      : Fungsi ini digunakan untuk menghapus data villa      //
+//                  anyelir                                              //
+// Versi : 1.0                                      Rev. 0               //
+// Tgl   : 1-1-2021                                 Tgl: -               //
+// Gusti Ayu Wahyu Whurapsari - 2105551042                               //
+// Kelas B                                                               //
+//=======================================================================//
+void hapus_villa(){
+	system ("cls");
+	int pil_hapus ; //deklarasi variabel pil_hapus bertipe data integer
+	list_villa (); //memanggil fungsi list_data_pemesan
+	printf ("\n\n"); //untuk enter jarak
+	printf ("\t\t\t\t\t|=========================================================|\n");
+    printf ("\t\t\t\t\t|                    HAPUS DATA VILLA                     |\n");
+    printf ("\t\t\t\t\t|=========================================================|\n");
+    printf ("\t\t\t\t\t| Ketik 1 untuk hapus data villa di atas                  |\n");
+    printf ("\t\t\t\t\t| Ketik 2 untuk keluar                                    |\n");
+    pilihLagi:
+    printf ("\t\t\t\t\t| Pilihan : ");
+    scanf  ("%d", &pil_hapus);
+    if (pil_hapus==1){ //jika memilih 1 akan mengarah pada fungsi hapus
+    	hapusvilla ();
+	}
+	else if (pil_hapus==2){ //jika memilih 2 akan mengarah pada fungsi menuadm
+		menuadm ();
+	}
+	else //jika salah memilih maka akan tampil error dengan memanggil fungsi error_alert dan kembali untuk memilih pilihan yang sesuai
+		error_alert ();
+		goto pilihLagi ;
+}
+
+//=======================================================================//
+//****    Fungsi Untuk Menghapus Data Villa dari Database            ****//
+//=======================================================================//
+// Nama Fungsi    : hapusdtvilla                                         //
+// Passing Argumen: data_villa villa, int r                              //
+// Input Argumen  : -                               		             //
+// Output Argumen : -                                                    //
+// Deskripsi      : Fungsi ini digunakan untuk menghapus data villa dari //
+//					database datavilla.dat kemudian yang tidak dihapus   //
+//    				akan disimpan sementara di Temp_Data dan akan dikem -//
+//                  balikan lagi pada datavilla.dat                      //
+// Versi : 1.0                                      Rev. 0               //
+// Tgl   : 1-1-2021                                 Tgl: -               //
+// Gusti Ayu Wahyu Whurapsari - 2105551042                               //
+// Kelas B                                                               //
+//=======================================================================//
+void hapusdtvilla (data_villa villa, int r){
+	FILE *tmp;
+	int s;
+	
+		if (checkKode(villa, r) == 0){
+			printf("\t\t\t\t\t Data villa %d tidak ditemukan\n\n",r);
+		}
+		else{
+			dtvilla = fopen("datavilla.dat","rb");
+			tmp = fopen("Temp_Data.txt","wb");
+			while (fread(&villa, sizeof(villa), 1, dtvilla)){
+				s = villa.kode_villa;
+				if ( s != r){
+					//Menyalin data file yang tidak ingin dihapus
+					fwrite(&villa, sizeof(villa), 1, tmp);
+				}
+			}
+			fclose(dtvilla);
+			fclose(tmp);
+			dtvilla = fopen("datavilla.dat","wb");
+			tmp = fopen("Temp_Data.txt","rb");
+			while(fread(&villa,sizeof(villa),1,tmp)){
+				fwrite(&villa,sizeof(villa),1,dtvilla);
+			}
+			fclose(dtvilla);
+			fclose(tmp);
+		}
+}
+
+//=======================================================================//
+//****              Fungsi Untuk Mengecek Kode/ID Villa              ****//
+//=======================================================================//
+// Nama Fungsi    : checkKode                                            //
+// Passing Argumen: data_villa villa, int id                             //
+// Input Argumen  : -                               		             //
+// Output Argumen : -                                                    //
+// Deskripsi      : Fungsi ini digunakan untuk mengecek kode/ID villa    //
+//       		    yang digunakan saat menghapus data villa             //
+// Versi : 1.0                                      Rev. 0               //
+// Tgl   : 1-1-2021                                 Tgl: -               //
+// Gusti Ayu Wahyu Whurapsari - 2105551042                               //
+// Kelas B                                                               //
+//=======================================================================//
+int checkKode(data_villa villa,int id){
+	FILE *dtvilla;
+	int c = 1;
+	if(c==1){
+		dtvilla = fopen("datavilla.dat","rb");
+		while(fread(&villa, sizeof(villa),1,dtvilla)){
+			if( id == villa.kode_villa){
+				fclose(dtvilla);
+				return 1;
+			}
+		}
+	}else{
+		c = 0;
+		fclose(dtvilla);
+		return 0;
+	}
+}
+
+//=======================================================================//
+//****              Fungsi Untuk Menghapus Data Villa (2)            ****//
+//=======================================================================//
+// Nama Fungsi    : hapusvilla                                           //
+// Input Argumen  : int pil_hapus                                        //
+// Output Argumen : -                                                    //
+// Deskripsi      : Fungsi ini digunakan untuk menghapus data villa yang //
+//                  merupakan lanjutan dari fungsi hapus_villa           //
+// Versi : 1.0                                      Rev. 0               //
+// Tgl   : 1-1-2021                                 Tgl: -               //
+// Gusti Ayu Wahyu Whurapsari - 2105551042                               //
+// Kelas B                                                               //
+//=======================================================================//
+void hapusvilla (){
+	int pil_hapus ; //deklarasi pil_hapus pada fungsi hapus ke dalam variabel bertipe data int
+	printf ("\t\t\t\t\t| Pilih ID villa yang akan dihapus : ");
+	scanf  ("%d",&pil_hapus); fflush(stdin);
+	printf ("\t\t\t\t\t| Apakah anda yakin? (Y/T)         : ");
+	jawab = toupper(getche());			/* Baca jawaban dari keyboard */
+	if (jawab == 'Y'|| jawab == 'y') 
+	{	hapusdtvilla(villa, pil_hapus); //memanggil fungsi hapusdtpesan
+		hapus_villa();
+	}hapus_villa(); //kembali pada fungsi hapus_pesanan jika tidak memilih Y atau y
+}
+
+//=======================================================================//
+//****         Fungsi Untuk Menginput Data Villa Anyelir Baru        ****//
+//=======================================================================//
+// Nama Fungsi    : inputVillaAnyelir                                    //
+// Input Argumen  : villa.kode_villa, villa.tipe_fasilitasLain,          //
+//					villa.nama_villa, villa.tipe_kamar, villa.harga_lunas//
+// 					villa.DP_villa, villa.kapasitas, villa.check_in,     //
+//  				villa.check_in, villa.check_out,villa.lama_inap, jawab//
+// Output Argumen : -                                                    //
+// Deskripsi      : Fungsi ini digunakan untuk meninput data villa anye- //
+//                  lir baru                                             //
+// Versi : 1.0                                      Rev. 0               //
+// Tgl   : 1-1-2021                                 Tgl: -               //
+// Gusti Ayu Wahyu Whurapsari - 2105551042                               //
+// Kelas B                                                               //
+//=======================================================================//
+void inputVillaAnyelir (){
+	system ("cls");
+	printf ("\t\t\t\t\t|===========================================================|\n");
+    printf ("\t\t\t\t\t|                 INPUT DATA VILLA ANYELIR                  |\n");
+    printf ("\t\t\t\t\t|===========================================================|\n");
+    	if ((dtvilla=fopen("datavilla.dat", "ab")) == NULL )
+	{
+		printf("\t\t\t\t\t File tidak dapat dibuat!\r\n");
+		menuadm();
+	}
+	
+	do {
+		printf("\t\t\t\t\t Kode Villa     : "); fflush(stdin);
+		scanf("%d", &villa.kode_villa);
+		printf("\t\t\t\t\t Nama Villa     : "); fflush(stdin);
+		gets(villa.nama_villa);
+		printf("\t\t\t\t\t Tipe Fasilitas : "); fflush(stdin);
+		gets(villa.tipe_fasilitasLain);
+		printf("\t\t\t\t\t Tipe Kamar     : "); fflush(stdin);
+		gets(villa.tipe_kamar);
+		printf("\t\t\t\t\t Harga Lunas    : "); fflush(stdin);
+		scanf("%d", &villa.harga_lunas);
+		printf("\t\t\t\t\t DP             : "); fflush(stdin);
+		scanf("%d", &villa.DP_villa);
+		printf("\t\t\t\t\t Kapasitas      : "); fflush(stdin);
+		scanf("%d", &villa.kapasitas);
+		printf("\t\t\t\t\t CHECK IN [Jam] : "); fflush(stdin);
+		gets(villa.check_in);
+		printf("\t\t\t\t\t CHECK OUT [Jam]: "); fflush(stdin);
+		gets(villa.check_out);
+		printf("\t\t\t\t\t Lama Inap      : "); fflush(stdin);
+		gets(villa.lama_inap);
+				
+		/* Rekam sebuah data bertipe record menggunakan fungsi fwrite */
+		fwrite(&villa, sizeof(villa), 1, dtvilla);
+		
+		printf("\t\t\t\t\t Memasukkan data lagi (Y/T)? => "); fflush(stdin);
+		jawab = toupper(getche());		/* Baca jawaban dari keyboard */
+	}
+	while (jawab == 'Y');
+	fclose(dtvilla);		/* Tutup file */
+	
+	printf("\n\t\t\t\t\t Data sudah disimpan pada file. \n");
+	printf("\t\t\t\t\t Lihat isi file (Y/T)? => "); fflush(stdin);
+	jawab = toupper(getche());			/* Baca jawaban dari keyboard */
+	if (jawab == 'Y');
+	{	list_villa();
+	}
+	
+	menuadm();
+}
+
+//=======================================================================//
+//****       Fungsi Untuk Menampilkan Tipe Fasilitas dan Kamar       ****//
+//=======================================================================//
+// Nama Fungsi    : tipeFasilitasdanKamar                                //
+// Input Argumen  : -                                                    //
+// Output Argumen : -                                                    //
+// Deskripsi      : Fungsi ini digunakan untuk menampilkan tipe fasilitas//
+//                  dan kamar pada villa anyelir                         //
+// Versi : 1.0                                      Rev. 0               //
+// Tgl   : 1-1-2021                                 Tgl: -               //
+// Gusti Ayu Wahyu Whurapsari - 2105551042                               //
+// Kelas B                                                               //
+//=======================================================================//
+void tipeFasilitasdanKamar (){
+	system ("cls");
+	printf ("\n\n");
+	printf ("\t\t\t\t\t|======================================================================|\n");
+    printf ("\t\t\t\t\t|                         TIPE FASILITAS DAN KAMAR                     |\n");
+    printf ("\t\t\t\t\t|======================================================================|\n");
+    printf ("\t\t\t\t\t| Tipe Fasilitas Villa                                                 |\n");
+    printf ("\t\t\t\t\t|----------------------------------------------------------------------|\n");
+    printf ("\t\t\t\t\t|1. Tipe A : Dilengkapi dengan AC, BathUp, Billyard, Ruang Tamu Luas,  |\n");
+    printf ("\t\t\t\t\t|            villa 3 lantai, 3 TV, Towel, Ruang Mandi Air Hangat, Dapur|\n");
+    printf ("\t\t\t\t\t|            yang luas, Wi-Fi, Kolam Renang Dekat Pantai, mendapat view|\n");
+    printf ("\t\t\t\t\t|            pantai, 5 kamar mandi, ruang makan, dan balkon.           |\n");
+    printf ("\t\t\t\t\t|2. Tipe B : Dilengkapi dengan AC, BathUp, Ruang Tamu Sedang, 3 kamar  |\n");
+    printf ("\t\t\t\t\t|            mandi, towel, 2 TV, Villa 3 lantai, ruang makan, kolam    |\n");
+    printf ("\t\t\t\t\t|            renang lantai 1, dan balkon, ruang mandi air hangat, dan  |\n");
+    printf ("\t\t\t\t\t|            1 dapur sedang.                                           |\n");
+    printf ("\t\t\t\t\t|3. Tipe C : Dilengkapi dengan AC, Ruang Tamu Sedang, 2 kamar mandi    |\n");
+    printf ("\t\t\t\t\t|            towel, kolam renang lantai 1, villa 2 lantai, towel, kolam|\n");
+    printf ("\t\t\t\t\t|            renang sedang lantai 1, 1 dapur sedang.                   |\n");
+    printf ("\t\t\t\t\t|----------------------------------------------------------------------|\n");
+    printf ("\t\t\t\t\t| Tipe Kamar                                                           |\n");
+    printf ("\t\t\t\t\t|----------------------------------------------------------------------|\n");
+    printf ("\t\t\t\t\t| 1. Single Room          : 1 kamar dengan 1 kasur besar               |\n");
+    printf ("\t\t\t\t\t| 2. Twin Room            : 2 kamar dengan masing-masing 1 kasur besar |\n");
+    printf ("\t\t\t\t\t| 3. Twin Room and Bed    : 2 kamar dengan masing-masing 2 kasur besar |\n");  
+    printf ("\t\t\t\t\t| 4. Triple Room          : 3 kamar dengan masing-masing 1 kasur besar |\n");  
+    printf ("\t\t\t\t\t| 5. Deluxe Room          : 5 kamar besar dengan masing-masing 1 kasur |\n");  
+	printf ("\t\t\t\t\t|                           besar                                      |\n");  
+    printf ("\t\t\t\t\t|======================================================================|\n");
+}
+
+//=======================================================================//
+//****       Fungsi Untuk Menampilkan Menu Rating Penginjung         ****//
+//=======================================================================//
+// Nama Fungsi    : menuRatingPengunjung                                 //
+// Input Argumen  : int pilihan, int opsiPilihan                         //
+// Output Argumen : -                                                    //
+// Deskripsi      : Fungsi ini digunakan untuk menampilkan menu rating   //
+//                  pengunjung, jika tekan 1 maka akan mengarah pada     //
+//                  fungsi ratingPengunjung, dan tekan 2 untuk keluar    //
+//                  yaitu ke menu pengunjung                             //
+// Versi : 1.0                                      Rev. 0               //
+// Tgl   : 1-1-2021                                 Tgl: -               //
+// Gusti Ayu Wahyu Whurapsari - 2105551042                               //
+// Kelas B                                                               //
+//=======================================================================//
+void menuRatingPengunjung (){
+	int pilihan ;
+	int opsiPilihan ;
+	system ("cls");
+	printf ("\n\n");
+	printf ("\t\t\t\t\t|======================================================================|\n");
+    printf ("\t\t\t\t\t|             RATING DAN KOMENTAR PENGUNJUNG VILLA ANYELIR             |\n");
+    printf ("\t\t\t\t\t|======================================================================|\n");
+    printf ("\t\t\t\t\t| Pilih :                                                              |\n");
+    printf ("\t\t\t\t\t| 1. Lanjutkan untuk beri rating                                       |\n");
+    printf ("\t\t\t\t\t| 2. Keluar                                                            |\n");
+    pilihUlang :
+    printf ("\t\t\t\t\t| Masukkan pilihan anda  : ");
+    scanf ("%d", &opsiPilihan);
+    switch (opsiPilihan){
+    	case 1 :
+    	   ratingPengunjung ();	
+    	break ;
+    	
+    	case 2 :
+    		menu_pengunjung ();
+    	break ;
+    	
+    	default :
+    		error_alert();
+    		goto pilihUlang ;
+    		break ;
+	}
+}
+
+//=======================================================================//
+//****                Fungsi Untuk Penilaian Pengunjung              ****//
+//=======================================================================//
+// Nama Fungsi    : ratingPengunjung                                     //
+// Input Argumen  : int tekan 1, penilaian.idPemesan, penilaian.nama_    //
+//                  penilai, penilaian.tglPenilaian, penilaian.blnPeni   //
+//                  laian, penilaian.thnPenilaian,penilaian.rating,      //
+//                  penilaian.komentar                                   //
+// Output Argumen : -                                                    //
+// Deskripsi      : Fungsi ini digunakan untuk menginputkan rating yang  //
+//                  diberikan pengunjung villa anyelir                   //
+// Versi : 1.0                                      Rev. 0               //
+// Tgl   : 10-12-2021                               Tgl: -               //
+// Gusti Ayu Wahyu Whurapsari - 2105551042                               //
+// Kelas B                                                               //
+//=======================================================================//
+void ratingPengunjung (){
+	int tekan1 ;
+	    
+	FILE*dtpenilaian ; // Membuat pointer dtpenilaian untuk menunjuk pada file "datapesan.txt"
+	dtpenilaian = fopen ("datapenilaian.txt", "ab"); // Membuka file "datapenilaian.txt" dengan mode "ab"
+	
+    // Melakukan Pengecekan apakah pointer dtpesan menunjuk kepada file yang dituju ("datapenilaian.txt")
+   	if (dtpenilaian== NULL ){
+	printf("\t\t\t\t\t|File tidak dapat dibuat!\r\n");
+	menu_pengunjung();
+	}
+	
+    else {
+	
+	printf ("\t\t\t\t\t| Masukkan ID Pemesanan anda     		: "); fflush(stdin);
+	scanf ("%d", &penilaian.idPemesan);
+	printf ("\t\t\t\t\t| Masukkan Nama Anda [MAX 12 huruf]		: "); fflush(stdin);
+	gets (penilaian.nama_penilai);
+	printf ("\t\t\t\t\t| Masukkan Tanggal Hari Ini [DD/MM/YYYY] : "); fflush(stdin);
+	scanf ("%d/%d/%d", &penilaian.tglPenilaian, &penilaian.blnPenilaian, &penilaian.thnPenilaian);
+	printf ("\t\t\t\t\t| Masukkan rating anda, berikut detail rating\n");
+	printf ("\t\t\t\t\t| 1. Sangat Kurang\n");
+	printf ("\t\t\t\t\t| 2. Kurang\n");
+	printf ("\t\t\t\t\t| 3. Cukup Memuaskan\n");
+	printf ("\t\t\t\t\t| 4. Memuaskan\n");
+	printf ("\t\t\t\t\t| 5. Sangat Memuaskan\n");
+	masukkanUlang :
+	printf ("\t\t\t\t\t| Masukkan Rating [1-5]                  : "); fflush(stdin);
+	scanf  ("%d", &penilaian.rating);
+	if (penilaian.rating >=6){
+		printf ("\t\t\t\t\t| Beri Rating yang Sesuai pada Opsi !\n"); fflush(stdin);
+		goto masukkanUlang ;
+	}
+	printf ("\t\t\t\t\t| Beri Komentar [MAX 200 huruf]          : "); fflush(stdin);
+	gets (penilaian.komentar);
+	
+	fwrite(&penilaian, sizeof(penilaian), 1, dtpenilaian);
+	fclose(dtpenilaian);
+	
+	printf ("\t\t\t\t\t                             DATA TELAH DISIMPAN\n");
+	printf ("\t\t\t\t\t                 TERIMAKASIH TELAH BERI RATING DAN KOMENTAR\n");
+	printf ("\t\t\t\t\t                       SEMOGA HARI MU MENYENANGKAN ^_^ \n");
+	tekan1Lagi :
+	printf ("\t\t\t\t\t   Kembali ke Menu Tekan 1 : ");
+	scanf ("%d", &tekan1);
+	if (tekan1=1){
+		menu_pengunjung ();
+	}
+	else {
+		printf ("\t\t\t\t\t  Silahkan tekan ulang 1");
+		goto tekan1Lagi;
+	}
+  }	
+}
+
+
+//=======================================================================//
+//****         Fungsi Untuk Menampilkan Penilaian Villa Anyelir      ****//
+//=======================================================================//
+// Nama Fungsi    : tampilanPenilaian                                    //
+// Input Argumen  : int pilih1                                           //
+// Output Argumen : -                                                    //
+// Deskripsi      : Fungsi ini digunakan untuk menampilkan penilaian     //
+//                  pengunjung terhadap villa anyelir                    //
+// Versi : 1.0                                      Rev. 0               //
+// Tgl   : 10-12-2021                               Tgl: -               //
+// Gusti Ayu Wahyu Whurapsari - 2105551042                               //
+// Kelas B                                                               //
+//=======================================================================//
+void tampilanPenilaian (){
+	int pilih1;
+	system ("cls");
+	printf ("|======================================================================================================================================================================|\n");
+    printf ("|                                                               PENILAIAN DARI PENGUNJUNG VILLA ANYELIR                                                                |\n");
+    printf ("|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|\n");
+    printf ("| ID Pemesan  |         Nama        |        Rating [1-5]       | Tgl Beri Rating  |                                         Komentar                                  |\n");
+    printf ("|-------------|---------------------|---------------------------|------------------|-----------------------------------------------------------------------------------|\n");
+    FILE*dtpenilaian ; // Membuat pointer dtpesan untuk menunjuk pada file "datapesan.txt"
+    dtpenilaian = fopen ("datapenilaian.txt", "rt"); //membuka file "datapesan.txt" dengan rt
+    if (dtpenilaian== NULL ){ // Melakukan Pengecekan apakah pointer dtpesan menunjuk kepada file yang dituju ("datapesan.txt")
+		printf("\t\t\t| FILE TIDAK DAPAT DIBUKA!\r\n");
+		menu_pengunjung();
+	}
+		/* Ambil isi file ngenggunakan fungsi fread(), lalu tampilkan ke layar */
+	while ((fread(&penilaian, sizeof(penilaian), JUM_BLOK, dtpenilaian)) == JUM_BLOK )
+	printf ("      %d            %-12s              %d                    %d/%d/%d              %-200s", penilaian.idPemesan, penilaian.nama_penilai, penilaian.rating, penilaian.tglPenilaian, penilaian.blnPenilaian, penilaian.thnPenilaian, penilaian.komentar);
+    fclose(dtpenilaian);
+	printf ("\n|======================================================================================================================================================================|\n");
+    tekan1 :
+    printf ("  Tekan 1 untuk balik ke menu pengunjung      : ") ;
+	scanf  ("%d", &pilih1);
+	if (pilih1== 1) //jika menekan 1 maka akan diarahkan pada menu pengunjung dengan memanggil fungsi menu_pengunjung
+		menu_pengunjung ();
+	else  //jika menekan selain 1 maka akan diminta untuk mengetik 1 sampai benar
+		printf ("\t\t\t\t\t| Silahkan ketik ulang 1 \n"); 
+		goto tekan1 ;
+}	
 
 //=======================================================================//
 //****      Fungsi Untuk Menampilkan List Villa Untuk Pengunjung     ****//
@@ -1378,17 +1786,17 @@ void list_villa (){
 // Deskripsi      : Fungsi ini digunakan untuk menampilkan list villa    //
 //                  pada pengunjung                                      //
 // Versi : 1.0                                      Rev. 0               //
-// Tgl   : 10-12-2020                               Tgl: -               //
+// Tgl   : 10-12-2021                               Tgl: -               //
 // Gusti Ayu Wahyu Whurapsari - 2105551042                               //
 // Kelas B                                                               //
 //=======================================================================//
 void list_villa_pengunjung (){
 	int pilih ; //deklarasi variabel pilih pada fungsi list_villa_pengunjung bertipe data integer
 	list_villa (); //memanggil fungsi list_villa
-    printf ("\t\t\t|                                                PROSES PEMESANAN HARAP PANGGIL ADMIN                                                     |\n");
-    printf ("\t\t\t|=========================================================================================================================================|\n");
+    printf ("|                                                                PROSES PEMESANAN HARAP PANGGIL ADMIN                                                                  |\n");
+    printf ("|======================================================================================================================================================================|\n");
     masukkan1 :
-    printf ("\t\t\t| Tekan 1 untuk kembali ke menu pengunjung      : ") ; //input memasukkan atau tekan 1
+    printf ("| Tekan 1 untuk kembali ke menu pengunjung      : ") ; //input memasukkan atau tekan 1
 	scanf  ("%d", &pilih);
 	if (pilih== 1){ //jika tekan 1 maka akan mengarah pada fungsi menu_pengunjung
 	
