@@ -39,9 +39,9 @@ typedef struct {
 	int blnCI ;             //berfungsi untuk menyimpan bulan check in saat input pemesanan villa ke dalam variabel bertipe integer
 	int thnCI ;             //berfungsi untuk menyimpan tahun check in saat input pemesanan villa ke dalam variabel bertipe integer
 	int tglbook;            //berfungsi untuk menyimpan tanggal booking saat input pemesanan villa ke dalam variabel bertipe integer
-  int blnbook;            //berfungsi untuk menyimpan bulan booking saat input pemesanan villa ke dalam variabel bertipe integer
-  int thnbook;            //berfungsi untuk menyimpan tahun booking saat input pemesanan villa ke dalam variabel bertipe integer
-  int tglCO ;             //berfungsi untuk menyimpan tanggal check out saat input pemesanan villa ke dalam variabel bertipe integer
+  	int blnbook;            //berfungsi untuk menyimpan bulan booking saat input pemesanan villa ke dalam variabel bertipe integer
+  	int thnbook;            //berfungsi untuk menyimpan tahun booking saat input pemesanan villa ke dalam variabel bertipe integer
+  	int tglCO ;             //berfungsi untuk menyimpan tanggal check out saat input pemesanan villa ke dalam variabel bertipe integer
 	int blnCO ;             //berfungsi untuk menyimpan bulan check out saat input pemesanan villa ke dalam variabel bertipe integer
 	int thnCO ;             //berfungsi untuk menyimpan tahun check out saat input pemesanan villa ke dalam variabel bertipe integer
 	float totalPembayaran ; //berfungsi untuk menyimpan total pembayaran villa ke dalam variabel bertipe float
@@ -975,7 +975,7 @@ void list_data_pemesan (){
 	printf ("\t\t|=======================================================================================================================================================|\n");
 	printf ("\t\t|                                                                      DATA PEMESAN VILLA ANYELIR                                                       |\n");
 	printf ("\t\t|=======================================================================================================================================================|\n");
-	printf ("\t\t| Id Pemesanan | Kode Villa |     Nama Pemesan      |        NO HP      |     Check In     |  Waktu Pembookingan |Total Pembayaran  | Sisa Pembayaran   |\n");
+	printf ("\t\t| Id Pemesanan | Kode Villa |     Nama Pemesan      |        NO HP      |     Check In     |  Waktu Pembookingan | Total Pembayaran |  Sisa Pembayaran  |\n");
 	printf ("\t\t|--------------|------------|-----------------------|-------------------|------------------|---------------------|------------------|-------------------|\n");                                                                                          
 	FILE*dtpesan ; // Membuat pointer dtpesan untuk menunjuk pada file "datapesan.txt"
     dtpesan = fopen ("datapesan.txt", "rt"); // Membuka file "datapesan.txt" dengan mode "rt"
@@ -1728,7 +1728,7 @@ void ratingPengunjung (){
 	fclose(dtpenilaian);
 	
 	printf ("\t\t\t\t\t                             DATA TELAH DISIMPAN\n");
-	printf ("\t\t\t\t\t                 TERIMAKASIH TELAH BERI RATING DAN KOMENTAR\n");
+	printf ("\t\t\t\t\t                 TERIMAKASIH TELAH MEMBERIKAN RATING DAN KOMENTAR\n");
 	printf ("\t\t\t\t\t                       SEMOGA HARI MU MENYENANGKAN ^_^ \n");
 	tekan1Lagi :
 	printf ("\t\t\t\t\t   Kembali ke Menu Tekan 1 : ");
