@@ -38,7 +38,10 @@ typedef struct {
 	int tglCI ;             //berfungsi untuk menyimpan tanggal check in saat input pemesanan villa ke dalam variabel bertipe integer
 	int blnCI ;             //berfungsi untuk menyimpan bulan check in saat input pemesanan villa ke dalam variabel bertipe integer
 	int thnCI ;             //berfungsi untuk menyimpan tahun check in saat input pemesanan villa ke dalam variabel bertipe integer
-	int tglCO ;             //berfungsi untuk menyimpan tanggal check out saat input pemesanan villa ke dalam variabel bertipe integer
+	int tglbook;            //berfungsi untuk menyimpan tanggal booking saat input pemesanan villa ke dalam variabel bertipe integer
+  int blnbook;            //berfungsi untuk menyimpan bulan booking saat input pemesanan villa ke dalam variabel bertipe integer
+  int thnbook;            //berfungsi untuk menyimpan tahun booking saat input pemesanan villa ke dalam variabel bertipe integer
+  int tglCO ;             //berfungsi untuk menyimpan tanggal check out saat input pemesanan villa ke dalam variabel bertipe integer
 	int blnCO ;             //berfungsi untuk menyimpan bulan check out saat input pemesanan villa ke dalam variabel bertipe integer
 	int thnCO ;             //berfungsi untuk menyimpan tahun check out saat input pemesanan villa ke dalam variabel bertipe integer
 	float totalPembayaran ; //berfungsi untuk menyimpan total pembayaran villa ke dalam variabel bertipe float
@@ -645,6 +648,7 @@ void pesan_villa_anyelir (){
 				printf ("\t\t\t\t\t| No HP Pemesan         : "); fflush(stdin); scanf ("%s", &pesanvl.noHP);
 				printf ("\t\t\t\t\t| Email Pemesan         : "); fflush(stdin); scanf ("%s", &pesanvl.email);
 				printf ("\t\t\t\t\t| Jumlah Orang          : "); fflush(stdin); scanf ("%d", &pesanvl.orang);
+        printf ("\t\t\t\t\t| Waktu Pembookingan    : "); fflush(stdin); scanf ("%d/%d/%d", &pesanvl.tglbook, &pesanvl.blnbook, &pesanvl.thnbook);
 				printf ("\t\t\t\t\t| Check In HARI [ANGKA] : ");
 				scanf ("%d", &hari1);
 				printf ("\t\t\t\t\t| Check In [DD/MM/YYYY] : "); fflush(stdin); scanf ("%d/%d/%d", &pesanvl.tglCI, &pesanvl.blnCI, &pesanvl.thnCI);
@@ -654,6 +658,7 @@ void pesan_villa_anyelir (){
 				printf ("\t\t\t\t\t| DP Pemesan            : "); fflush(stdin); scanf ("%f", &pesanvl.DPpemesan);
 				pesanvl.sisaPembayaran = pesanvl.totalPembayaran - pesanvl.DPpemesan ;
 				printf ("\t\t\t\t\t| Sisa Pembayaran       : Rp.%.2f\n", pesanvl.sisaPembayaran);
+				printf ("\t\t\t\t\t|=========================================================|\n");
 				// Menuliskan semua data yang sebelumnya yang diinput oleh pengguna kedalam file "datapesan.txt"
 		    	fwrite(&pesanvl, sizeof(pesanvl), 1, dtpesan);
 		}
@@ -749,13 +754,15 @@ void detPemesanan (){
     printf ("\t\t\t\t\t|                  DETAIL PEMESANAN VILLA                 |\n");
     printf ("\t\t\t\t\t|=========================================================|\n");
 	waktu (); //memanggil fungsi waktu
-	printf ("\t\t\t\t\t| Id Villa              : %d\n", pesanvl.nomor_villa);
-	printf ("\t\t\t\t\t| Id Pemesanan          : %d\n", pesanvl.id_pesan);
-	printf ("\t\t\t\t\t| Nama Pemesan          : %s\n", pesanvl.nama_pemesan);
-	printf ("\t\t\t\t\t| No HP Pemesan         : %s\n", pesanvl.noHP);
-	printf ("\t\t\t\t\t| Email Pemesan         : %s\n", pesanvl.email);
-	printf ("\t\t\t\t\t| Jumlah Orang          : %d\n", pesanvl.orang);
-	printf ("\t\t\t\t\t| Check In              : ");
+	printf ("\t\t\t\t\t| Id Villa                  : %d\n", pesanvl.nomor_villa);
+	printf ("\t\t\t\t\t| Id Pemesanan              : %d\n", pesanvl.id_pesan);
+	printf ("\t\t\t\t\t| Nama Pemesan              : %s\n", pesanvl.nama_pemesan);
+	printf ("\t\t\t\t\t| No HP Pemesan             : %s\n", pesanvl.noHP);
+	printf ("\t\t\t\t\t| Email Pemesan             : %s\n", pesanvl.email);
+	printf ("\t\t\t\t\t| Jumlah Orang              : %d\n", pesanvl.orang);
+    printf ("\t\t\t\t\t| Waktu Booking[DD/MM/YYYY] : "); 
+    printf ("%d/%d/%d\n", pesanvl.tglbook, pesanvl.blnbook, pesanvl.thnbook);
+	printf ("\t\t\t\t\t| Check In                  : ");
 	hari (); //memanggil fungsi hari 
 	printf (" %d/%d/%d\n", pesanvl.tglCI, pesanvl.blnCI, pesanvl.thnCI);
 	kalenderuntukCO (); //memanggil fungsi kalenderuntukCO
@@ -765,14 +772,14 @@ void detPemesanan (){
 	while (hari1>7)
 		hari1=hari1%7;
 		
-	printf ("\t\t\t\t\t| Check Out             : ");
+	printf ("\t\t\t\t\t| Check Out                  : ");
 	hari (); //memanggil fungsi hari 
 	printf (" %d/%d/%d\n", pesanvl.tglCO,pesanvl.blnCO, pesanvl.thnCO) ;
-	printf ("\t\t\t\t\t| Deposito              : Rp.%.2f\n", deposito);
-	printf ("\t\t\t\t\t| Biaya Admin           : Rp.%.2f\n", biaya_ADM);
-	printf ("\t\t\t\t\t| Total Pembayaran      : Rp.%.2f\n", pesanvl.totalPembayaran);
-	printf ("\t\t\t\t\t| DP Pemesan            : Rp.%.2f\n", pesanvl.DPpemesan);
-	printf ("\t\t\t\t\t| Sisa Pembayaran       : Rp.%.2f\n", pesanvl.sisaPembayaran);
+	printf ("\t\t\t\t\t| Deposito                   : Rp.%.2f\n", deposito);
+	printf ("\t\t\t\t\t| Biaya Admin                : Rp.%.2f\n", biaya_ADM);
+	printf ("\t\t\t\t\t| Total Pembayaran           : Rp.%.2f\n", pesanvl.totalPembayaran);
+	printf ("\t\t\t\t\t| DP Pemesan                 : Rp.%.2f\n", pesanvl.DPpemesan);
+	printf ("\t\t\t\t\t| Sisa Pembayaran            : Rp.%.2f\n", pesanvl.sisaPembayaran);
 	printf ("\t\t\t\t\t|=========================================================|\n");
 }
 
@@ -965,11 +972,11 @@ void lihat_data_pesanan (){
 //=======================================================================//
 void list_data_pemesan (){
 	system ("cls");
-	printf ("\t\t|==================================================================================================================================|\n");
-	printf ("\t\t|                                                 DATA PEMESAN VILLA ANYELIR                                                       |\n");
-	printf ("\t\t|==================================================================================================================================|\n");
-	printf ("\t\t| Id Pemesanan | Kode Villa |     Nama Pemesan      |        NO HP      |     Check In     | Total Pembayaran  | Sisa Pembayaran   |\n");
-	printf ("\t\t|--------------|------------|-----------------------|-------------------|------------------|-------------------|-------------------|\n");                                                                                          
+	printf ("\t\t|=======================================================================================================================================================|\n");
+	printf ("\t\t|                                                                      DATA PEMESAN VILLA ANYELIR                                                       |\n");
+	printf ("\t\t|=======================================================================================================================================================|\n");
+	printf ("\t\t| Id Pemesanan | Kode Villa |     Nama Pemesan      |        NO HP      |     Check In     |  Waktu Pembookingan |Total Pembayaran  | Sisa Pembayaran   |\n");
+	printf ("\t\t|--------------|------------|-----------------------|-------------------|------------------|---------------------|------------------|-------------------|\n");                                                                                          
 	FILE*dtpesan ; // Membuat pointer dtpesan untuk menunjuk pada file "datapesan.txt"
     dtpesan = fopen ("datapesan.txt", "rt"); // Membuka file "datapesan.txt" dengan mode "rt"
     if (dtpesan== NULL ){ // Melakukan Pengecekan apakah pointer dtpesan menunjuk kepada file yang dituju ("datapesan.txt")
@@ -978,9 +985,9 @@ void list_data_pemesan (){
 	}
 		/* Ambil isi file ngenggunakan fungsi fread(), lalu tampilkan ke layar */
 	while ((fread(&pesanvl, sizeof(pesanvl), JUM_BLOK, dtpesan)) == JUM_BLOK )
-	printf ("\t\t|     %d          %d           %s               %s           %d/%d/%d      Rp.%.2f      Rp.%.2f\n", pesanvl.id_pesan, pesanvl.nomor_villa, pesanvl.nama_pemesan, pesanvl.noHP, pesanvl.tglCI, pesanvl.blnCI, pesanvl.thnCI, pesanvl.totalPembayaran, pesanvl.sisaPembayaran);
+	printf ("\t\t|     %d          %d           %s               %s           %d/%d/%d        %d/%d/%d      Rp.%.2f      Rp.%.2f\n", pesanvl.id_pesan, pesanvl.nomor_villa, pesanvl.nama_pemesan, pesanvl.noHP, pesanvl.tglCI, pesanvl.blnCI, pesanvl.thnCI,pesanvl.tglbook, pesanvl.blnbook, pesanvl.thnbook, pesanvl.totalPembayaran, pesanvl.sisaPembayaran);
 	fclose(dtpesan);
-	printf ("\t\t|==================================================================================================================================|\n");
+	printf ("\t\t|========================================================================================================================================================|\n");
 }
 
 //=======================================================================//
@@ -1353,14 +1360,14 @@ void list_villa (){
     printf ("|ID/KODE VILLA|    NAMA VILLA   |   TIPE   FASILITAS  |    TIPE KAMAR   | HARGA LUNAS  |      DP      |   KAPASITAS   |   CHECK IN  | CHECK OUT |     LAMA INAP        |\n");
     printf ("|-------------|-----------------|---------------------|-----------------|--------------|--------------|---------------|-------------|-----------|----------------------|\n");
     	/* Buka file untuk dibaca isinya */
-	if ((dtvilla=fopen("datavilla.dat", "rt")) == NULL )
+	if ((dtvilla=fopen("datavilla.txt", "rt")) == NULL )
 		{
 			printf("\t\t File tidak dapat dibuka!\n");
 			exit(1);
 		}
 		/* Ambil isi file ngenggunakan fungsi fread(), lalu tampilkan ke layar */
 	while ((fread(&villa, sizeof(villa), JUM_BLOK, dtvilla)) == JUM_BLOK )
-	printf("|    %d\t          %-15s          %-10s     %-25s   Rp.%d      Rp.%d      %d Orang       %-10s  %-10s  %-25s\n", villa.kode_villa, villa.nama_villa, villa.tipe_fasilitasLain, villa.tipe_kamar, villa.harga_lunas, villa.DP_villa, villa.kapasitas, villa.check_in, villa.check_out, villa.lama_inap);
+	printf("|    %d\t          %-15s          %-10s     %-25s Rp.%d   Rp.%d      %d Orang       %-10s  %-10s  %-25s\n", villa.kode_villa, villa.nama_villa, villa.tipe_fasilitasLain, villa.tipe_kamar, villa.harga_lunas, villa.DP_villa, villa.kapasitas, villa.check_in, villa.check_out, villa.lama_inap);
 	printf ("|======================================================================================================================================================================|\n");
 	fclose(dtvilla);		/* Tutup file */
 
@@ -1428,7 +1435,7 @@ void hapusdtvilla (data_villa villa, int r){
 			printf("\t\t\t\t\t Data villa %d tidak ditemukan\n\n",r);
 		}
 		else{
-			dtvilla = fopen("datavilla.dat","rb");
+			dtvilla = fopen("datavilla.txt","rb");
 			tmp = fopen("Temp_Data.txt","wb");
 			while (fread(&villa, sizeof(villa), 1, dtvilla)){
 				s = villa.kode_villa;
@@ -1439,7 +1446,7 @@ void hapusdtvilla (data_villa villa, int r){
 			}
 			fclose(dtvilla);
 			fclose(tmp);
-			dtvilla = fopen("datavilla.dat","wb");
+			dtvilla = fopen("datavilla.txt","wb");
 			tmp = fopen("Temp_Data.txt","rb");
 			while(fread(&villa,sizeof(villa),1,tmp)){
 				fwrite(&villa,sizeof(villa),1,dtvilla);
@@ -1527,7 +1534,7 @@ void inputVillaAnyelir (){
 	printf ("\t\t\t\t\t|===========================================================|\n");
     printf ("\t\t\t\t\t|                 INPUT DATA VILLA ANYELIR                  |\n");
     printf ("\t\t\t\t\t|===========================================================|\n");
-    	if ((dtvilla=fopen("datavilla.dat", "ab")) == NULL )
+    	if ((dtvilla=fopen("datavilla.txt", "ab")) == NULL )
 	{
 		printf("\t\t\t\t\t File tidak dapat dibuat!\r\n");
 		menuadm();
@@ -1567,7 +1574,7 @@ void inputVillaAnyelir (){
 	printf("\n\t\t\t\t\t Data sudah disimpan pada file. \n");
 	printf("\t\t\t\t\t Lihat isi file (Y/T)? => "); fflush(stdin);
 	jawab = toupper(getche());			/* Baca jawaban dari keyboard */
-	if (jawab == 'Y');
+	if (jawab == 'Y')
 	{	list_villa();
 	}
 	
@@ -1641,6 +1648,8 @@ void menuRatingPengunjung (){
 	printf ("\t\t\t\t\t|======================================================================|\n");
     printf ("\t\t\t\t\t|             RATING DAN KOMENTAR PENGUNJUNG VILLA ANYELIR             |\n");
     printf ("\t\t\t\t\t|======================================================================|\n");
+    printf ("\t\t\t\t\t| Rating dan komentar hanya bisa diberikan bagi pengunjung yang sudah  |\n");
+    printf ("\t\t\t\t\t| melakukan check out.                                                 |\n");
     printf ("\t\t\t\t\t| Pilih :                                                              |\n");
     printf ("\t\t\t\t\t| 1. Lanjutkan untuk beri rating                                       |\n");
     printf ("\t\t\t\t\t| 2. Keluar                                                            |\n");
@@ -1724,7 +1733,7 @@ void ratingPengunjung (){
 	tekan1Lagi :
 	printf ("\t\t\t\t\t   Kembali ke Menu Tekan 1 : ");
 	scanf ("%d", &tekan1);
-	if (tekan1=1){
+	if (tekan1==1){
 		menu_pengunjung ();
 	}
 	else {
@@ -1817,7 +1826,7 @@ void list_villa_pengunjung (){
 // Deskripsi      : Fungsi ini digunakan untuk menampilkan cara pemesanan//
 //                  villa anyelir                                        //
 // Versi : 1.0                                      Rev. 0               //
-// Tgl   : 10-12-2020                               Tgl: -               //
+// Tgl   : 10-12-2021                               Tgl: -               //
 // Gusti Ayu Wahyu Whurapsari - 2105551042                               //
 // Kelas B                                                               //
 //=======================================================================//
@@ -1853,4 +1862,5 @@ void cara_pesan_villa (){
 		printf ("\t\t\t\t\t| Silahkan ketik ulang 1 \n");
 		goto opsi1 ; //kembali pada opsi
 }
+
 
